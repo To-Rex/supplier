@@ -98,10 +98,10 @@ const Header = () => {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${headerBg}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
+        <div className="flex justify-between items-center py-4 md:grid md:grid-cols-3">
           {/* Logo */}
           <div
-            className="flex items-center space-x-2 cursor-pointer transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg p-1"
+            className="flex items-center space-x-2 cursor-pointer transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg p-1 md:justify-self-start"
             onClick={() => scrollToSection('hero')}
             role="button"
             tabIndex={0}
@@ -120,7 +120,7 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
+          <div className="hidden md:flex items-center justify-center space-x-4 lg:space-x-6">
             <nav className="flex space-x-4 lg:space-x-6" role="navigation" aria-label="Asosiy navigatsiya">
               {navigationItems.map((item) => (
                 <button
@@ -142,11 +142,10 @@ const Header = () => {
                 Bog'lanish
               </button>
             </nav>
-            <ThemeToggle />
           </div>
 
-          {/* Mobile Controls */}
-          <div className="md:hidden flex items-center space-x-3">
+          {/* Right Controls */}
+          <div className="flex items-center justify-end space-x-3">
             <ThemeToggle />
             <button
               data-mobile-toggle
