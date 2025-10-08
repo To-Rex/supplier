@@ -302,7 +302,7 @@ body {
   height: 2px;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.8), transparent);
   transform-origin: left center;
-  transform: translate(0, -50%) rotate(var(--rotation-angle));
+  transform: translate(0, -50%) rotate(calc(var(--rotation-angle) + 180deg));
   pointer-events: none;
 }
 
