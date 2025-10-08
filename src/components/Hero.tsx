@@ -110,38 +110,75 @@ const Hero: React.FC = () => {
     >
       {/* Animated Background - Hidden from screen readers */}
       <div className="absolute inset-0" aria-hidden="true">
-        {/* Light mode: Sun and clouds */}
-        {!isDark && !prefersReducedMotion && (
+        {!prefersReducedMotion && (
           <>
-            {/* Sun */}
-            <div className="absolute top-20 right-20 w-24 h-24 opacity-30">
-              <div className="absolute inset-0 bg-yellow-300 rounded-full animate-pulse" style={{ animationDuration: '3s' }}></div>
-              <div className="absolute inset-0 bg-yellow-200 rounded-full animate-ping" style={{ animationDuration: '4s' }}></div>
-            </div>
+            {/* Light mode: Sun and clouds */}
+            {!isDark && (
+              <>
+                {/* Sun */}
+                <div className="absolute top-20 right-20 w-24 h-24 opacity-30">
+                  <div className="absolute inset-0 bg-yellow-300 rounded-full animate-pulse" style={{ animationDuration: '3s' }}></div>
+                  <div className="absolute inset-0 bg-yellow-200 rounded-full animate-ping" style={{ animationDuration: '4s' }}></div>
+                </div>
 
-            {/* Clouds */}
-            <div className="absolute top-32 left-[10%] opacity-20">
-              <div className="flex items-center animate-float-slow">
-                <div className="w-20 h-12 bg-white rounded-full"></div>
-                <div className="w-16 h-10 bg-white rounded-full -ml-8"></div>
-                <div className="w-24 h-14 bg-white rounded-full -ml-10"></div>
-              </div>
-            </div>
+                {/* Clouds */}
+                <div className="absolute top-32 left-[10%] opacity-20">
+                  <div className="flex items-center animate-float-slow">
+                    <div className="w-20 h-12 bg-white rounded-full"></div>
+                    <div className="w-16 h-10 bg-white rounded-full -ml-8"></div>
+                    <div className="w-24 h-14 bg-white rounded-full -ml-10"></div>
+                  </div>
+                </div>
 
-            <div className="absolute top-48 right-[15%] opacity-20">
-              <div className="flex items-center animate-float-slow" style={{ animationDelay: '1s' }}>
-                <div className="w-16 h-10 bg-white rounded-full"></div>
-                <div className="w-20 h-12 bg-white rounded-full -ml-6"></div>
-                <div className="w-14 h-9 bg-white rounded-full -ml-8"></div>
-              </div>
-            </div>
+                <div className="absolute top-48 right-[15%] opacity-20">
+                  <div className="flex items-center animate-float-slow" style={{ animationDelay: '1s' }}>
+                    <div className="w-16 h-10 bg-white rounded-full"></div>
+                    <div className="w-20 h-12 bg-white rounded-full -ml-6"></div>
+                    <div className="w-14 h-9 bg-white rounded-full -ml-8"></div>
+                  </div>
+                </div>
 
-            <div className="absolute top-[60%] left-[20%] opacity-15">
-              <div className="flex items-center animate-float-slow" style={{ animationDelay: '2s' }}>
-                <div className="w-18 h-11 bg-white rounded-full"></div>
-                <div className="w-22 h-13 bg-white rounded-full -ml-7"></div>
-              </div>
-            </div>
+                <div className="absolute top-[60%] left-[20%] opacity-15">
+                  <div className="flex items-center animate-float-slow" style={{ animationDelay: '2s' }}>
+                    <div className="w-18 h-11 bg-white rounded-full"></div>
+                    <div className="w-22 h-13 bg-white rounded-full -ml-7"></div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Dark mode: Moon and stars */}
+            {isDark && (
+              <>
+                {/* Moon */}
+                <div className="absolute top-16 right-24 w-20 h-20 opacity-40">
+                  <div className="absolute inset-0 bg-gray-100 rounded-full"></div>
+                  {/* Moon craters */}
+                  <div className="absolute top-3 left-4 w-3 h-3 bg-gray-300 rounded-full opacity-50"></div>
+                  <div className="absolute top-8 left-10 w-4 h-4 bg-gray-300 rounded-full opacity-40"></div>
+                  <div className="absolute top-12 left-5 w-2 h-2 bg-gray-300 rounded-full opacity-60"></div>
+                  {/* Moon glow */}
+                  <div className="absolute inset-0 bg-gray-200 rounded-full blur-xl opacity-30 animate-pulse" style={{ animationDuration: '4s' }}></div>
+                </div>
+
+                {/* Static stars background */}
+                <div className="absolute inset-0">
+                  {Array.from({ length: 40 }).map((_, i) => (
+                    <div
+                      key={`star-${i}`}
+                      className="absolute w-1 h-1 bg-white rounded-full"
+                      style={{
+                        top: `${Math.random() * 100}%`,
+                        left: `${Math.random() * 100}%`,
+                        opacity: Math.random() * 0.5 + 0.3,
+                        animation: `twinkle ${2 + Math.random() * 3}s ease-in-out infinite`,
+                        animationDelay: `${Math.random() * 2}s`
+                      }}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </>
         )}
 

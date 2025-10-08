@@ -261,6 +261,18 @@ body {
   background: linear-gradient(to bottom, #2563eb, #7c3aed);
 }
 
+/* Twinkle stars animation */
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
 /* Shooting star animation */
 @keyframes shooting-star {
   0% {
