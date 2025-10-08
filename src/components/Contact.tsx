@@ -51,29 +51,38 @@ const Contact: React.FC = () => {
     setIsLoading(true);
     setError(null);
 
+    console.log('Form submission started', formData);
+
     try {
-      const { error: insertError } = await supabase
+      const { data, error: insertError } = await supabase
         .from('contact_messages')
         .insert([
           {
             name: formData.name,
             email: formData.email,
-            phone: formData.phone,
+            phone: formData.phone || '',
             subject: formData.subject,
             message: formData.message,
             status: 'new',
           },
-        ]);
+        ])
+        .select();
 
-      if (insertError) throw insertError;
+      console.log('Supabase response:', { data, error: insertError });
 
+      if (insertError) {
+        console.error('Insert error:', insertError);
+        throw insertError;
+      }
+
+      console.log('Message saved successfully:', data);
       setIsSubmitted(true);
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
 
       setTimeout(() => setIsSubmitted(false), 5000);
     } catch (err: any) {
       console.error('Error submitting contact form:', err);
-      setError('Xatolik yuz berdi! Iltimos, qaytadan urinib ko\'ring.');
+      setError(`Xatolik yuz berdi! ${err.message || 'Iltimos, qaytadan urinib ko\'ring.'}`);
     } finally {
       setIsLoading(false);
     }
