@@ -47,6 +47,7 @@ ALTER TABLE contact_messages ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Anyone can insert contact messages"
   ON contact_messages
   FOR INSERT
+  TO anon, authenticated
   WITH CHECK (true);
 
 CREATE POLICY "Anyone can view contact messages"
