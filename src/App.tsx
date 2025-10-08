@@ -8,6 +8,7 @@ import Dashboard from './pages/admin/Dashboard';
 import TeamManagement from './pages/admin/TeamManagement';
 import UsersManagement from './pages/admin/UsersManagement';
 import ContactMessages from './pages/admin/ContactMessages';
+import ContactInfo from './pages/admin/ContactInfo';
 import TeamMemberProfile from './pages/TeamMemberProfile';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 
@@ -49,6 +50,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ContactMessages />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/contact-info"
+              element={
+                <ProtectedRoute>
+                  <ContactInfo />
                 </ProtectedRoute>
               }
             />

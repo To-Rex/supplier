@@ -5,6 +5,13 @@ import { typography, getTextColors } from '../utils/typography';
 import { getInputStyles } from '../utils/formStyles';
 import { supabase } from '../lib/supabase';
 
+interface ContactInfoData {
+  phone: string;
+  email: string;
+  location: string;
+  work_hours: string;
+}
+
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -13,6 +20,7 @@ const Contact: React.FC = () => {
     subject: '',
     message: ''
   });
+  const [contactInfoData, setContactInfoData] = useState<ContactInfoData | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -22,6 +30,8 @@ const Contact: React.FC = () => {
   const textColors = getTextColors(isDark);
 
   useEffect(() => {
+    fetchContactInfo();
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -37,6 +47,26 @@ const Contact: React.FC = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  const fetchContactInfo = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('contact_info')
+        .select('phone, email, location, work_hours')
+        .single();
+
+      if (error) {
+        console.error('Error fetching contact info:', error);
+        return;
+      }
+
+      if (data) {
+        setContactInfoData(data);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -92,21 +122,21 @@ const Contact: React.FC = () => {
     {
       icon: Mail,
       title: 'Email Yuboring',
-      details: 'dev.dilshodjon@gmail.com',
+      details: contactInfoData?.email || 'dev.dilshodjon@gmail.com',
       description: 'Istalgan vaqtda email yuboring!',
       color: 'blue'
     },
     {
       icon: Phone,
       title: 'Qo\'ng\'iroq Qiling',
-      details: '+998 99 534 03 13',
-      description: 'Dush-Jum 9:00 dan 18:00 gacha',
+      details: contactInfoData?.phone || '+998 99 534 03 13',
+      description: contactInfoData?.work_hours || 'Dush-Jum 9:00 dan 18:00 gacha',
       color: 'green'
     },
     {
       icon: MapPin,
       title: 'Bizni Ziyorat Qiling',
-      details: 'Toshkent, O\'zbekiston',
+      details: contactInfoData?.location || 'Toshkent, O\'zbekiston',
       description: 'Ofisimizga tashrif buyuring',
       color: 'purple'
     }
