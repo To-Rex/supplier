@@ -12,11 +12,20 @@ interface ShootingStar {
   angle: number;
 }
 
+interface RainDrop {
+  id: number;
+  left: string;
+  delay: number;
+}
+
 const Hero: React.FC = () => {
   const [currentText, setCurrentText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimationPaused, setIsAnimationPaused] = useState(false);
   const [shootingStars, setShootingStars] = useState<ShootingStar[]>([]);
+  const [rainDrops, setRainDrops] = useState<RainDrop[]>([]);
+  const [cloudDarkness, setCloudDarkness] = useState(0);
+  const [cloudScale, setCloudScale] = useState(1);
   const texts = ['Professional Veb-saytlar', 'Mobil Ilovalar', 'Telegram Botlar', 'Raqamli Yechimlar'];
   const { isDark } = useTheme();
   const textColors = getTextColors(isDark);
@@ -73,18 +82,53 @@ const Hero: React.FC = () => {
       }, 1500);
     };
 
-    // Create shooting stars on scroll
+    // Create shooting stars on scroll (dark mode)
+    // Create rain drops on scroll (light mode)
     let lastScrollTime = 0;
     const handleScroll = () => {
       const now = Date.now();
-      // Only create if scroll position is past a threshold and throttle
-      if (window.scrollY > 50 && now - lastScrollTime > 80) {
+      const scrollY = window.scrollY;
+
+      if (scrollY > 50 && now - lastScrollTime > 80) {
         lastScrollTime = now;
-        // Create 8-12 shooting stars on scroll
-        const count = Math.floor(Math.random() * 5) + 8;
-        for (let i = 0; i < count; i++) {
-          setTimeout(() => createShootingStar(), i * 60);
+
+        if (isDark) {
+          // Dark mode: shooting stars
+          const count = Math.floor(Math.random() * 5) + 8;
+          for (let i = 0; i < count; i++) {
+            setTimeout(() => createShootingStar(), i * 60);
+          }
+        } else {
+          // Light mode: rain effect
+          // Calculate cloud darkness and scale based on scroll
+          const darkness = Math.min(scrollY / 500, 0.7);
+          const scale = Math.min(1 + scrollY / 1000, 1.5);
+          setCloudDarkness(darkness);
+          setCloudScale(scale);
+
+          // Create rain drops
+          const rainCount = Math.floor(Math.random() * 8) + 12;
+          for (let i = 0; i < rainCount; i++) {
+            setTimeout(() => {
+              const drop: RainDrop = {
+                id: Date.now() + Math.random(),
+                left: `${Math.random() * 100}%`,
+                delay: 0
+              };
+              setRainDrops(prev => [...prev, drop]);
+
+              setTimeout(() => {
+                setRainDrops(prev => prev.filter(d => d.id !== drop.id));
+              }, 1000);
+            }, i * 30);
+          }
         }
+      }
+
+      // Reset clouds when not scrolling (light mode)
+      if (!isDark && scrollY < 50) {
+        setCloudDarkness(0);
+        setCloudScale(1);
       }
     };
 
@@ -101,12 +145,46 @@ const Hero: React.FC = () => {
     };
   }, [isDark, prefersReducedMotion]);
 
+  // Smooth cloud reset when scroll stops
+  useEffect(() => {
+    if (isDark) return;
+
+    let scrollTimeout: NodeJS.Timeout;
+    const handleScrollStop = () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        // Gradually reset clouds
+        const resetInterval = setInterval(() => {
+          setCloudDarkness(prev => {
+            if (prev <= 0.05) {
+              clearInterval(resetInterval);
+              return 0;
+            }
+            return prev * 0.85;
+          });
+          setCloudScale(prev => {
+            if (Math.abs(prev - 1) < 0.02) {
+              return 1;
+            }
+            return prev - (prev - 1) * 0.15;
+          });
+        }, 100);
+      }, 500);
+    };
+
+    window.addEventListener('scroll', handleScrollStop);
+    return () => {
+      window.removeEventListener('scroll', handleScrollStop);
+      clearTimeout(scrollTimeout);
+    };
+  }, [isDark]);
+
   useEffect(() => {
     if (isAnimationPaused || prefersReducedMotion) return;
 
     const typeWriter = () => {
       const currentFullText = texts[currentIndex];
-      
+
       if (currentText.length < currentFullText.length) {
         setCurrentText(currentFullText.slice(0, currentText.length + 1));
       } else {
@@ -165,29 +243,63 @@ const Hero: React.FC = () => {
                   <div className="absolute inset-0 bg-yellow-200 rounded-full animate-ping" style={{ animationDuration: '4s' }}></div>
                 </div>
 
-                {/* Clouds */}
-                <div className="absolute top-32 left-[10%] opacity-20">
+                {/* Clouds with dynamic darkness and scale */}
+                <div
+                  className="absolute top-32 left-[10%] transition-all duration-700 ease-out"
+                  style={{
+                    opacity: 0.2 + cloudDarkness * 0.5,
+                    transform: `scale(${cloudScale})`,
+                    filter: `brightness(${1 - cloudDarkness * 0.6})`
+                  }}
+                >
                   <div className="flex items-center animate-float-slow">
-                    <div className="w-20 h-12 bg-white rounded-full"></div>
-                    <div className="w-16 h-10 bg-white rounded-full -ml-8"></div>
-                    <div className="w-24 h-14 bg-white rounded-full -ml-10"></div>
+                    <div className="w-20 h-12 bg-white rounded-full" style={{ backgroundColor: `rgb(${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120})` }}></div>
+                    <div className="w-16 h-10 bg-white rounded-full -ml-8" style={{ backgroundColor: `rgb(${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120})` }}></div>
+                    <div className="w-24 h-14 bg-white rounded-full -ml-10" style={{ backgroundColor: `rgb(${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120})` }}></div>
                   </div>
                 </div>
 
-                <div className="absolute top-48 right-[15%] opacity-20">
+                <div
+                  className="absolute top-48 right-[15%] transition-all duration-700 ease-out"
+                  style={{
+                    opacity: 0.2 + cloudDarkness * 0.5,
+                    transform: `scale(${cloudScale})`,
+                    filter: `brightness(${1 - cloudDarkness * 0.6})`
+                  }}
+                >
                   <div className="flex items-center animate-float-slow" style={{ animationDelay: '1s' }}>
-                    <div className="w-16 h-10 bg-white rounded-full"></div>
-                    <div className="w-20 h-12 bg-white rounded-full -ml-6"></div>
-                    <div className="w-14 h-9 bg-white rounded-full -ml-8"></div>
+                    <div className="w-16 h-10 bg-white rounded-full" style={{ backgroundColor: `rgb(${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120})` }}></div>
+                    <div className="w-20 h-12 bg-white rounded-full -ml-6" style={{ backgroundColor: `rgb(${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120})` }}></div>
+                    <div className="w-14 h-9 bg-white rounded-full -ml-8" style={{ backgroundColor: `rgb(${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120})` }}></div>
                   </div>
                 </div>
 
-                <div className="absolute top-[60%] left-[20%] opacity-15">
+                <div
+                  className="absolute top-[60%] left-[20%] transition-all duration-700 ease-out"
+                  style={{
+                    opacity: 0.15 + cloudDarkness * 0.5,
+                    transform: `scale(${cloudScale})`,
+                    filter: `brightness(${1 - cloudDarkness * 0.6})`
+                  }}
+                >
                   <div className="flex items-center animate-float-slow" style={{ animationDelay: '2s' }}>
-                    <div className="w-18 h-11 bg-white rounded-full"></div>
-                    <div className="w-22 h-13 bg-white rounded-full -ml-7"></div>
+                    <div className="w-18 h-11 bg-white rounded-full" style={{ backgroundColor: `rgb(${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120})` }}></div>
+                    <div className="w-22 h-13 bg-white rounded-full -ml-7" style={{ backgroundColor: `rgb(${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120})` }}></div>
                   </div>
                 </div>
+
+                {/* Rain drops */}
+                {rainDrops.map((drop) => (
+                  <div
+                    key={drop.id}
+                    className="absolute w-0.5 h-8 bg-gradient-to-b from-blue-200/70 to-transparent animate-rain"
+                    style={{
+                      left: drop.left,
+                      top: '-2rem',
+                      animationDelay: `${drop.delay}ms`
+                    }}
+                  />
+                ))}
               </>
             )}
 
