@@ -16,7 +16,7 @@ const LoadingScreen: React.FC = () => {
           <div className="h-full bg-gradient-to-r from-blue-500 to-blue-600 animate-pulse will-change-transform"></div>
         </div>
         <p className="mt-4 text-gray-600 dark:text-gray-300 font-medium" aria-live="polite">
-          Supplier IT yuklanmoqda...
+          Torex IT yuklanmoqda...
         </p>
       </div>
     </div>

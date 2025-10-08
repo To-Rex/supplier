@@ -74,10 +74,10 @@ const AppContent: React.FC = () => {
   return (
     <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
       <SEOOptimizer
-        title="Supplier IT - Professional Veb Dasturlash, Mobil Ilovalar va Telegram Botlar"
-        description="Supplier IT - O'zbekistondagi yetakchi IT kompaniya. Professional veb-sayt dasturlash, iOS va Android uchun mobil ilovalar, maxsus Telegram botlar."
-        keywords="veb dasturlash, mobil ilovalar, telegram botlar, iOS, Android, IT xizmatlar, O'zbekiston, Toshkent"
-        canonicalUrl="https://supplier.uz/"
+        title="Torex IT - Professional Veb Dasturlash, Mobil Ilovalar, CRM va AI Yechimlar"
+        description="Torex IT - O'zbekistondagi yetakchi IT kompaniya. Professional veb-sayt va mobil ilova dasturlash, iOS va Android ilovalar, Telegram botlar, CRM tizimlar va AI yechimlar. 5+ yillik tajriba, 100+ mamnun mijozlar. Bepul konsultatsiya!"
+        keywords="veb dasturlash, mobil ilovalar, telegram botlar, iOS dasturlash, Android dasturlash, CRM tizimlar, AI yechimlar, raqamli marketing, elektron tijorat, IT xizmatlar, dasturiy ta'minot, O'zbekiston, Toshkent, torex it, torex uz"
+        canonicalUrl="https://torex.uz/"
       />
       <Header />
       <main>

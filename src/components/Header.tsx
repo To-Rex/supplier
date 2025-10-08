@@ -113,7 +113,7 @@ const Header = () => {
             onClick={() => scrollToSection('hero')}
             role="button"
             tabIndex={0}
-            aria-label="Supplier IT bosh sahifaga o'tish"
+            aria-label="Torex IT bosh sahifaga o'tish"
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -123,7 +123,7 @@ const Header = () => {
           >
             <Bot className={`w-7 h-7 lg:w-8 lg:h-8 transition-all duration-500 ${logoColor} hover:rotate-12`} aria-hidden="true" />
             <span className={`text-lg lg:text-xl font-bold transition-all duration-500 ${textColor}`}>
-              Supplier IT
+              Torex IT
             </span>
           </div>
 

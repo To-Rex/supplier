@@ -478,7 +478,7 @@ const Hero: React.FC = () => {
           className={`${typography.heroMain} text-white mb-4 md:mb-6 animate-fade-in-up animation-delay-200`}
           id="main-content"
           tabIndex={-1}
-          aria-label="Supplier IT kompaniyasining bosh sahifasi"
+          aria-label="Torex IT kompaniyasining bosh sahifasi"
         >
           <span className={`inline-block ${!prefersReducedMotion ? 'animate-pulse' : ''}`}>Biz</span>{' '}
           <span className={`inline-block bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent ${!prefersReducedMotion ? 'animate-pulse animation-delay-400' : ''}`}>

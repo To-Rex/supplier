@@ -187,7 +187,7 @@ const Contact: React.FC = () => {
               </div>
               
               <div className="relative z-10">
-                <h4 className="text-2xl font-bold text-gray-900 mb-6">Nega Supplier IT ni Tanlash Kerak?</h4>
+                <h4 className="text-2xl font-bold text-gray-900 mb-6">Nega Torex IT ni Tanlash Kerak?</h4>
                 <ul className="space-y-4">
                   {[
                     '5+ yillik tajribaga ega mutaxassis jamoa',

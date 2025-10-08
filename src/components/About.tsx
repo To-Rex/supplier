@@ -145,7 +145,7 @@ const About: React.FC = () => {
             className={`${typography.h1} ${textColors.primary} mb-6 animate-fade-in-up`}
           >
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Supplier IT
+              Torex IT
             </span>{' '}
             Haqida
           </h2>

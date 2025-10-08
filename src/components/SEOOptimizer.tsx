@@ -19,7 +19,7 @@ const SEOOptimizer: React.FC<SEOOptimizerProps> = ({
   keywords,
   ogImage,
   canonicalUrl,
-  author = 'Supplier IT',
+  author = 'Torex IT',
   publishDate,
   modifiedDate,
   articleSection,
@@ -28,7 +28,7 @@ const SEOOptimizer: React.FC<SEOOptimizerProps> = ({
   useEffect(() => {
     // Update title with proper format
     if (title) {
-      const fullTitle = title.includes('Supplier IT') ? title : `${title} | Supplier IT`;
+      const fullTitle = title.includes('Torex IT') ? title : `${title} | Torex IT`;
       document.title = fullTitle;
       
       // Update OG title
@@ -170,20 +170,20 @@ const SEOOptimizer: React.FC<SEOOptimizerProps> = ({
       "@type": "WebPage",
       "@id": `${currentUrl}#webpage`,
       "url": currentUrl,
-      "name": title || "Supplier IT - Professional IT Xizmatlar",
-      "description": description || "Professional veb dasturlash, mobil ilovalar va Telegram botlar",
+      "name": title || "Torex IT - Professional IT Xizmatlar",
+      "description": description || "Professional veb dasturlash, mobil ilovalar, Telegram botlar va AI yechimlar",
       "inLanguage": locale.split('_')[0],
       "isPartOf": {
         "@type": "WebSite",
-        "@id": "https://supplier.uz/#website"
+        "@id": "https://torex.uz/#website"
       },
       "about": {
         "@type": "Organization",
-        "@id": "https://supplier.uz/#organization"
+        "@id": "https://torex.uz/#organization"
       },
       "mainEntity": {
         "@type": "Organization",
-        "@id": "https://supplier.uz/#organization"
+        "@id": "https://torex.uz/#organization"
       },
       "breadcrumb": {
         "@type": "BreadcrumbList",
@@ -191,18 +191,18 @@ const SEOOptimizer: React.FC<SEOOptimizerProps> = ({
           "@type": "ListItem",
           "position": 1,
           "name": "Bosh sahifa",
-          "item": "https://supplier.uz/"
+          "item": "https://torex.uz/"
         }]
       },
       "publisher": {
         "@type": "Organization",
-        "@id": "https://supplier.uz/#organization"
+        "@id": "https://torex.uz/#organization"
       },
       "datePublished": publishDate || new Date().toISOString(),
       "dateModified": modifiedDate || new Date().toISOString(),
       "author": {
         "@type": "Organization",
-        "@id": "https://supplier.uz/#organization"
+        "@id": "https://torex.uz/#organization"
       },
       "potentialAction": [{
         "@type": "ReadAction",

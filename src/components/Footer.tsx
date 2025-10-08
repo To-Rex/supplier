@@ -50,7 +50,7 @@ const Footer: React.FC = () => {
           <div className="lg:col-span-1">
             <div className="flex items-center space-x-2 mb-6">
               <Bot className="w-8 h-8 text-blue-400" />
-              <span className={`${typography.navLarge} font-bold`}>Supplier IT</span>
+              <span className={`${typography.navLarge} font-bold`}>Torex IT</span>
             </div>
             <p className={`${typography.body} mb-6 leading-relaxed ${
               isDark ? 'text-gray-400' : 'text-blue-100'
@@ -168,7 +168,7 @@ const Footer: React.FC = () => {
             <div className={`${typography.footerText} ${
               isDark ? 'text-gray-400' : 'text-blue-100'
             }`}>
-              © 2024 Supplier IT. All rights reserved. | supplier.uz
+              © 2024 Torex IT. Barcha huquqlar himoyalangan. | torex.uz
             </div>
             <div className={`flex space-x-6 ${typography.footerText} ${
               isDark ? 'text-gray-400' : 'text-blue-200'

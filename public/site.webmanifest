@@ -1,7 +1,7 @@
 {
-  "name": "Supplier IT - Professional IT Xizmatlar",
-  "short_name": "Supplier IT",
-  "description": "Professional veb dasturlash, mobil ilovalar va Telegram botlar",
+  "name": "Torex IT - Professional IT Xizmatlar",
+  "short_name": "Torex IT",
+  "description": "Professional veb dasturlash, mobil ilovalar, Telegram botlar va AI yechimlar",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
