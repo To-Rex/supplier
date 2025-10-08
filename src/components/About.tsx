@@ -29,6 +29,7 @@ const About: React.FC = () => {
         if (error) {
           console.error('Error fetching team members:', error);
         } else if (data) {
+          console.log('Team members fetched successfully:', data);
           setTeamMembers(data);
         }
       } catch (err) {
@@ -199,6 +200,10 @@ const About: React.FC = () => {
             <div className="text-center py-12">
               <div className="inline-block w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" role="status" aria-label="Yuklanmoqda"></div>
               <p className={`mt-4 ${typography.bodyLarge} ${textColors.secondary}`}>Jamoa ma'lumotlari yuklanmoqda...</p>
+            </div>
+          ) : teamMembers.length === 0 ? (
+            <div className="text-center py-12">
+              <p className={`${typography.bodyLarge} ${textColors.secondary}`}>Hozircha jamoa a'zolari mavjud emas.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" role="list" aria-label="Jamoa a'zolari">
