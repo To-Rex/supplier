@@ -212,10 +212,14 @@ const Contact: React.FC = () => {
 
           {/* Contact Form */}
           <div className={`relative transition-all duration-1000 ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'}`}>
-            <form onSubmit={handleSubmit} className="space-y-8 bg-white rounded-3xl p-8 shadow-xl">
+            <form onSubmit={handleSubmit} className={`space-y-8 rounded-3xl p-10 shadow-2xl border transition-all duration-300 ${
+              isDark ? 'bg-gray-800/95 border-gray-700 backdrop-blur-sm' : 'bg-white border-gray-100'
+            }`}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="group">
-                  <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-3">
+                  <label htmlFor="name" className={`block text-sm font-bold mb-3 transition-colors ${
+                    isDark ? 'text-gray-200' : 'text-gray-800'
+                  }`}>
                     To'liq Ism *
                   </label>
                   <input
@@ -230,7 +234,9 @@ const Contact: React.FC = () => {
                   />
                 </div>
                 <div className="group">
-                  <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-3">
+                  <label htmlFor="email" className={`block text-sm font-bold mb-3 transition-colors ${
+                    isDark ? 'text-gray-200' : 'text-gray-800'
+                  }`}>
                     Email Manzil *
                   </label>
                   <input
@@ -248,7 +254,9 @@ const Contact: React.FC = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="group">
-                  <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-3">
+                  <label htmlFor="phone" className={`block text-sm font-bold mb-3 transition-colors ${
+                    isDark ? 'text-gray-200' : 'text-gray-800'
+                  }`}>
                     Telefon Raqam
                   </label>
                   <input
@@ -262,7 +270,9 @@ const Contact: React.FC = () => {
                   />
                 </div>
                 <div className="group">
-                  <label htmlFor="subject" className="block text-sm font-semibold text-gray-700 mb-3">
+                  <label htmlFor="subject" className={`block text-sm font-bold mb-3 transition-colors ${
+                    isDark ? 'text-gray-200' : 'text-gray-800'
+                  }`}>
                     Mavzu *
                   </label>
                   <select
@@ -282,7 +292,9 @@ const Contact: React.FC = () => {
               </div>
 
               <div className="group">
-                <label htmlFor="message" className="block text-sm font-semibold text-gray-700 mb-3">
+                <label htmlFor="message" className={`block text-sm font-bold mb-3 transition-colors ${
+                  isDark ? 'text-gray-200' : 'text-gray-800'
+                }`}>
                   Xabar *
                 </label>
                 <textarea
@@ -292,7 +304,11 @@ const Contact: React.FC = () => {
                   rows={6}
                   value={formData.message}
                   onChange={handleInputChange}
-                  className="w-full px-6 py-4 rounded-xl border-2 border-gray-200 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 resize-none group-hover:border-blue-300"
+                  className={`w-full px-6 py-4 rounded-xl border-2 focus:ring-4 focus:ring-blue-500/30 focus:border-blue-500 transition-all duration-300 resize-none ${
+                    isDark
+                      ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 group-hover:border-blue-400 focus:bg-gray-700'
+                      : 'bg-white border-gray-200 text-gray-900 placeholder-gray-500 group-hover:border-blue-300 focus:bg-blue-50/30'
+                  }`}
                   placeholder="Loyihangiz haqida bizga ayting..."
                 />
               </div>
@@ -318,11 +334,17 @@ const Contact: React.FC = () => {
 
             {/* Success Message */}
             {isSubmitted && (
-              <div className="absolute inset-0 bg-white/95 backdrop-blur-sm rounded-3xl flex items-center justify-center animate-fade-in-up">
+              <div className={`absolute inset-0 backdrop-blur-sm rounded-3xl flex items-center justify-center animate-fade-in-up ${
+                isDark ? 'bg-gray-800/95' : 'bg-white/95'
+              }`}>
                 <div className="text-center p-8">
                   <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-6 animate-bounce" />
-                  <h3 className="text-3xl font-bold text-gray-900 mb-4">Xabar Yuborildi!</h3>
-                  <p className="text-xl text-gray-600">Xabaringiz uchun rahmat. Tez orada siz bilan bog'lanamiz!</p>
+                  <h3 className={`text-3xl font-bold mb-4 ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>Xabar Yuborildi!</h3>
+                  <p className={`text-xl ${
+                    isDark ? 'text-gray-300' : 'text-gray-600'
+                  }`}>Xabaringiz uchun rahmat. Tez orada siz bilan bog'lanamiz!</p>
                 </div>
               </div>
             )}
