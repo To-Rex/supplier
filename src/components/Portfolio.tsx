@@ -187,31 +187,56 @@ const Portfolio: React.FC = () => {
                 <Link
                   key={project.id}
                   to={`/portfolio/${project.slug}`}
-                  className={`group bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-700 transform cursor-pointer relative ${
+                  className={`group ${isDark ? 'bg-gray-800' : 'bg-white'} rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-700 transform cursor-pointer relative border ${isDark ? 'border-gray-700' : 'border-gray-100'} ${
                     isVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-20 opacity-0 scale-95'
-                  } hover:scale-105`}
+                  } hover:scale-[1.02] hover:-translate-y-2`}
                   style={{
                     transitionDelay: isVisible ? '0s' : `${index * 0.1}s`,
                   }}
                 >
-                  <div className="relative overflow-hidden">
+                  <div className="relative overflow-hidden h-72">
                     <img
                       src={project.image_url}
                       alt={project.meta_title || project.title}
-                      className="w-full h-64 object-cover group-hover:scale-125 transition-transform duration-700"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                     />
 
-                    {/* Overlay with animated buttons */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-600/90 to-purple-600/90 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center space-x-6">
+                    {/* Category Badge */}
+                    <div className="absolute top-4 left-4 z-10">
+                      <span className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md ${
+                        isDark ? 'bg-white/20 text-white' : 'bg-black/70 text-white'
+                      } shadow-lg`}>
+                        {project.category === 'web' ? 'Veb' :
+                         project.category === 'mobile' ? 'Mobil' :
+                         project.category === 'bot' ? 'Bot' :
+                         project.category === 'design' ? 'Dizayn' : 'Boshqa'}
+                      </span>
+                    </div>
+
+                    {/* Featured Badge */}
+                    {project.is_featured && (
+                      <div className="absolute top-4 right-4 z-10">
+                        <span className="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-lg animate-pulse">
+                          ⭐ Top
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
+
+                    {/* Hover Overlay with Buttons */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-600/95 to-cyan-600/95 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center space-x-6">
                       {project.live_url && (
                         <a
                           href={project.live_url}
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="bg-white text-blue-600 p-4 rounded-full hover:bg-blue-50 transition-all duration-300 transform hover:scale-125 hover:rotate-12 shadow-xl"
+                          className="bg-white text-blue-600 p-5 rounded-2xl hover:bg-blue-50 transition-all duration-300 transform hover:scale-125 hover:rotate-6 shadow-2xl"
+                          title="Live Demo"
                         >
-                          <ExternalLink className="w-6 h-6" />
+                          <ExternalLink className="w-7 h-7" />
                         </a>
                       )}
                       {project.github_url && (
@@ -220,50 +245,72 @@ const Portfolio: React.FC = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="bg-white text-blue-600 p-4 rounded-full hover:bg-blue-50 transition-all duration-300 transform hover:scale-125 hover:-rotate-12 shadow-xl"
+                          className="bg-white text-gray-900 p-5 rounded-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-125 hover:-rotate-6 shadow-2xl"
+                          title="GitHub"
                         >
-                          <Github className="w-6 h-6" />
+                          <Github className="w-7 h-7" />
                         </a>
                       )}
-                    </div>
-
-                    {/* Floating particles on hover */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                      {[...Array(10)].map((_, i) => (
-                        <div
-                          key={i}
-                          className="absolute w-2 h-2 bg-white rounded-full animate-ping"
-                          style={{
-                            left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100}%`,
-                            animationDelay: `${i * 0.2}s`,
-                          }}
-                        />
-                      ))}
                     </div>
                   </div>
 
                   <div className="p-8 relative">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300">
+                    {/* Client Name */}
+                    {project.client_name && (
+                      <p className={`text-sm font-semibold mb-2 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+                        {project.client_name}
+                      </p>
+                    )}
+
+                    <h3 className={`text-2xl font-bold mb-4 group-hover:text-blue-600 transition-colors duration-300 ${
+                      isDark ? 'text-white' : 'text-gray-900'
+                    }`}>
                       {project.title}
                     </h3>
-                    <p className="text-gray-600 mb-6 leading-relaxed line-clamp-2">{project.description}</p>
 
-                    <div className="flex flex-wrap gap-2">
-                      {project.technologies.map((tech, techIndex) => (
+                    <p className={`mb-6 leading-relaxed line-clamp-3 ${
+                      isDark ? 'text-gray-300' : 'text-gray-600'
+                    }`}>
+                      {project.description}
+                    </p>
+
+                    {/* Technologies */}
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.technologies.slice(0, 4).map((tech, techIndex) => (
                         <span
                           key={techIndex}
-                          className="px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 text-sm rounded-full font-semibold transform hover:scale-110 transition-all duration-300 cursor-pointer"
-                          style={{ animationDelay: `${techIndex * 0.1}s` }}
+                          className={`px-3 py-1.5 text-xs rounded-lg font-semibold transform hover:scale-105 transition-all duration-300 ${
+                            isDark
+                              ? 'bg-blue-900/50 text-blue-300 border border-blue-700'
+                              : 'bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-700 border border-blue-200'
+                          }`}
                         >
                           {tech}
                         </span>
                       ))}
+                      {project.technologies.length > 4 && (
+                        <span className={`px-3 py-1.5 text-xs rounded-lg font-semibold ${
+                          isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
+                        }`}>
+                          +{project.technologies.length - 4}
+                        </span>
+                      )}
                     </div>
+
+                    {/* Date */}
+                    {project.completion_date && (
+                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'} mt-4`}>
+                        📅 {new Date(project.completion_date).toLocaleDateString('uz-UZ', { year: 'numeric', month: 'long' })}
+                      </p>
+                    )}
                   </div>
 
-                  {/* Animated border */}
-                  <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-500 rounded-3xl transition-all duration-500"></div>
+                  {/* Animated Glow Border */}
+                  <div className={`absolute inset-0 rounded-3xl transition-all duration-500 ${
+                    isDark
+                      ? 'group-hover:shadow-[0_0_30px_rgba(59,130,246,0.5)]'
+                      : 'group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]'
+                  }`}></div>
                 </Link>
               );
             })}
