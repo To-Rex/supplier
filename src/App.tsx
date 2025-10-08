@@ -9,6 +9,9 @@ import TeamManagement from './pages/admin/TeamManagement';
 import UsersManagement from './pages/admin/UsersManagement';
 import ContactMessages from './pages/admin/ContactMessages';
 import TeamMemberProfile from './pages/TeamMemberProfile';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import Sitemap from './pages/Sitemap';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 
 function App() {
@@ -17,8 +20,11 @@ function App() {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/*" element={<MainSite />} />
+            <Route path="/" element={<MainSite />} />
             <Route path="/team/:slug" element={<TeamMemberProfile />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/sitemap" element={<Sitemap />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route
               path="/admin/dashboard"

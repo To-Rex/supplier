@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Bot, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Github } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
 import { typography, getTextColors } from '../utils/typography';
 import { supabase } from '../lib/supabase';
@@ -212,15 +213,15 @@ const Footer: React.FC = () => {
             <div className={`flex space-x-6 ${typography.footerText} ${
               isDark ? 'text-gray-400' : 'text-blue-200'
             }`}>
-              <a href="#" className={`transition-colors duration-300 ${
+              <Link to="/privacy-policy" className={`transition-colors duration-300 ${
                 isDark ? 'hover:text-white' : 'hover:text-white'
-              }`}>Maxfiylik Siyosati</a>
-              <a href="#" className={`transition-colors duration-300 ${
+              }`}>Maxfiylik Siyosati</Link>
+              <Link to="/terms-of-service" className={`transition-colors duration-300 ${
                 isDark ? 'hover:text-white' : 'hover:text-white'
-              }`}>Xizmat Shartlari</a>
-              <a href="#" className={`transition-colors duration-300 ${
+              }`}>Xizmat Shartlari</Link>
+              <Link to="/sitemap" className={`transition-colors duration-300 ${
                 isDark ? 'hover:text-white' : 'hover:text-white'
-              }`}>Sayt Xaritasi</a>
+              }`}>Sayt Xaritasi</Link>
             </div>
           </div>
         </div>
