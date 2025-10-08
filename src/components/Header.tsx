@@ -103,7 +103,7 @@ const Header = () => {
   return (
     <header
       role="banner"
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${headerBg}`}
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${headerBg}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4 md:grid md:grid-cols-3">
@@ -176,23 +176,28 @@ const Header = () => {
         {isMenuOpen && (
           <div
             id="mobile-menu"
-            className={`md:hidden backdrop-blur-md border-t py-4 animate-fade-in-up rounded-b-2xl shadow-xl ${
+            className={`md:hidden backdrop-blur-md border-t py-4 animate-fade-in-up rounded-b-2xl shadow-xl relative z-[110] ${
               isDark ? 'bg-gray-900/95 border-gray-700' : 'bg-white/95 border-gray-200'
             }`}
             role="navigation"
             aria-label="Mobil navigatsiya"
           >
-            <nav className="flex flex-col space-y-4">
+            <nav className="flex flex-col space-y-4 pointer-events-auto">
               {navigationItems.map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`text-left transition-all duration-300 text-sm font-medium px-4 py-2 rounded-lg transform hover:translate-x-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    scrollToSection(item.id);
+                  }}
+                  className={`text-left transition-all duration-300 text-sm font-medium px-4 py-2 rounded-lg transform hover:translate-x-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer ${
                     activeSection === item.id
                       ? `text-blue-600 ${isDark ? 'bg-blue-900/30' : 'bg-blue-50'}`
                       : `${isDark ? 'text-gray-200 hover:text-blue-400 hover:bg-gray-800' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'}`
                   }`}
                   aria-current={activeSection === item.id ? 'page' : undefined}
+                  type="button"
                 >
                   {item.label}
                   {activeSection === item.id && <span className="ml-2 text-blue-400" aria-hidden="true">●</span>}
