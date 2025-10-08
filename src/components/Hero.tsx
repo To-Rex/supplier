@@ -126,21 +126,25 @@ const Hero: React.FC = () => {
             setExtraClouds(prev => [...prev, newCloud]);
           }
 
-          // Create rain drops
-          const rainCount = Math.floor(Math.random() * 8) + 12;
+          // Create rain drops - more and continuous
+          const rainCount = Math.floor(Math.random() * 15) + 20;
+          console.log('Creating rain drops:', rainCount, 'darkness:', darkness);
           for (let i = 0; i < rainCount; i++) {
             setTimeout(() => {
               const drop: RainDrop = {
-                id: Date.now() + Math.random(),
+                id: Date.now() + Math.random() * 10000,
                 left: `${Math.random() * 100}%`,
-                delay: 0
+                delay: Math.random() * 200
               };
-              setRainDrops(prev => [...prev, drop]);
+              setRainDrops(prev => {
+                console.log('Adding rain drop at', drop.left);
+                return [...prev, drop];
+              });
 
               setTimeout(() => {
                 setRainDrops(prev => prev.filter(d => d.id !== drop.id));
-              }, 1000);
-            }, i * 30);
+              }, 1600);
+            }, i * 40);
           }
         }
       }
@@ -345,11 +349,12 @@ const Hero: React.FC = () => {
                 {rainDrops.map((drop) => (
                   <div
                     key={drop.id}
-                    className="absolute w-0.5 h-8 bg-gradient-to-b from-blue-200/70 to-transparent animate-rain"
+                    className="absolute w-1 h-16 bg-gradient-to-b from-blue-400 via-blue-300 to-transparent animate-rain rounded-full"
                     style={{
                       left: drop.left,
-                      top: '-2rem',
-                      animationDelay: `${drop.delay}ms`
+                      top: '0',
+                      animationDelay: `${drop.delay}ms`,
+                      boxShadow: '0 0 2px rgba(59, 130, 246, 0.5)'
                     }}
                   />
                 ))}
