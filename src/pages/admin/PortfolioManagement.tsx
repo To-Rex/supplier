@@ -3,8 +3,10 @@ import { Plus, Edit, Trash2, Eye, EyeOff, Search } from 'lucide-react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { supabase, Portfolio } from '../../lib/supabase';
 import ImageUpload from '../../components/admin/ImageUpload';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const PortfolioManagement: React.FC = () => {
+  const { isDark } = useTheme();
   const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -214,8 +216,8 @@ const PortfolioManagement: React.FC = () => {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Portfolio Boshqaruvi</h1>
-            <p className="text-gray-600 mt-1">Portfolio loyihalarini qo'shish va tahrirlash</p>
+            <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Portfolio Boshqaruvi</h1>
+            <p className={`mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Portfolio loyihalarini qo'shish va tahrirlash</p>
           </div>
           <button
             onClick={() => {
@@ -229,7 +231,7 @@ const PortfolioManagement: React.FC = () => {
           </button>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className={`rounded-lg shadow-sm p-6 transition-colors duration-300 ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -238,13 +240,21 @@ const PortfolioManagement: React.FC = () => {
                 placeholder="Portfolio qidirish..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                  isDark
+                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                }`}
               />
             </div>
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className={`px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                isDark
+                  ? 'bg-gray-700 border-gray-600 text-white'
+                  : 'bg-white border-gray-300 text-gray-900'
+              }`}
             >
               {categories.map(cat => (
                 <option key={cat.value} value={cat.value}>{cat.label}</option>
@@ -257,26 +267,30 @@ const PortfolioManagement: React.FC = () => {
               <div className="inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
             </div>
           ) : filteredPortfolios.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
+            <div className={`text-center py-12 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
               Portfolio loyihalari topilmadi
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50">
+                <thead className={isDark ? 'bg-gray-700' : 'bg-gray-50'}>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rasm</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nomi</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategoriya</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Texnologiyalar</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tartib</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amallar</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Rasm</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Nomi</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Kategoriya</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Texnologiyalar</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Status</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Tartib</th>
+                    <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Amallar</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className={`divide-y transition-colors duration-300 ${
+                  isDark ? 'bg-gray-800 divide-gray-700' : 'bg-white divide-gray-200'
+                }`}>
                   {filteredPortfolios.map((portfolio) => (
-                    <tr key={portfolio.id} className="hover:bg-gray-50">
+                    <tr key={portfolio.id} className={`transition-colors duration-200 ${
+                      isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
+                    }`}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <img
                           src={portfolio.image_url}
@@ -285,8 +299,8 @@ const PortfolioManagement: React.FC = () => {
                         />
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm font-medium text-gray-900">{portfolio.title}</div>
-                        <div className="text-sm text-gray-500">{portfolio.slug}</div>
+                        <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{portfolio.title}</div>
+                        <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{portfolio.slug}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
@@ -296,12 +310,12 @@ const PortfolioManagement: React.FC = () => {
                       <td className="px-6 py-4">
                         <div className="flex flex-wrap gap-1">
                           {portfolio.technologies.slice(0, 3).map((tech, idx) => (
-                            <span key={idx} className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded">
+                            <span key={idx} className={`px-2 py-1 text-xs rounded ${isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
                               {tech}
                             </span>
                           ))}
                           {portfolio.technologies.length > 3 && (
-                            <span className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded">
+                            <span className={`px-2 py-1 text-xs rounded ${isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
                               +{portfolio.technologies.length - 3}
                             </span>
                           )}
@@ -320,7 +334,7 @@ const PortfolioManagement: React.FC = () => {
                           <span>{portfolio.is_active ? 'Faol' : 'Nofaol'}</span>
                         </button>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         {portfolio.display_order}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
@@ -350,9 +364,9 @@ const PortfolioManagement: React.FC = () => {
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-white rounded-lg max-w-4xl w-full my-8">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-2xl font-bold text-gray-900">
+          <div className={`rounded-lg max-w-4xl w-full my-8 transition-colors duration-300 ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+            <div className={`p-6 border-b transition-colors duration-300 ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                 {editingPortfolio ? 'Portfolio Tahrirlash' : 'Yangi Portfolio Qo\'shish'}
               </h2>
             </div>
@@ -360,7 +374,7 @@ const PortfolioManagement: React.FC = () => {
             <form onSubmit={handleSubmit} className="p-6 space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     Nomi *
                   </label>
                   <input
@@ -373,12 +387,14 @@ const PortfolioManagement: React.FC = () => {
                         setFormData(prev => ({ ...prev, slug: generateSlug(e.target.value) }));
                       }
                     }}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                      isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                    }`}
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     Slug (URL) *
                   </label>
                   <input
@@ -386,12 +402,14 @@ const PortfolioManagement: React.FC = () => {
                     required
                     value={formData.slug}
                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                      isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                    }`}
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     Qisqa Tavsif *
                   </label>
                   <textarea
@@ -399,31 +417,37 @@ const PortfolioManagement: React.FC = () => {
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                      isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                    }`}
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     To'liq Tavsif
                   </label>
                   <textarea
                     value={formData.full_description}
                     onChange={(e) => setFormData({ ...formData, full_description: e.target.value })}
                     rows={6}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                      isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                    }`}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     Kategoriya *
                   </label>
                   <select
                     required
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                      isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                    }`}
                   >
                     <option value="web">Veb Dasturlash</option>
                     <option value="mobile">Mobil Ilovalar</option>
@@ -434,7 +458,7 @@ const PortfolioManagement: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     Tartib Raqami *
                   </label>
                   <input
@@ -442,12 +466,14 @@ const PortfolioManagement: React.FC = () => {
                     required
                     value={formData.display_order}
                     onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                      isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                    }`}
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     Rasm URL *
                   </label>
                   <ImageUpload
@@ -458,7 +484,7 @@ const PortfolioManagement: React.FC = () => {
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     Texnologiyalar (vergul bilan ajrating) *
                   </label>
                   <input
@@ -467,63 +493,73 @@ const PortfolioManagement: React.FC = () => {
                     value={formData.technologies}
                     onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
                     placeholder="React, Node.js, MongoDB"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                      isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                    }`}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     Jonli Havola
                   </label>
                   <input
                     type="url"
                     value={formData.live_url}
                     onChange={(e) => setFormData({ ...formData, live_url: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                      isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                    }`}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     GitHub Havola
                   </label>
                   <input
                     type="url"
                     value={formData.github_url}
                     onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                      isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                    }`}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     Mijoz Nomi
                   </label>
                   <input
                     type="text"
                     value={formData.client_name}
                     onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                      isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                    }`}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     Tugallangan Sana
                   </label>
                   <input
                     type="date"
                     value={formData.completion_date}
                     onChange={(e) => setFormData({ ...formData, completion_date: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                      isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                    }`}
                   />
                 </div>
 
                 <div className="md:col-span-2 space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-900">SEO Ma'lumotlari</h3>
+                  <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>SEO Ma'lumotlari</h3>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                       Meta Title
                     </label>
                     <input
@@ -531,12 +567,14 @@ const PortfolioManagement: React.FC = () => {
                       value={formData.meta_title}
                       onChange={(e) => setFormData({ ...formData, meta_title: e.target.value })}
                       placeholder="SEO uchun maxsus title (bo'sh qoldirilsa, asosiy nom ishlatiladi)"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                        isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                      }`}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                       Meta Description
                     </label>
                     <textarea
@@ -544,12 +582,14 @@ const PortfolioManagement: React.FC = () => {
                       onChange={(e) => setFormData({ ...formData, meta_description: e.target.value })}
                       rows={3}
                       placeholder="SEO uchun tavsif (bo'sh qoldirilsa, qisqa tavsif ishlatiladi)"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                        isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                      }`}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                       Meta Keywords (vergul bilan ajrating)
                     </label>
                     <input
@@ -557,12 +597,14 @@ const PortfolioManagement: React.FC = () => {
                       value={formData.meta_keywords}
                       onChange={(e) => setFormData({ ...formData, meta_keywords: e.target.value })}
                       placeholder="web development, react, node.js"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                        isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                      }`}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                       Open Graph Rasm URL
                     </label>
                     <input
@@ -570,7 +612,9 @@ const PortfolioManagement: React.FC = () => {
                       value={formData.og_image}
                       onChange={(e) => setFormData({ ...formData, og_image: e.target.value })}
                       placeholder="Ijtimoiy tarmoqlar uchun rasm (bo'sh qoldirilsa, asosiy rasm ishlatiladi)"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                        isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                      }`}
                     />
                   </div>
                 </div>
@@ -583,7 +627,7 @@ const PortfolioManagement: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
                     className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <label htmlFor="is_featured" className="text-sm font-medium text-gray-700">
+                  <label htmlFor="is_featured" className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     Tanlangan loyiha
                   </label>
                 </div>
@@ -596,20 +640,24 @@ const PortfolioManagement: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
                     className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <label htmlFor="is_active" className="text-sm font-medium text-gray-700">
+                  <label htmlFor="is_active" className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     Faol (saytda ko'rsatish)
                   </label>
                 </div>
               </div>
 
-              <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+              <div className={`flex justify-end space-x-4 pt-6 border-t transition-colors duration-300 ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                 <button
                   type="button"
                   onClick={() => {
                     setShowModal(false);
                     resetForm();
                   }}
-                  className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                  className={`px-6 py-2 border rounded-lg transition-colors duration-300 ${
+                    isDark
+                      ? 'border-gray-600 text-gray-300 hover:bg-gray-700'
+                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
                 >
                   Bekor qilish
                 </button>
