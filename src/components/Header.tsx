@@ -12,9 +12,9 @@ const Header = () => {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
-      
+
       // Detect active section
-      const sections = ['hero', 'about', 'services', 'portfolio', 'contact', 'blog'];
+      const sections = ['hero', 'about', 'services', 'portfolio', 'blog', 'contact'];
       const scrollPosition = window.scrollY + 100;
       
       for (const section of sections) {
@@ -125,7 +125,7 @@ const Header = () => {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`transition-all duration-500 text-sm lg:text-base font-medium hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg px-3 py-2 whitespace-nowrap ${
+                className={`transition-all duration-500 text-sm lg:text-base font-medium hover:scale-105 focus:outline-none rounded-lg px-3 py-2 whitespace-nowrap ${
                   activeSection === item.id
                     ? 'bg-blue-600 text-white shadow-lg'
                     : `${textColor} hover:bg-blue-500/10`

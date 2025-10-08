@@ -92,10 +92,10 @@ const AppContent: React.FC = () => {
           <Portfolio />
         </LazySection>
         <LazySection fallback={<SectionSkeleton />}>
-          <Contact />
+          <Blog />
         </LazySection>
         <LazySection fallback={<SectionSkeleton />}>
-          <Blog />
+          <Contact />
         </LazySection>
         <LazySection fallback={<SectionSkeleton />}>
           <Footer />
