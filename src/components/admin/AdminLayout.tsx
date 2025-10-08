@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, UserCog, LogOut, Menu, X, MessageSquare, Phone } from 'lucide-react';
+import { LayoutDashboard, Users, UserCog, LogOut, Menu, X, MessageSquare } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { typography, getTextColors } from '../../utils/typography';
@@ -28,7 +28,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     { path: '/admin/team', icon: Users, label: 'Jamoa A\'zolari' },
     { path: '/admin/users', icon: UserCog, label: 'Adminlar' },
     { path: '/admin/messages', icon: MessageSquare, label: 'Xabarlar' },
-    { path: '/admin/contact-info', icon: Phone, label: 'Kontakt Ma\'lumotlari' },
   ];
 
   const isActive = (path: string) => location.pathname === path;

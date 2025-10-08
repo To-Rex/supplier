@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Eye, TrendingUp, Calendar } from 'lucide-react';
+import { Users, Eye, TrendingUp, Calendar, Mail, Phone, MapPin, Clock, Facebook, Instagram, Twitter, Linkedin, Github, Save, AlertCircle } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useTheme } from '../../contexts/ThemeContext';
 import { typography, getTextColors } from '../../utils/typography';
@@ -12,10 +12,37 @@ interface StatsSummary {
   page_views: Record<string, number>;
 }
 
+interface ContactInfoData {
+  id: string;
+  phone: string;
+  email: string;
+  location: string;
+  work_hours: string;
+  facebook_url: string;
+  instagram_url: string;
+  twitter_url: string;
+  linkedin_url: string;
+  github_url: string;
+}
+
 const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<StatsSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalTeamMembers, setTotalTeamMembers] = useState(0);
+  const [contactInfo, setContactInfo] = useState<ContactInfoData>({
+    id: '',
+    phone: '',
+    email: '',
+    location: '',
+    work_hours: '',
+    facebook_url: '',
+    instagram_url: '',
+    twitter_url: '',
+    linkedin_url: '',
+    github_url: ''
+  });
+  const [isSaving, setIsSaving] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
   const { isDark } = useTheme();
   const textColors = getTextColors(isDark);
 
@@ -38,12 +65,60 @@ const Dashboard: React.FC = () => {
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true);
 
+      const { data: contactData } = await supabase
+        .from('contact_info')
+        .select('*')
+        .single();
+
       if (statsData) setStats(statsData);
       if (count) setTotalTeamMembers(count);
+      if (contactData) setContactInfo(contactData);
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleContactInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setContactInfo(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSaving(true);
+    setMessage(null);
+
+    try {
+      const { error } = await supabase
+        .from('contact_info')
+        .update({
+          phone: contactInfo.phone,
+          email: contactInfo.email,
+          location: contactInfo.location,
+          work_hours: contactInfo.work_hours,
+          facebook_url: contactInfo.facebook_url,
+          instagram_url: contactInfo.instagram_url,
+          twitter_url: contactInfo.twitter_url,
+          linkedin_url: contactInfo.linkedin_url,
+          github_url: contactInfo.github_url,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', contactInfo.id);
+
+      if (error) throw error;
+
+      setMessage({ type: 'success', text: 'Kontakt ma\'lumotlari muvaffaqiyatli yangilandi!' });
+      setTimeout(() => setMessage(null), 3000);
+    } catch (error: any) {
+      console.error('Error updating contact info:', error);
+      setMessage({ type: 'error', text: 'Yangilashda xatolik: ' + error.message });
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -146,58 +221,188 @@ const Dashboard: React.FC = () => {
           ))}
         </div>
 
-        <div className={`rounded-xl p-6 shadow-lg ${
-          isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white'
-        }`}>
-          <h2 className={`${typography.h2} ${textColors.primary} mb-6`}>So'nggi 7 Kunlik Statistika</h2>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-                  <th className={`text-left py-3 px-4 ${typography.cardSubtitle} ${textColors.primary}`}>Sana</th>
-                  <th className={`text-right py-3 px-4 ${typography.cardSubtitle} ${textColors.primary}`}>Tashriflar</th>
-                  <th className={`text-right py-3 px-4 ${typography.cardSubtitle} ${textColors.primary}`}>Noyob Foydalanuvchilar</th>
-                  <th className={`text-right py-3 px-4 ${typography.cardSubtitle} ${textColors.primary}`}>Home</th>
-                  <th className={`text-right py-3 px-4 ${typography.cardSubtitle} ${textColors.primary}`}>About</th>
-                  <th className={`text-right py-3 px-4 ${typography.cardSubtitle} ${textColors.primary}`}>Services</th>
-                  <th className={`text-right py-3 px-4 ${typography.cardSubtitle} ${textColors.primary}`}>Contact</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stats.map((day, index) => (
-                  <tr
-                    key={index}
-                    className={`border-b transition-colors ${
-                      isDark
-                        ? 'border-gray-700 hover:bg-gray-700/50'
-                        : 'border-gray-100 hover:bg-gray-50'
-                    }`}
-                  >
-                    <td className={`py-3 px-4 ${typography.bodyLarge} ${textColors.primary}`}>
-                      {new Date(day.stat_date).toLocaleDateString('uz-UZ')}
-                    </td>
-                    <td className={`text-right py-3 px-4 ${typography.bodyLarge} ${textColors.primary} font-semibold`}>
-                      {day.total_visits.toLocaleString()}
-                    </td>
-                    <td className={`text-right py-3 px-4 ${typography.bodyLarge} ${textColors.secondary}`}>
-                      {day.unique_visitors.toLocaleString()}
-                    </td>
-                    <td className={`text-right py-3 px-4 ${typography.bodyLarge} ${textColors.secondary}`}>
-                      {day.page_views.home || 0}
-                    </td>
-                    <td className={`text-right py-3 px-4 ${typography.bodyLarge} ${textColors.secondary}`}>
-                      {day.page_views.about || 0}
-                    </td>
-                    <td className={`text-right py-3 px-4 ${typography.bodyLarge} ${textColors.secondary}`}>
-                      {day.page_views.services || 0}
-                    </td>
-                    <td className={`text-right py-3 px-4 ${typography.bodyLarge} ${textColors.secondary}`}>
-                      {day.page_views.contact || 0}
-                    </td>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className={`rounded-xl p-6 shadow-lg ${
+            isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white'
+          }`}>
+            <h2 className={`${typography.h2} ${textColors.primary} mb-6`}>So'nggi 7 Kunlik Statistika</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+                    <th className={`text-left py-3 px-2 ${typography.cardSubtitle} ${textColors.primary}`}>Sana</th>
+                    <th className={`text-right py-3 px-2 ${typography.cardSubtitle} ${textColors.primary}`}>Tashriflar</th>
+                    <th className={`text-right py-3 px-2 ${typography.cardSubtitle} ${textColors.primary}`}>Foydalanuvchilar</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {stats.map((day, index) => (
+                    <tr
+                      key={index}
+                      className={`border-b transition-colors ${
+                        isDark
+                          ? 'border-gray-700 hover:bg-gray-700/50'
+                          : 'border-gray-100 hover:bg-gray-50'
+                      }`}
+                    >
+                      <td className={`py-3 px-2 ${typography.bodyLarge} ${textColors.primary}`}>
+                        {new Date(day.stat_date).toLocaleDateString('uz-UZ')}
+                      </td>
+                      <td className={`text-right py-3 px-2 ${typography.bodyLarge} ${textColors.primary} font-semibold`}>
+                        {day.total_visits.toLocaleString()}
+                      </td>
+                      <td className={`text-right py-3 px-2 ${typography.bodyLarge} ${textColors.secondary}`}>
+                        {day.unique_visitors.toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className={`rounded-xl p-6 shadow-lg ${
+            isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white'
+          }`}>
+            <h2 className={`${typography.h2} ${textColors.primary} mb-6`}>Kontakt Ma'lumotlari</h2>
+
+            {message && (
+              <div className={`mb-4 p-3 rounded-lg flex items-start space-x-2 text-sm ${
+                message.type === 'success'
+                  ? 'bg-green-50 border border-green-200 text-green-800'
+                  : 'bg-red-50 border border-red-200 text-red-800'
+              }`}>
+                <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <p>{message.text}</p>
+              </div>
+            )}
+
+            <form onSubmit={handleContactSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 gap-4">
+                <div>
+                  <label className={`block text-sm font-semibold ${textColors.primary} mb-1`}>
+                    <Phone className="w-3 h-3 inline mr-1" />
+                    Telefon
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={contactInfo.phone}
+                    onChange={handleContactInputChange}
+                    className={`w-full px-3 py-2 text-sm border-2 rounded-lg transition-all ${
+                      isDark
+                        ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500'
+                        : 'bg-white border-gray-200 focus:border-blue-500'
+                    } focus:ring-2 focus:ring-blue-500/20`}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className={`block text-sm font-semibold ${textColors.primary} mb-1`}>
+                    <Mail className="w-3 h-3 inline mr-1" />
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={contactInfo.email}
+                    onChange={handleContactInputChange}
+                    className={`w-full px-3 py-2 text-sm border-2 rounded-lg transition-all ${
+                      isDark
+                        ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500'
+                        : 'bg-white border-gray-200 focus:border-blue-500'
+                    } focus:ring-2 focus:ring-blue-500/20`}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className={`block text-sm font-semibold ${textColors.primary} mb-1`}>
+                    <MapPin className="w-3 h-3 inline mr-1" />
+                    Manzil
+                  </label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={contactInfo.location}
+                    onChange={handleContactInputChange}
+                    className={`w-full px-3 py-2 text-sm border-2 rounded-lg transition-all ${
+                      isDark
+                        ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500'
+                        : 'bg-white border-gray-200 focus:border-blue-500'
+                    } focus:ring-2 focus:ring-blue-500/20`}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className={`block text-sm font-semibold ${textColors.primary} mb-1`}>
+                    <Clock className="w-3 h-3 inline mr-1" />
+                    Ish Vaqti
+                  </label>
+                  <input
+                    type="text"
+                    name="work_hours"
+                    value={contactInfo.work_hours}
+                    onChange={handleContactInputChange}
+                    className={`w-full px-3 py-2 text-sm border-2 rounded-lg transition-all ${
+                      isDark
+                        ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500'
+                        : 'bg-white border-gray-200 focus:border-blue-500'
+                    } focus:ring-2 focus:ring-blue-500/20`}
+                    required
+                  />
+                </div>
+
+                <div className="pt-2 border-t border-gray-200">
+                  <p className={`text-xs font-semibold ${textColors.secondary} mb-3`}>Ijtimoiy Tarmoqlar</p>
+
+                  <div className="space-y-3">
+                    <input
+                      type="url"
+                      name="facebook_url"
+                      value={contactInfo.facebook_url}
+                      onChange={handleContactInputChange}
+                      placeholder="Facebook URL"
+                      className={`w-full px-3 py-2 text-sm border-2 rounded-lg transition-all ${
+                        isDark
+                          ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500'
+                          : 'bg-white border-gray-200 focus:border-blue-500'
+                      } focus:ring-2 focus:ring-blue-500/20`}
+                    />
+
+                    <input
+                      type="url"
+                      name="instagram_url"
+                      value={contactInfo.instagram_url}
+                      onChange={handleContactInputChange}
+                      placeholder="Instagram URL"
+                      className={`w-full px-3 py-2 text-sm border-2 rounded-lg transition-all ${
+                        isDark
+                          ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500'
+                          : 'bg-white border-gray-200 focus:border-blue-500'
+                      } focus:ring-2 focus:ring-blue-500/20`}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSaving}
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 rounded-lg font-bold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 shadow-lg"
+              >
+                {isSaving ? (
+                  <div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <>
+                    <Save className="w-4 h-4" />
+                    <span>Saqlash</span>
+                  </>
+                )}
+              </button>
+            </form>
           </div>
         </div>
       </div>
