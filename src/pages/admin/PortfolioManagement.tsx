@@ -1,0 +1,631 @@
+import React, { useState, useEffect } from 'react';
+import { Plus, Edit, Trash2, Eye, EyeOff, Search } from 'lucide-react';
+import AdminLayout from '../../components/admin/AdminLayout';
+import { supabase, Portfolio } from '../../lib/supabase';
+import ImageUpload from '../../components/admin/ImageUpload';
+
+const PortfolioManagement: React.FC = () => {
+  const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterCategory, setFilterCategory] = useState<string>('all');
+  const [showModal, setShowModal] = useState(false);
+  const [editingPortfolio, setEditingPortfolio] = useState<Portfolio | null>(null);
+  const [formData, setFormData] = useState({
+    title: '',
+    slug: '',
+    description: '',
+    full_description: '',
+    image_url: '',
+    category: 'web' as 'web' | 'mobile' | 'bot' | 'design' | 'other',
+    technologies: '',
+    live_url: '',
+    github_url: '',
+    client_name: '',
+    completion_date: '',
+    is_featured: false,
+    is_active: true,
+    display_order: 0,
+    meta_title: '',
+    meta_description: '',
+    meta_keywords: '',
+    og_image: ''
+  });
+
+  useEffect(() => {
+    fetchPortfolios();
+  }, []);
+
+  const fetchPortfolios = async () => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from('portfolio')
+        .select('*')
+        .order('display_order', { ascending: true });
+
+      if (error) throw error;
+      setPortfolios(data || []);
+    } catch (error) {
+      console.error('Error fetching portfolios:', error);
+      alert('Portfolio ma\'lumotlarini olishda xatolik');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const portfolioData = {
+      ...formData,
+      technologies: formData.technologies.split(',').map(t => t.trim()).filter(Boolean),
+      meta_keywords: formData.meta_keywords.split(',').map(k => k.trim()).filter(Boolean),
+      live_url: formData.live_url || null,
+      github_url: formData.github_url || null,
+      client_name: formData.client_name || null,
+      completion_date: formData.completion_date || null,
+      full_description: formData.full_description || null,
+      meta_title: formData.meta_title || null,
+      meta_description: formData.meta_description || null,
+      og_image: formData.og_image || null
+    };
+
+    try {
+      if (editingPortfolio) {
+        const { error } = await supabase
+          .from('portfolio')
+          .update(portfolioData)
+          .eq('id', editingPortfolio.id);
+
+        if (error) throw error;
+        alert('Portfolio muvaffaqiyatli yangilandi!');
+      } else {
+        const { error } = await supabase
+          .from('portfolio')
+          .insert([portfolioData]);
+
+        if (error) throw error;
+        alert('Portfolio muvaffaqiyatli qo\'shildi!');
+      }
+
+      setShowModal(false);
+      resetForm();
+      fetchPortfolios();
+    } catch (error: any) {
+      console.error('Error saving portfolio:', error);
+      if (error.message.includes('duplicate key')) {
+        alert('Bu slug allaqachon mavjud. Boshqa slug tanlang.');
+      } else {
+        alert('Xatolik yuz berdi: ' + error.message);
+      }
+    }
+  };
+
+  const handleEdit = (portfolio: Portfolio) => {
+    setEditingPortfolio(portfolio);
+    setFormData({
+      title: portfolio.title,
+      slug: portfolio.slug,
+      description: portfolio.description,
+      full_description: portfolio.full_description || '',
+      image_url: portfolio.image_url,
+      category: portfolio.category,
+      technologies: portfolio.technologies.join(', '),
+      live_url: portfolio.live_url || '',
+      github_url: portfolio.github_url || '',
+      client_name: portfolio.client_name || '',
+      completion_date: portfolio.completion_date || '',
+      is_featured: portfolio.is_featured,
+      is_active: portfolio.is_active,
+      display_order: portfolio.display_order,
+      meta_title: portfolio.meta_title || '',
+      meta_description: portfolio.meta_description || '',
+      meta_keywords: portfolio.meta_keywords.join(', '),
+      og_image: portfolio.og_image || ''
+    });
+    setShowModal(true);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Rostdan ham bu portfolioni o\'chirmoqchimisiz?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('portfolio')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      alert('Portfolio muvaffaqiyatli o\'chirildi!');
+      fetchPortfolios();
+    } catch (error) {
+      console.error('Error deleting portfolio:', error);
+      alert('O\'chirishda xatolik yuz berdi');
+    }
+  };
+
+  const toggleActive = async (portfolio: Portfolio) => {
+    try {
+      const { error } = await supabase
+        .from('portfolio')
+        .update({ is_active: !portfolio.is_active })
+        .eq('id', portfolio.id);
+
+      if (error) throw error;
+      fetchPortfolios();
+    } catch (error) {
+      console.error('Error toggling active:', error);
+      alert('Status o\'zgartirishda xatolik');
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      title: '',
+      slug: '',
+      description: '',
+      full_description: '',
+      image_url: '',
+      category: 'web',
+      technologies: '',
+      live_url: '',
+      github_url: '',
+      client_name: '',
+      completion_date: '',
+      is_featured: false,
+      is_active: true,
+      display_order: 0,
+      meta_title: '',
+      meta_description: '',
+      meta_keywords: '',
+      og_image: ''
+    });
+    setEditingPortfolio(null);
+  };
+
+  const generateSlug = (title: string) => {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim();
+  };
+
+  const filteredPortfolios = portfolios.filter(portfolio => {
+    const matchesSearch = portfolio.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      portfolio.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = filterCategory === 'all' || portfolio.category === filterCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  const categories = [
+    { value: 'all', label: 'Barcha' },
+    { value: 'web', label: 'Veb Dasturlash' },
+    { value: 'mobile', label: 'Mobil Ilovalar' },
+    { value: 'bot', label: 'Telegram Botlar' },
+    { value: 'design', label: 'Dizayn' },
+    { value: 'other', label: 'Boshqa' }
+  ];
+
+  return (
+    <AdminLayout>
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Portfolio Boshqaruvi</h1>
+            <p className="text-gray-600 mt-1">Portfolio loyihalarini qo'shish va tahrirlash</p>
+          </div>
+          <button
+            onClick={() => {
+              resetForm();
+              setShowModal(true);
+            }}
+            className="flex items-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-5 h-5" />
+            <span>Yangi Portfolio</span>
+          </button>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="flex flex-col md:flex-row gap-4 mb-6">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Portfolio qidirish..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              {categories.map(cat => (
+                <option key={cat.value} value={cat.value}>{cat.label}</option>
+              ))}
+            </select>
+          </div>
+
+          {isLoading ? (
+            <div className="text-center py-12">
+              <div className="inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : filteredPortfolios.length === 0 ? (
+            <div className="text-center py-12 text-gray-500">
+              Portfolio loyihalari topilmadi
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rasm</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nomi</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategoriya</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Texnologiyalar</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tartib</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amallar</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredPortfolios.map((portfolio) => (
+                    <tr key={portfolio.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <img
+                          src={portfolio.image_url}
+                          alt={portfolio.title}
+                          className="w-16 h-16 object-cover rounded-lg"
+                        />
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm font-medium text-gray-900">{portfolio.title}</div>
+                        <div className="text-sm text-gray-500">{portfolio.slug}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                          {categories.find(c => c.value === portfolio.category)?.label}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-wrap gap-1">
+                          {portfolio.technologies.slice(0, 3).map((tech, idx) => (
+                            <span key={idx} className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded">
+                              {tech}
+                            </span>
+                          ))}
+                          {portfolio.technologies.length > 3 && (
+                            <span className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded">
+                              +{portfolio.technologies.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button
+                          onClick={() => toggleActive(portfolio)}
+                          className={`flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-semibold ${
+                            portfolio.is_active
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-gray-100 text-gray-800'
+                          }`}
+                        >
+                          {portfolio.is_active ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+                          <span>{portfolio.is_active ? 'Faol' : 'Nofaol'}</span>
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {portfolio.display_order}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => handleEdit(portfolio)}
+                            className="text-blue-600 hover:text-blue-800"
+                          >
+                            <Edit className="w-5 h-5" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(portfolio.id)}
+                            className="text-red-600 hover:text-red-800"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+          <div className="bg-white rounded-lg max-w-4xl w-full my-8">
+            <div className="p-6 border-b border-gray-200">
+              <h2 className="text-2xl font-bold text-gray-900">
+                {editingPortfolio ? 'Portfolio Tahrirlash' : 'Yangi Portfolio Qo\'shish'}
+              </h2>
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-6 space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Nomi *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.title}
+                    onChange={(e) => {
+                      setFormData({ ...formData, title: e.target.value });
+                      if (!editingPortfolio) {
+                        setFormData(prev => ({ ...prev, slug: generateSlug(e.target.value) }));
+                      }
+                    }}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Slug (URL) *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.slug}
+                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Qisqa Tavsif *
+                  </label>
+                  <textarea
+                    required
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    rows={3}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    To'liq Tavsif
+                  </label>
+                  <textarea
+                    value={formData.full_description}
+                    onChange={(e) => setFormData({ ...formData, full_description: e.target.value })}
+                    rows={6}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Kategoriya *
+                  </label>
+                  <select
+                    required
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="web">Veb Dasturlash</option>
+                    <option value="mobile">Mobil Ilovalar</option>
+                    <option value="bot">Telegram Botlar</option>
+                    <option value="design">Dizayn</option>
+                    <option value="other">Boshqa</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Tartib Raqami *
+                  </label>
+                  <input
+                    type="number"
+                    required
+                    value={formData.display_order}
+                    onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Rasm URL *
+                  </label>
+                  <ImageUpload
+                    currentImage={formData.image_url}
+                    onImageChange={(url) => setFormData({ ...formData, image_url: url })}
+                    bucket="portfolio-images"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Texnologiyalar (vergul bilan ajrating) *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.technologies}
+                    onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
+                    placeholder="React, Node.js, MongoDB"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Jonli Havola
+                  </label>
+                  <input
+                    type="url"
+                    value={formData.live_url}
+                    onChange={(e) => setFormData({ ...formData, live_url: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    GitHub Havola
+                  </label>
+                  <input
+                    type="url"
+                    value={formData.github_url}
+                    onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Mijoz Nomi
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.client_name}
+                    onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Tugallangan Sana
+                  </label>
+                  <input
+                    type="date"
+                    value={formData.completion_date}
+                    onChange={(e) => setFormData({ ...formData, completion_date: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div className="md:col-span-2 space-y-4">
+                  <h3 className="text-lg font-semibold text-gray-900">SEO Ma'lumotlari</h3>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Meta Title
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.meta_title}
+                      onChange={(e) => setFormData({ ...formData, meta_title: e.target.value })}
+                      placeholder="SEO uchun maxsus title (bo'sh qoldirilsa, asosiy nom ishlatiladi)"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Meta Description
+                    </label>
+                    <textarea
+                      value={formData.meta_description}
+                      onChange={(e) => setFormData({ ...formData, meta_description: e.target.value })}
+                      rows={3}
+                      placeholder="SEO uchun tavsif (bo'sh qoldirilsa, qisqa tavsif ishlatiladi)"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Meta Keywords (vergul bilan ajrating)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.meta_keywords}
+                      onChange={(e) => setFormData({ ...formData, meta_keywords: e.target.value })}
+                      placeholder="web development, react, node.js"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Open Graph Rasm URL
+                    </label>
+                    <input
+                      type="url"
+                      value={formData.og_image}
+                      onChange={(e) => setFormData({ ...formData, og_image: e.target.value })}
+                      placeholder="Ijtimoiy tarmoqlar uchun rasm (bo'sh qoldirilsa, asosiy rasm ishlatiladi)"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="is_featured"
+                    checked={formData.is_featured}
+                    onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <label htmlFor="is_featured" className="text-sm font-medium text-gray-700">
+                    Tanlangan loyiha
+                  </label>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="is_active"
+                    checked={formData.is_active}
+                    onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <label htmlFor="is_active" className="text-sm font-medium text-gray-700">
+                    Faol (saytda ko'rsatish)
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowModal(false);
+                    resetForm();
+                  }}
+                  className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  Bekor qilish
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  {editingPortfolio ? 'Yangilash' : 'Qo\'shish'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </AdminLayout>
+  );
+};
+
+export default PortfolioManagement;
