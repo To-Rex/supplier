@@ -53,39 +53,15 @@ const Footer: React.FC = () => {
     { icon: Github, href: contactInfo?.github_url || '#', label: 'GitHub', show: !!contactInfo?.github_url }
   ];
 
-  const quickLinks = [
-    { label: 'Biz Haqimizda', href: '#about' },
-    { label: 'Xizmatlar', href: '#services' },
-    { label: 'Portfolio', href: '#portfolio' },
-    { label: 'Blog', href: '#blog' },
-    { label: 'Aloqa', href: '#contact' }
-  ];
-
-  const services = [
-    'Veb Dasturlash',
-    'Mobil Ilovalar',
-    'Telegram Botlar',
-    'UI/UX Dizayn',
-    'Backend Dasturlash',
-    'Maslahat'
-  ];
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id.replace('#', ''));
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <footer className={`transition-colors duration-300 ${
       isDark ? 'bg-gray-900 text-white' : 'bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
-        <div className="py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="py-16 grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Company Info */}
-          <div className="lg:col-span-1">
+          <div>
             <div className="flex items-center space-x-2 mb-6">
               <Bot className="w-8 h-8 text-blue-400" />
               <span className={`${typography.navLarge} font-bold`}>Torex IT</span>
@@ -93,7 +69,7 @@ const Footer: React.FC = () => {
             <p className={`${typography.body} mb-6 leading-relaxed ${
               isDark ? 'text-gray-400' : 'text-blue-100'
             }`}>
-              G'oyalarni zamonaviy texnologiyalar va innovatsion yechimlar bilan raqamli haqiqatga aylantiramiz. 
+              G'oyalarni zamonaviy texnologiyalar va innovatsion yechimlar bilan raqamli haqiqatga aylantiramiz.
               Veb dasturlash, mobil ilovalar va avtomatlashtirish sohasidagi ishonchli hamkoringiz.
             </p>
             <div className="flex space-x-4">
@@ -112,41 +88,6 @@ const Footer: React.FC = () => {
                 </a>
               ))}
             </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className={`${typography.footerTitle} font-semibold mb-6`}>Tezkor Havolalar</h3>
-            <ul className="space-y-3">
-              {quickLinks.map((link, index) => (
-                <li key={index}>
-                  <button
-                    onClick={() => scrollToSection(link.href)}
-                    className={`${typography.footerText} transition-colors duration-300 hover:translate-x-1 transform inline-block ${
-                      isDark ? 'text-gray-400 hover:text-white' : 'text-blue-200 hover:text-white'
-                    }`}
-                  >
-                    {link.label}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Services */}
-          <div>
-            <h3 className={`${typography.footerTitle} font-semibold mb-6`}>Bizning Xizmatlarimiz</h3>
-            <ul className="space-y-3">
-              {services.map((service, index) => (
-                <li key={index}>
-                  <span className={`${typography.footerText} transition-colors duration-300 cursor-pointer hover:translate-x-1 transform inline-block ${
-                    isDark ? 'text-gray-400 hover:text-white' : 'text-blue-200 hover:text-white'
-                  }`}>
-                    {service}
-                  </span>
-                </li>
-              ))}
-            </ul>
           </div>
 
           {/* Contact Info */}
