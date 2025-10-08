@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Contact Form</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>Test Contact Form</h1>
+    <button onclick="testInsert()">Test Insert</button>
+    <div id="result"></div>
+
+    <script>
+        const supabaseUrl = 'https://tnscdriuivwtpvhmvfvf.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRuc2Nkcml1aXZ3dHB2aG12ZnZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5NDQxMzMsImV4cCI6MjA3NTUyMDEzM30.yXJP3NwZNOmVlQGmA2xUDwWbzSLyoU68-2VbOf2m4v0';
+
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+        async function testInsert() {
+            console.log('Starting test insert...');
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+
+            try {
+                const { data, error } = await supabase
+                    .from('contact_messages')
+                    .insert([
+                        {
+                            name: 'Test User HTML',
+                            email: 'testhtml@example.com',
+                            phone: '+998901234567',
+                            subject: 'Test Subject',
+                            message: 'Test message from HTML file',
+                            status: 'new'
+                        }
+                    ])
+                    .select();
+
+                console.log('Response:', { data, error });
+
+                if (error) {
+                    resultDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>
+                    <pre>${JSON.stringify(error, null, 2)}</pre>`;
+                } else {
+                    resultDiv.innerHTML = `<p style="color: green;">Success!</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>`;
+                }
+            } catch (err) {
+                console.error('Catch error:', err);
+                resultDiv.innerHTML = `<p style="color: red;">Catch Error: ${err.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
