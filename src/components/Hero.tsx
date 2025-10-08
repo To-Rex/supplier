@@ -78,12 +78,12 @@ const Hero: React.FC = () => {
     const handleScroll = () => {
       const now = Date.now();
       // Only create if scroll position is past a threshold and throttle
-      if (window.scrollY > 50 && now - lastScrollTime > 150) {
+      if (window.scrollY > 50 && now - lastScrollTime > 80) {
         lastScrollTime = now;
-        // Create 2-3 shooting stars on scroll
-        const count = Math.floor(Math.random() * 2) + 2;
+        // Create 8-12 shooting stars on scroll
+        const count = Math.floor(Math.random() * 5) + 8;
         for (let i = 0; i < count; i++) {
-          setTimeout(() => createShootingStar(), i * 100);
+          setTimeout(() => createShootingStar(), i * 60);
         }
       }
     };
