@@ -16,8 +16,8 @@
 
   2. Security
     - Enable RLS on contact_messages table
-    - Allow public INSERT for form submissions
-    - Allow anon and authenticated SELECT/UPDATE for admin panel
+    - Allow PUBLIC INSERT for anyone to submit contact forms (no authentication required)
+    - Allow only AUTHENTICATED users to SELECT/UPDATE/DELETE (admin access only)
 
   3. Indexes
     - Index on status for filtering
@@ -44,29 +44,33 @@ ALTER TABLE contact_messages ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies
 
-CREATE POLICY "Anyone can insert contact messages"
+-- Allow anyone (including unauthenticated users) to submit contact forms
+CREATE POLICY "Public can insert contact messages"
   ON contact_messages
   FOR INSERT
-  TO anon, authenticated
+  TO public
   WITH CHECK (true);
 
-CREATE POLICY "Anyone can view contact messages"
+-- Only authenticated users (admins) can view messages
+CREATE POLICY "Authenticated users can view contact messages"
   ON contact_messages
   FOR SELECT
-  TO anon, authenticated
+  TO authenticated
   USING (true);
 
-CREATE POLICY "Anyone can update contact messages"
+-- Only authenticated users (admins) can update messages
+CREATE POLICY "Authenticated users can update contact messages"
   ON contact_messages
   FOR UPDATE
-  TO anon, authenticated
+  TO authenticated
   USING (true)
   WITH CHECK (true);
 
-CREATE POLICY "Anyone can delete contact messages"
+-- Only authenticated users (admins) can delete messages
+CREATE POLICY "Authenticated users can delete contact messages"
   ON contact_messages
   FOR DELETE
-  TO anon, authenticated
+  TO authenticated
   USING (true);
 
 -- Create indexes for better performance
