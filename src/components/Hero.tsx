@@ -73,11 +73,18 @@ const Hero: React.FC = () => {
       }, 1500);
     };
 
-    // Create shooting star on scroll
+    // Create shooting stars on scroll
+    let lastScrollTime = 0;
     const handleScroll = () => {
-      // Only create if scroll position is past a threshold
-      if (window.scrollY > 50) {
-        createShootingStar();
+      const now = Date.now();
+      // Only create if scroll position is past a threshold and throttle
+      if (window.scrollY > 50 && now - lastScrollTime > 150) {
+        lastScrollTime = now;
+        // Create 2-3 shooting stars on scroll
+        const count = Math.floor(Math.random() * 2) + 2;
+        for (let i = 0; i < count; i++) {
+          setTimeout(() => createShootingStar(), i * 100);
+        }
       }
     };
 
