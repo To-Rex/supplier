@@ -125,8 +125,10 @@ const Header = () => {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`transition-all duration-300 text-sm lg:text-base font-medium hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1 whitespace-nowrap ${textColor} hover:text-blue-400 ${
-                  activeSection === item.id ? 'text-blue-400' : ''
+                className={`transition-all duration-500 text-sm lg:text-base font-medium hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg px-3 py-2 whitespace-nowrap ${
+                  activeSection === item.id
+                    ? 'bg-blue-600 text-white shadow-lg'
+                    : `${textColor} hover:bg-blue-500/10`
                 }`}
                 aria-current={activeSection === item.id ? 'page' : undefined}
               >
