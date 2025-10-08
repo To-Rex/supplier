@@ -120,29 +120,20 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center justify-center space-x-4 lg:space-x-6">
-            <nav className="flex space-x-4 lg:space-x-6" role="navigation" aria-label="Asosiy navigatsiya">
-              {navigationItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`transition-all duration-300 text-sm lg:text-base font-medium hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1 ${textColor} hover:text-blue-400 ${
-                    activeSection === item.id ? 'text-blue-400' : ''
-                  }`}
-                  aria-current={activeSection === item.id ? 'page' : undefined}
-                >
-                  {item.label}
-                </button>
-              ))}
+          <nav className="hidden md:flex items-center justify-center space-x-3 lg:space-x-5 xl:space-x-8" role="navigation" aria-label="Asosiy navigatsiya">
+            {navigationItems.map((item) => (
               <button
-                onClick={() => scrollToSection('contact')}
-                className="bg-blue-600 text-white px-4 lg:px-6 py-2 rounded-full hover:bg-blue-700 transition-all duration-300 text-sm lg:text-base font-medium transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                aria-label="Bog'lanish qismiga o'tish"
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className={`transition-all duration-300 text-sm lg:text-base font-medium hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1 whitespace-nowrap ${textColor} hover:text-blue-400 ${
+                  activeSection === item.id ? 'text-blue-400' : ''
+                }`}
+                aria-current={activeSection === item.id ? 'page' : undefined}
               >
-                Bog'lanish
+                {item.label}
               </button>
-            </nav>
-          </div>
+            ))}
+          </nav>
 
           {/* Right Controls */}
           <div className="flex items-center justify-end space-x-3">
