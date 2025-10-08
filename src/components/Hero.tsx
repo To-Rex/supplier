@@ -9,6 +9,7 @@ interface ShootingStar {
   left: string;
   top: string;
   delay: number;
+  direction: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 }
 
 const Hero: React.FC = () => {
@@ -24,16 +25,23 @@ const Hero: React.FC = () => {
   const optimizedParticles = useMemo(() => generateOptimizedParticles(12), []);
   const optimizedShapes = useMemo(() => generateOptimizedShapes(6), []);
 
-  // Generate fixed star positions once
+  // Generate fixed star positions once with truly random distribution
   const staticStars = useMemo(() => {
-    return Array.from({ length: 40 }).map((_, i) => ({
-      id: i,
-      top: `${(i * 37 + 13) % 100}%`,
-      left: `${(i * 67 + 29) % 100}%`,
-      opacity: ((i * 17) % 50 + 30) / 100,
-      duration: 2 + ((i * 23) % 30) / 10,
-      delay: ((i * 19) % 20) / 10
-    }));
+    const generateRandomStars = () => {
+      const stars = [];
+      for (let i = 0; i < 40; i++) {
+        stars.push({
+          id: i,
+          top: `${Math.random() * 100}%`,
+          left: `${Math.random() * 100}%`,
+          opacity: Math.random() * 0.5 + 0.3,
+          duration: 2 + Math.random() * 3,
+          delay: Math.random() * 2
+        });
+      }
+      return stars;
+    };
+    return generateRandomStars();
   }, []);
 
   // Respect reduced motion preferences
@@ -46,11 +54,17 @@ const Hero: React.FC = () => {
     if (!isDark || prefersReducedMotion) return;
 
     const createShootingStar = () => {
+      const directions: Array<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'> = [
+        'top-left', 'top-right', 'bottom-left', 'bottom-right'
+      ];
+      const randomDirection = directions[Math.floor(Math.random() * directions.length)];
+
       const star: ShootingStar = {
         id: Date.now() + Math.random(),
         left: `${Math.random() * 80 + 10}%`,
-        top: `${Math.random() * 50}%`,
-        delay: 0
+        top: `${Math.random() * 80 + 10}%`,
+        delay: 0,
+        direction: randomDirection
       };
 
       setShootingStars(prev => [...prev, star]);
@@ -246,7 +260,7 @@ const Hero: React.FC = () => {
             {isDark && shootingStars.map((star) => (
               <div
                 key={star.id}
-                className="absolute w-1 h-1 bg-white rounded-full shooting-star"
+                className={`absolute w-1 h-1 bg-white rounded-full shooting-star-${star.direction}`}
                 style={{
                   left: star.left,
                   top: star.top,

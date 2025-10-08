@@ -273,8 +273,8 @@ body {
   }
 }
 
-/* Shooting star animation */
-@keyframes shooting-star {
+/* Shooting star animations - multiple directions */
+@keyframes shooting-star-top-right {
   0% {
     transform: translateX(0) translateY(0) rotate(-45deg);
     opacity: 1;
@@ -283,17 +283,77 @@ body {
     opacity: 1;
   }
   100% {
-    transform: translateX(300px) translateY(300px) rotate(-45deg);
+    transform: translateX(300px) translateY(-300px) rotate(-45deg);
     opacity: 0;
   }
 }
 
-.shooting-star {
-  animation: shooting-star 1.5s ease-out forwards;
+@keyframes shooting-star-top-left {
+  0% {
+    transform: translateX(0) translateY(0) rotate(45deg);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-300px) translateY(-300px) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+@keyframes shooting-star-bottom-right {
+  0% {
+    transform: translateX(0) translateY(0) rotate(45deg);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(300px) translateY(300px) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+@keyframes shooting-star-bottom-left {
+  0% {
+    transform: translateX(0) translateY(0) rotate(-45deg);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-300px) translateY(300px) rotate(-45deg);
+    opacity: 0;
+  }
+}
+
+.shooting-star-top-right {
+  animation: shooting-star-top-right 1.5s ease-out forwards;
   will-change: transform, opacity;
 }
 
-.shooting-star::after {
+.shooting-star-top-left {
+  animation: shooting-star-top-left 1.5s ease-out forwards;
+  will-change: transform, opacity;
+}
+
+.shooting-star-bottom-right {
+  animation: shooting-star-bottom-right 1.5s ease-out forwards;
+  will-change: transform, opacity;
+}
+
+.shooting-star-bottom-left {
+  animation: shooting-star-bottom-left 1.5s ease-out forwards;
+  will-change: transform, opacity;
+}
+
+.shooting-star-top-right::after,
+.shooting-star-top-left::after,
+.shooting-star-bottom-right::after,
+.shooting-star-bottom-left::after {
   content: '';
   position: absolute;
   top: 0;
