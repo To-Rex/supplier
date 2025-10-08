@@ -133,14 +133,19 @@ const Header = () => {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`transition-all duration-500 text-sm lg:text-base font-medium hover:scale-105 focus:outline-none rounded-lg px-3 py-2 whitespace-nowrap ${
+                className={`transition-all duration-500 text-sm lg:text-base font-medium hover:scale-105 focus:outline-none rounded-lg px-3 py-2 whitespace-nowrap relative ${
                   activeSection === item.id
-                    ? 'bg-blue-600 text-white shadow-lg'
+                    ? (isHeroSection ? 'text-white' : (isDark ? 'text-white' : 'text-blue-600'))
                     : `${textColor} hover:bg-blue-500/10`
                 }`}
                 aria-current={activeSection === item.id ? 'page' : undefined}
               >
                 {item.label}
+                {activeSection === item.id && (
+                  <span className={`absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 rounded-full ${
+                    isHeroSection ? 'bg-white' : 'bg-blue-500'
+                  }`} aria-hidden="true"></span>
+                )}
               </button>
             ))}
           </nav>
@@ -200,7 +205,7 @@ const Header = () => {
                   type="button"
                 >
                   {item.label}
-                  {activeSection === item.id && <span className="ml-2 text-blue-400" aria-hidden="true">●</span>}
+                  {activeSection === item.id && <span className="ml-2 text-blue-500" aria-hidden="true">●</span>}
                 </button>
               ))}
               <button
