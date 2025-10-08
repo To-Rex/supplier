@@ -26,6 +26,12 @@ const UsersManagement: React.FC = () => {
     full_name: '',
     email: '',
   });
+  const [editFormData, setEditFormData] = useState({
+    username: '',
+    password: '',
+    full_name: '',
+    email: '',
+  });
   const { isDark } = useTheme();
   const textColors = getTextColors(isDark);
 
@@ -52,6 +58,12 @@ const UsersManagement: React.FC = () => {
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (formData.password.length < 6) {
+      alert('Parol kamida 6 ta belgidan iborat bo\'lishi kerak!');
+      return;
+    }
+
     try {
       const { error } = await supabase.from('admin_users').insert([
         {
@@ -67,34 +79,53 @@ const UsersManagement: React.FC = () => {
 
       setShowAddForm(false);
       setFormData({ username: '', password: '', full_name: '', email: '' });
+      alert('Admin muvaffaqiyatli qo\'shildi!');
       fetchUsers();
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error adding user:', err);
-      alert('Xatolik yuz berdi!');
+      if (err.message?.includes('duplicate')) {
+        alert('Bu login yoki email allaqachon mavjud!');
+      } else {
+        alert('Xatolik yuz berdi!');
+      }
     }
   };
 
   const handleUpdate = async (id: string) => {
     try {
-      const user = users.find((u) => u.id === id);
-      if (!user) return;
+      const updateData: any = {
+        username: editFormData.username,
+        full_name: editFormData.full_name,
+        email: editFormData.email,
+        updated_at: new Date().toISOString(),
+      };
+
+      if (editFormData.password) {
+        if (editFormData.password.length < 6) {
+          alert('Parol kamida 6 ta belgidan iborat bo\'lishi kerak!');
+          return;
+        }
+        updateData.password_hash = editFormData.password;
+      }
 
       const { error } = await supabase
         .from('admin_users')
-        .update({
-          full_name: user.full_name,
-          email: user.email,
-          updated_at: new Date().toISOString(),
-        })
+        .update(updateData)
         .eq('id', id);
 
       if (error) throw error;
 
       setEditingId(null);
+      setEditFormData({ username: '', password: '', full_name: '', email: '' });
+      alert('Ma\'lumotlar muvaffaqiyatli yangilandi!');
       fetchUsers();
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error updating user:', err);
-      alert('Xatolik yuz berdi!');
+      if (err.message?.includes('duplicate')) {
+        alert('Bu login yoki email allaqachon mavjud!');
+      } else {
+        alert('Xatolik yuz berdi!');
+      }
     }
   };
 
@@ -114,12 +145,16 @@ const UsersManagement: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Rostdan ham o\'chirmoqchimisiz?')) return;
+    const user = users.find(u => u.id === id);
+    if (!user) return;
+
+    if (!confirm(`Rostdan ham "${user.full_name}" ni o\'chirmoqchimisiz? Bu amalni bekor qilib bo\'lmaydi!`)) return;
 
     try {
       const { error } = await supabase.from('admin_users').delete().eq('id', id);
 
       if (error) throw error;
+      alert('Admin muvaffaqiyatli o\'chirildi!');
       fetchUsers();
     } catch (err) {
       console.error('Error deleting user:', err);
@@ -127,12 +162,19 @@ const UsersManagement: React.FC = () => {
     }
   };
 
-  const handleFieldChange = (id: string, field: keyof AdminUser, value: any) => {
-    setUsers(
-      users.map((u) =>
-        u.id === id ? { ...u, [field]: value } : u
-      )
-    );
+  const startEditing = (user: AdminUser) => {
+    setEditingId(user.id);
+    setEditFormData({
+      username: user.username,
+      password: '',
+      full_name: user.full_name,
+      email: user.email,
+    });
+  };
+
+  const cancelEditing = () => {
+    setEditingId(null);
+    setEditFormData({ username: '', password: '', full_name: '', email: '' });
   };
 
   if (loading) {
@@ -159,7 +201,10 @@ const UsersManagement: React.FC = () => {
             </p>
           </div>
           <button
-            onClick={() => setShowAddForm(true)}
+            onClick={() => {
+              setShowAddForm(true);
+              setFormData({ username: '', password: '', full_name: '', email: '' });
+            }}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-5 h-5" />
@@ -248,7 +293,10 @@ const UsersManagement: React.FC = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setShowAddForm(false)}
+                  onClick={() => {
+                    setShowAddForm(false);
+                    setFormData({ username: '', password: '', full_name: '', email: '' });
+                  }}
                   className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
                 >
                   Bekor qilish
@@ -271,17 +319,50 @@ const UsersManagement: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className={`block ${typography.cardSubtitle} ${textColors.primary} mb-2`}>
-                        To'liq ism
+                        Login
                       </label>
                       <input
                         type="text"
-                        value={user.full_name}
-                        onChange={(e) => handleFieldChange(user.id, 'full_name', e.target.value)}
+                        value={editFormData.username}
+                        onChange={(e) => setEditFormData({ ...editFormData, username: e.target.value })}
                         className={`w-full px-4 py-2 rounded-lg border ${
                           isDark
                             ? 'bg-gray-700 border-gray-600 text-white'
                             : 'bg-white border-gray-300 text-gray-900'
                         }`}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className={`block ${typography.cardSubtitle} ${textColors.primary} mb-2`}>
+                        Yangi Parol (ixtiyoriy)
+                      </label>
+                      <input
+                        type="password"
+                        value={editFormData.password}
+                        onChange={(e) => setEditFormData({ ...editFormData, password: e.target.value })}
+                        className={`w-full px-4 py-2 rounded-lg border ${
+                          isDark
+                            ? 'bg-gray-700 border-gray-600 text-white'
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
+                        placeholder="Bo'sh qoldiring, o'zgarishsiz qoladi"
+                      />
+                    </div>
+                    <div>
+                      <label className={`block ${typography.cardSubtitle} ${textColors.primary} mb-2`}>
+                        To'liq ism
+                      </label>
+                      <input
+                        type="text"
+                        value={editFormData.full_name}
+                        onChange={(e) => setEditFormData({ ...editFormData, full_name: e.target.value })}
+                        className={`w-full px-4 py-2 rounded-lg border ${
+                          isDark
+                            ? 'bg-gray-700 border-gray-600 text-white'
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
+                        required
                       />
                     </div>
                     <div>
@@ -290,13 +371,14 @@ const UsersManagement: React.FC = () => {
                       </label>
                       <input
                         type="email"
-                        value={user.email}
-                        onChange={(e) => handleFieldChange(user.id, 'email', e.target.value)}
+                        value={editFormData.email}
+                        onChange={(e) => setEditFormData({ ...editFormData, email: e.target.value })}
                         className={`w-full px-4 py-2 rounded-lg border ${
                           isDark
                             ? 'bg-gray-700 border-gray-600 text-white'
                             : 'bg-white border-gray-300 text-gray-900'
                         }`}
+                        required
                       />
                     </div>
                   </div>
@@ -309,7 +391,7 @@ const UsersManagement: React.FC = () => {
                       Saqlash
                     </button>
                     <button
-                      onClick={() => setEditingId(null)}
+                      onClick={cancelEditing}
                       className="flex items-center gap-2 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
                     >
                       <X className="w-4 h-4" />
@@ -364,14 +446,16 @@ const UsersManagement: React.FC = () => {
                       {user.is_active ? <UserX className="w-5 h-5" /> : <UserCheck className="w-5 h-5" />}
                     </button>
                     <button
-                      onClick={() => setEditingId(user.id)}
+                      onClick={() => startEditing(user)}
                       className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      title="Tahrirlash"
                     >
                       <Edit2 className="w-5 h-5" />
                     </button>
                     <button
                       onClick={() => handleDelete(user.id)}
                       className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      title="O'chirish"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>
