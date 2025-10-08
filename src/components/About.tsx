@@ -212,13 +212,13 @@ const About: React.FC = () => {
               <Link
                 key={member.id}
                 to={`/team/${member.slug}`}
-                className="group cursor-pointer transform hover:scale-105 transition-all duration-500"
+                className="group cursor-pointer transform hover:scale-105 transition-all duration-500 flex"
                 style={{ animationDelay: `${index * 0.1}s` }}
                 role="listitem"
                 tabIndex={0}
                 aria-label={`${member.name} - ${member.role}. ${member.expertise.join(', ')}`}
               >
-                <div className={`rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 text-center relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                <div className={`rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 text-center relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex flex-col w-full ${
                   isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white'
                 }`}>
                   {/* Animated background */}
@@ -262,18 +262,20 @@ const About: React.FC = () => {
                       {member.name}
                     </h4>
                     <p className={`text-blue-600 ${typography.cardSubtitle} font-semibold mb-2`}>{member.role}</p>
-                    <div className={`${typography.cardBody} ${textColors.secondary}`}>
+                    <div className={`${typography.cardBody} ${textColors.secondary} mb-3`}>
                       {member.expertise.map((skill, i) => (
                         <span key={i}>
                           {skill}{i < member.expertise.length - 1 ? ' • ' : ''}
                         </span>
                       ))}
                     </div>
-                    {member.bio && (
-                      <p className={`${typography.bodySmall} ${textColors.secondary} mt-3 leading-relaxed`}>
-                        {member.bio}
-                      </p>
-                    )}
+                    <div className="flex-grow">
+                      {member.bio && (
+                        <p className={`${typography.bodySmall} ${textColors.secondary} leading-relaxed line-clamp-3`}>
+                          {member.bio}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </Link>
