@@ -4,6 +4,7 @@ import { supabase, TeamMember } from '../../lib/supabase';
 import { useTheme } from '../../contexts/ThemeContext';
 import { typography, getTextColors } from '../../utils/typography';
 import AdminLayout from '../../components/admin/AdminLayout';
+import ImageUpload from '../../components/admin/ImageUpload';
 
 const TeamManagement: React.FC = () => {
   const [members, setMembers] = useState<TeamMember[]>([]);
@@ -48,6 +49,12 @@ const TeamManagement: React.FC = () => {
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.image_url) {
+      alert('Iltimos, rasm yuklang!');
+      return;
+    }
+
     try {
       const slug = formData.slug || formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       const { error } = await supabase.from('team_members').insert([
@@ -217,20 +224,11 @@ const TeamManagement: React.FC = () => {
                     required
                   />
                 </div>
-                <div>
-                  <label className={`block ${typography.cardSubtitle} ${textColors.primary} mb-2`}>
-                    Rasm URL
-                  </label>
-                  <input
-                    type="url"
-                    value={formData.image_url}
-                    onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                    className={`w-full px-4 py-2 rounded-lg border ${
-                      isDark
-                        ? 'bg-gray-700 border-gray-600 text-white'
-                        : 'bg-white border-gray-300 text-gray-900'
-                    }`}
-                    required
+                <div className="md:col-span-2">
+                  <ImageUpload
+                    currentImage={formData.image_url}
+                    onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+                    label="Jamoa a'zosining rasmi"
                   />
                 </div>
                 <div>
