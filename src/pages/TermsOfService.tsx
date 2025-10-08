@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { FileText, CheckCircle, AlertTriangle, Scale, Users, ShieldCheck, CreditCard, XCircle } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { typography, getTextColors } from '../utils/typography';
+import SEOOptimizer from '../components/SEOOptimizer';
 
 const TermsOfService: React.FC = () => {
   const { isDark } = useTheme();
@@ -76,6 +77,12 @@ const TermsOfService: React.FC = () => {
     <div className={`min-h-screen transition-colors duration-300 ${
       isDark ? 'bg-gray-900' : 'bg-gradient-to-br from-blue-50 via-white to-blue-50'
     }`}>
+      <SEOOptimizer
+        title="Foydalanish Shartlari"
+        description="Torex IT xizmatlaridan foydalanish shartlari va qoidalari. Intellektual mulk huquqlari, javobgarlik va foydalanuvchi majburiyatlari haqida to'liq ma'lumot."
+        keywords="foydalanish shartlari, xizmat shartlari, qoidalar, shartnoma, foydalanuvchi shartnomasi, torex it"
+        canonicalUrl="https://torex.uz/terms-of-service"
+      />
       {/* Hero Section */}
       <div className={`relative overflow-hidden transition-colors duration-300 ${
         isDark ? 'bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800' : 'bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800'

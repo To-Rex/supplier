@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Shield, Lock, Eye, UserCheck, Database, Globe, Mail, FileText } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { typography, getTextColors } from '../utils/typography';
+import SEOOptimizer from '../components/SEOOptimizer';
 
 const PrivacyPolicy: React.FC = () => {
   const { isDark } = useTheme();
@@ -58,6 +59,12 @@ const PrivacyPolicy: React.FC = () => {
     <div className={`min-h-screen transition-colors duration-300 ${
       isDark ? 'bg-gray-900' : 'bg-gradient-to-br from-blue-50 via-white to-blue-50'
     }`}>
+      <SEOOptimizer
+        title="Maxfiylik Siyosati"
+        description="Torex IT maxfiylik siyosati. Shaxsiy ma'lumotlarni to'plash, ishlatish va himoya qilish haqida batafsil ma'lumot. Sizning ma'lumotlaringiz xavfsizligi bizning ustuvor vazifamiz."
+        keywords="maxfiylik siyosati, shaxsiy ma'lumotlar, ma'lumotlar xavfsizligi, GDPR, ma'lumotlar himoyasi, torex it"
+        canonicalUrl="https://torex.uz/privacy-policy"
+      />
       {/* Hero Section */}
       <div className={`relative overflow-hidden transition-colors duration-300 ${
         isDark ? 'bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800' : 'bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800'
