@@ -64,7 +64,7 @@ const Hero: React.FC = () => {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 pt-20 sm:pt-0"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 pt-20"
       role="banner"
       aria-label="Bosh sahifa qismi"
     >
@@ -104,7 +104,7 @@ const Hero: React.FC = () => {
         )}
       </div>
 
-      <div className="relative z-10 text-center px-4 sm:px-6 md:px-8 lg:px-8 max-w-5xl mx-auto mt-8 sm:mt-0">
+      <div className="relative z-10 text-center px-4 sm:px-6 md:px-8 lg:px-8 max-w-5xl mx-auto">
         <div className="mb-6 md:mb-8 animate-fade-in-up">
           <Bot
             className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 mx-auto mb-4 md:mb-6 text-white ${!prefersReducedMotion ? 'animate-bounce' : ''}`}
