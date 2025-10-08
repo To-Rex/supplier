@@ -96,40 +96,58 @@ const Dashboard: React.FC = () => {
     setMessage(null);
 
     try {
-      if (contactInfo.id) {
-        const { error } = await supabase
-          .from('contact_info')
-          .update({
-            phone: contactInfo.phone,
-            email: contactInfo.email,
-            location: contactInfo.location,
-            work_hours: contactInfo.work_hours,
-            facebook_url: contactInfo.facebook_url,
-            instagram_url: contactInfo.instagram_url,
-            twitter_url: contactInfo.twitter_url,
-            linkedin_url: contactInfo.linkedin_url,
-            github_url: contactInfo.github_url,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', contactInfo.id);
+      const { data: { user } } = await supabase.auth.getUser();
 
-        if (error) throw error;
-      } else {
+      if (contactInfo.id) {
+        const updateData = {
+          phone: contactInfo.phone,
+          email: contactInfo.email,
+          location: contactInfo.location,
+          work_hours: contactInfo.work_hours,
+          facebook_url: contactInfo.facebook_url || '',
+          instagram_url: contactInfo.instagram_url || '',
+          twitter_url: contactInfo.twitter_url || '',
+          linkedin_url: contactInfo.linkedin_url || '',
+          github_url: contactInfo.github_url || '',
+          updated_at: new Date().toISOString(),
+          updated_by: user?.id || null
+        };
+
+        console.log('Updating contact info:', updateData);
+
         const { data, error } = await supabase
           .from('contact_info')
-          .insert({
-            phone: contactInfo.phone,
-            email: contactInfo.email,
-            location: contactInfo.location,
-            work_hours: contactInfo.work_hours,
-            facebook_url: contactInfo.facebook_url,
-            instagram_url: contactInfo.instagram_url,
-            twitter_url: contactInfo.twitter_url,
-            linkedin_url: contactInfo.linkedin_url,
-            github_url: contactInfo.github_url
-          })
+          .update(updateData)
+          .eq('id', contactInfo.id)
+          .select();
+
+        console.log('Update result:', { data, error });
+
+        if (error) throw error;
+        if (data && data.length > 0) setContactInfo(data[0]);
+      } else {
+        const insertData = {
+          phone: contactInfo.phone,
+          email: contactInfo.email,
+          location: contactInfo.location,
+          work_hours: contactInfo.work_hours,
+          facebook_url: contactInfo.facebook_url || '',
+          instagram_url: contactInfo.instagram_url || '',
+          twitter_url: contactInfo.twitter_url || '',
+          linkedin_url: contactInfo.linkedin_url || '',
+          github_url: contactInfo.github_url || '',
+          updated_by: user?.id || null
+        };
+
+        console.log('Inserting contact info:', insertData);
+
+        const { data, error } = await supabase
+          .from('contact_info')
+          .insert(insertData)
           .select()
           .single();
+
+        console.log('Insert result:', { data, error });
 
         if (error) throw error;
         if (data) setContactInfo(data);
