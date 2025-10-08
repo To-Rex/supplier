@@ -133,7 +133,7 @@ const Header = () => {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`transition-all duration-500 text-sm lg:text-base font-medium hover:scale-105 focus:outline-none rounded-lg px-3 py-2 whitespace-nowrap relative ${
+                className={`transition-all duration-500 text-sm lg:text-base font-medium hover:scale-105 focus:outline-none rounded-lg px-3 py-2 pb-3 whitespace-nowrap relative group ${
                   activeSection === item.id
                     ? (isHeroSection ? 'text-white' : (isDark ? 'text-white' : 'text-blue-600'))
                     : `${textColor} hover:bg-blue-500/10`
@@ -142,9 +142,14 @@ const Header = () => {
               >
                 {item.label}
                 {activeSection === item.id && (
-                  <span className={`absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 rounded-full ${
-                    isHeroSection ? 'bg-white' : 'bg-blue-500'
-                  }`} aria-hidden="true"></span>
+                  <>
+                    <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 rounded-full transition-all duration-500 ${
+                      isHeroSection ? 'bg-white w-8' : (isDark ? 'bg-blue-400 w-8' : 'bg-blue-600 w-8')
+                    }`} aria-hidden="true"></span>
+                    <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 blur-sm animate-pulse ${
+                      isHeroSection ? 'bg-white/50' : (isDark ? 'bg-blue-400/50' : 'bg-blue-600/50')
+                    }`} aria-hidden="true"></span>
+                  </>
                 )}
               </button>
             ))}
@@ -205,7 +210,14 @@ const Header = () => {
                   type="button"
                 >
                   {item.label}
-                  {activeSection === item.id && <span className="ml-2 text-blue-500" aria-hidden="true">●</span>}
+                  {activeSection === item.id && (
+                    <span className="ml-2 inline-flex items-center">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                      </span>
+                    </span>
+                  )}
                 </button>
               ))}
               <button
