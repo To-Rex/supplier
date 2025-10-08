@@ -3,15 +3,43 @@ import { Users, Award, Clock, Globe } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { typography, getTextColors } from '../utils/typography';
 import OptimizedImage from './OptimizedImage';
+import { supabase, TeamMember } from '../lib/supabase';
 
 const About: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [counts, setCounts] = useState({ clients: 0, projects: 0, experience: 0, countries: 0 });
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const sectionRef = useRef<HTMLDivElement>(null);
   const { isDark } = useTheme();
   const textColors = getTextColors(isDark);
 
   const finalCounts = { clients: 50, projects: 100, experience: 5, countries: 15 };
+
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        setIsLoading(true);
+        const { data, error } = await supabase
+          .from('team_members')
+          .select('*')
+          .eq('is_active', true)
+          .order('display_order', { ascending: true });
+
+        if (error) {
+          console.error('Error fetching team members:', error);
+        } else if (data) {
+          setTeamMembers(data);
+        }
+      } catch (err) {
+        console.error('Unexpected error:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTeamMembers();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -65,40 +93,7 @@ const About: React.FC = () => {
     { icon: Globe, number: counts.countries, suffix: '+', label: 'Xizmat Ko\'rsatilgan Mamlakatlar', color: 'pink' },
   ];
 
-  const team = [
-    {
-      name: 'Dilshodjon Abdullayev',
-      role: 'Bosh Dasturchi',
-      expertise: 'Full-Stack Dasturlash',
-      image: 'https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg',
-      placeholder: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLli5GFvLggA7jHQW/4UhtlhfuKCa7gAwC5wxknx7eAR/Nx7u0AjG88/8AXb9AoqVk0KGjsHAHTZO+Cjj5f/g==',
-      alt: 'Dilshodjon Abdullayev - Bosh Dasturchi'
-    },
-    {
-      name: 'Aziza Karimova',
-      role: 'Mobil Ilova Mutaxassisi',
-      expertise: 'iOS va Android Dasturlash',
-      image: 'https://images.pexels.com/photos/3727464/pexels-photo-3727464.jpeg',
-      placeholder: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLli5GFvLggA7jHQW/4UhtlhfuKCa7gAwC5wxknx7eAR/Nx7u0AjG88/8AXb9AoqVk0KGjsHAHTZO+Cjj5f/g==',
-      alt: 'Aziza Karimova - Mobil Ilova Mutaxassisi'
-    },
-    {
-      name: 'Bobur Rahimov',
-      role: 'Bot Dasturchisi',
-      expertise: 'Telegram Bot Yaratish',
-      image: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg',
-      placeholder: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLli5GFvLggA7jHQW/4UhtlhfuKCa7gAwC5wxknx7eAR/Nx7u0AjG88/8AXb9AoqVk0KGjsHAHTZO+Cjj5f/g==',
-      alt: 'Bobur Rahimov - Bot Dasturchisi'
-    },
-    {
-      name: 'Madina Toshmatova',
-      role: 'UI/UX Dizayner',
-      expertise: 'Dizayn va Foydalanuvchi Tajribasi',
-      image: 'https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg',
-      placeholder: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLli5GFvLggA7jHQW/4UhtlhfuKCa7gAwC5wxknx7eAR/Nx7u0AjG88/8AXb9AoqVk0KGjsHAHTZO+Cjj5f/g==',
-      alt: 'Madina Toshmatova - UI/UX Dizayner'
-    },
-  ];
+  const placeholder = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLli5GFvLggA7jHQW/4UhtlhfuKCa7gAwC5wxknx7eAR/Nx7u0AjG88/8AXb9AoqVk0KGjsHAHTZO+Cjj5f/g==';
 
   const getColorClasses = (color: string) => {
     const colors = {
@@ -200,15 +195,21 @@ const About: React.FC = () => {
             </span>
           </h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" role="list" aria-label="Jamoa a'zolari">
-            {team.map((member, index) => (
+          {isLoading ? (
+            <div className="text-center py-12">
+              <div className="inline-block w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" role="status" aria-label="Yuklanmoqda"></div>
+              <p className={`mt-4 ${typography.bodyLarge} ${textColors.secondary}`}>Jamoa ma'lumotlari yuklanmoqda...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" role="list" aria-label="Jamoa a'zolari">
+              {teamMembers.map((member, index) => (
               <div 
-                key={index}
+                key={member.id}
                 className="group cursor-pointer transform hover:scale-105 transition-all duration-500"
                 style={{ animationDelay: `${index * 0.1}s` }}
                 role="listitem"
                 tabIndex={0}
-                aria-label={`${member.name} - ${member.role}. ${member.expertise}`}
+                aria-label={`${member.name} - ${member.role}. ${member.expertise.join(', ')}`}
               >
                 <div className={`rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 text-center relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                   isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white'
@@ -220,13 +221,13 @@ const About: React.FC = () => {
                     <div className="relative mb-6">
                       <div className="relative w-28 h-28 mx-auto">
                         <OptimizedImage
-                          src={member.image}
-                          alt={member.alt}
+                          src={member.image_url}
+                          alt={`${member.name} - ${member.role}`}
                           width={112}
                           height={112}
                           className="w-28 h-28 rounded-full object-cover group-hover:scale-110 transition-transform duration-500 shadow-lg"
                           loading="lazy"
-                          placeholder={member.placeholder}
+                          placeholder={placeholder}
                           sizes="112px"
                         />
                         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-600/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true"></div>
@@ -254,12 +255,24 @@ const About: React.FC = () => {
                       {member.name}
                     </h4>
                     <p className={`text-blue-600 ${typography.cardSubtitle} font-semibold mb-2`}>{member.role}</p>
-                    <p className={`${typography.cardBody} ${textColors.secondary}`}>{member.expertise}</p>
+                    <div className={`${typography.cardBody} ${textColors.secondary}`}>
+                      {member.expertise.map((skill, i) => (
+                        <span key={i}>
+                          {skill}{i < member.expertise.length - 1 ? ' • ' : ''}
+                        </span>
+                      ))}
+                    </div>
+                    {member.bio && (
+                      <p className={`${typography.bodySmall} ${textColors.secondary} mt-3 leading-relaxed`}>
+                        {member.bio}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>
