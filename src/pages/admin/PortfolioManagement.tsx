@@ -59,18 +59,27 @@ const PortfolioManagement: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const slug = editingPortfolio ? formData.slug : generateSlug(formData.title);
+    const metaTitle = formData.meta_title || formData.title;
+    const metaDescription = formData.meta_description || formData.description;
+    const metaKeywords = formData.meta_keywords
+      ? formData.meta_keywords.split(',').map(k => k.trim()).filter(Boolean)
+      : formData.technologies.split(',').map(t => t.trim()).filter(Boolean);
+    const ogImage = formData.og_image || formData.image_url;
+
     const portfolioData = {
       ...formData,
+      slug,
       technologies: formData.technologies.split(',').map(t => t.trim()).filter(Boolean),
-      meta_keywords: formData.meta_keywords.split(',').map(k => k.trim()).filter(Boolean),
+      meta_title: metaTitle,
+      meta_description: metaDescription,
+      meta_keywords: metaKeywords,
+      og_image: ogImage,
       live_url: formData.live_url || null,
       github_url: formData.github_url || null,
       client_name: formData.client_name || null,
       completion_date: formData.completion_date || null,
-      full_description: formData.full_description || null,
-      meta_title: formData.meta_title || null,
-      meta_description: formData.meta_description || null,
-      og_image: formData.og_image || null
+      full_description: formData.full_description || null
     };
 
     try {
@@ -381,32 +390,29 @@ const PortfolioManagement: React.FC = () => {
                     type="text"
                     required
                     value={formData.title}
-                    onChange={(e) => {
-                      setFormData({ ...formData, title: e.target.value });
-                      if (!editingPortfolio) {
-                        setFormData(prev => ({ ...prev, slug: generateSlug(e.target.value) }));
-                      }
-                    }}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
                       isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
                     }`}
                   />
                 </div>
 
-                <div className="md:col-span-2">
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    Slug (URL) *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.slug}
-                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
-                      isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
-                    }`}
-                  />
-                </div>
+                {editingPortfolio && (
+                  <div className="md:col-span-2">
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                      Slug (URL) *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.slug}
+                      onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                        isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                      }`}
+                    />
+                  </div>
+                )}
 
                 <div className="md:col-span-2">
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -555,69 +561,74 @@ const PortfolioManagement: React.FC = () => {
                   />
                 </div>
 
-                <div className="md:col-span-2 space-y-4">
-                  <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>SEO Ma'lumotlari</h3>
+                {editingPortfolio && (
+                  <div className="md:col-span-2 space-y-4">
+                    <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>SEO Ma'lumotlari</h3>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                      Bo'sh qoldirilgan maydonlar avtomatik to'ldiriladi
+                    </p>
 
-                  <div>
-                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Meta Title
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.meta_title}
-                      onChange={(e) => setFormData({ ...formData, meta_title: e.target.value })}
-                      placeholder="SEO uchun maxsus title (bo'sh qoldirilsa, asosiy nom ishlatiladi)"
-                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
-                        isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                      }`}
-                    />
-                  </div>
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                        Meta Title
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.meta_title}
+                        onChange={(e) => setFormData({ ...formData, meta_title: e.target.value })}
+                        placeholder="SEO uchun maxsus title (bo'sh qoldirilsa, asosiy nom ishlatiladi)"
+                        className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                          isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                        }`}
+                      />
+                    </div>
 
-                  <div>
-                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Meta Description
-                    </label>
-                    <textarea
-                      value={formData.meta_description}
-                      onChange={(e) => setFormData({ ...formData, meta_description: e.target.value })}
-                      rows={3}
-                      placeholder="SEO uchun tavsif (bo'sh qoldirilsa, qisqa tavsif ishlatiladi)"
-                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
-                        isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                      }`}
-                    />
-                  </div>
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                        Meta Description
+                      </label>
+                      <textarea
+                        value={formData.meta_description}
+                        onChange={(e) => setFormData({ ...formData, meta_description: e.target.value })}
+                        rows={3}
+                        placeholder="SEO uchun tavsif (bo'sh qoldirilsa, qisqa tavsif ishlatiladi)"
+                        className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                          isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                        }`}
+                      />
+                    </div>
 
-                  <div>
-                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Meta Keywords (vergul bilan ajrating)
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.meta_keywords}
-                      onChange={(e) => setFormData({ ...formData, meta_keywords: e.target.value })}
-                      placeholder="web development, react, node.js"
-                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
-                        isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                      }`}
-                    />
-                  </div>
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                        Meta Keywords (vergul bilan ajrating)
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.meta_keywords}
+                        onChange={(e) => setFormData({ ...formData, meta_keywords: e.target.value })}
+                        placeholder="Bo'sh qoldirilsa, texnologiyalar ishlatiladi"
+                        className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                          isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                        }`}
+                      />
+                    </div>
 
-                  <div>
-                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Open Graph Rasm URL
-                    </label>
-                    <input
-                      type="url"
-                      value={formData.og_image}
-                      onChange={(e) => setFormData({ ...formData, og_image: e.target.value })}
-                      placeholder="Ijtimoiy tarmoqlar uchun rasm (bo'sh qoldirilsa, asosiy rasm ishlatiladi)"
-                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
-                        isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                      }`}
-                    />
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                        Open Graph Rasm URL
+                      </label>
+                      <input
+                        type="url"
+                        value={formData.og_image}
+                        onChange={(e) => setFormData({ ...formData, og_image: e.target.value })}
+                        placeholder="Bo'sh qoldirilsa, asosiy rasm ishlatiladi"
+                        className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                          isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                        }`}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div className="flex items-center space-x-2">
                   <input
