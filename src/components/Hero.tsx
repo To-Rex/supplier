@@ -97,11 +97,15 @@ const Hero: React.FC = () => {
       const now = Date.now();
       const scrollY = window.scrollY;
 
+      console.log('Scroll event:', scrollY, 'isDark:', isDark);
+
       if (scrollY > 50 && now - lastScrollTime > 80) {
         lastScrollTime = now;
+        console.log('Triggering effects at scrollY:', scrollY);
 
         if (isDark) {
           // Dark mode: shooting stars
+          console.log('Dark mode - creating stars');
           const count = Math.floor(Math.random() * 5) + 8;
           for (let i = 0; i < count; i++) {
             setTimeout(() => createShootingStar(), i * 60);
