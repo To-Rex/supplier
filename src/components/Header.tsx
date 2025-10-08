@@ -113,20 +113,20 @@ const Header = () => {
               }
             }}
           >
-            <Bot className={`w-8 h-8 transition-all duration-500 ${logoColor} hover:rotate-12`} aria-hidden="true" />
-            <span className={`text-xl font-bold transition-all duration-500 ${textColor}`}>
+            <Bot className={`w-7 h-7 lg:w-8 lg:h-8 transition-all duration-500 ${logoColor} hover:rotate-12`} aria-hidden="true" />
+            <span className={`text-lg lg:text-xl font-bold transition-all duration-500 ${textColor}`}>
               Supplier IT
             </span>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
-            <nav className="flex space-x-8" role="navigation" aria-label="Asosiy navigatsiya">
+          <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
+            <nav className="flex space-x-4 lg:space-x-6" role="navigation" aria-label="Asosiy navigatsiya">
               {navigationItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className={`transition-all duration-300 font-medium hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1 ${textColor} hover:text-blue-400 ${
+                  className={`transition-all duration-300 text-sm lg:text-base font-medium hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1 ${textColor} hover:text-blue-400 ${
                     activeSection === item.id ? 'text-blue-400' : ''
                   }`}
                   aria-current={activeSection === item.id ? 'page' : undefined}
@@ -136,7 +136,7 @@ const Header = () => {
               ))}
               <button
                 onClick={() => scrollToSection('contact')}
-                className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-all duration-300 font-medium transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className="bg-blue-600 text-white px-4 lg:px-6 py-2 rounded-full hover:bg-blue-700 transition-all duration-300 text-sm lg:text-base font-medium transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 aria-label="Bog'lanish qismiga o'tish"
               >
                 Bog'lanish
@@ -180,9 +180,9 @@ const Header = () => {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className={`text-left transition-all duration-300 font-medium px-4 py-2 rounded-lg transform hover:translate-x-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                    activeSection === item.id 
-                      ? `text-blue-600 ${isDark ? 'bg-blue-900/30' : 'bg-blue-50'}` 
+                  className={`text-left transition-all duration-300 text-sm font-medium px-4 py-2 rounded-lg transform hover:translate-x-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                    activeSection === item.id
+                      ? `text-blue-600 ${isDark ? 'bg-blue-900/30' : 'bg-blue-50'}`
                       : `${isDark ? 'text-gray-200 hover:text-blue-400 hover:bg-gray-800' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'}`
                   }`}
                   aria-current={activeSection === item.id ? 'page' : undefined}
@@ -193,7 +193,7 @@ const Header = () => {
               ))}
               <button
                 onClick={() => scrollToSection('contact')}
-                className="text-left bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-all duration-300 font-medium mx-4 transform hover:scale-105 shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className="text-left bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-all duration-300 text-sm font-medium mx-4 transform hover:scale-105 shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 aria-label="Bog'lanish qismiga o'tish"
               >
                 Bog'lanish
