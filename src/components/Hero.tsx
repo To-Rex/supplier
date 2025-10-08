@@ -104,17 +104,17 @@ const Hero: React.FC = () => {
         )}
       </div>
 
-      <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto mt-8 sm:mt-0">
-        <div className="mb-4 md:mb-8 animate-fade-in-up">
-          <Bot 
-            className={`w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-6 text-white ${!prefersReducedMotion ? 'animate-bounce' : ''}`}
+      <div className="relative z-10 text-center px-4 sm:px-6 md:px-8 lg:px-8 max-w-5xl mx-auto mt-8 sm:mt-0">
+        <div className="mb-6 md:mb-8 animate-fade-in-up">
+          <Bot
+            className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 mx-auto mb-4 md:mb-6 text-white ${!prefersReducedMotion ? 'animate-bounce' : ''}`}
             style={{ animationDuration: '2s' }}
             aria-hidden="true"
           />
         </div>
-        
-        <h1 
-          className={`${typography.heroMain} text-white mb-8 animate-fade-in-up animation-delay-200`} 
+
+        <h1
+          className={`${typography.heroMain} text-white mb-6 md:mb-8 animate-fade-in-up animation-delay-200`}
           id="main-content"
           tabIndex={-1}
           aria-label="Supplier IT kompaniyasining bosh sahifasi"
@@ -124,8 +124,8 @@ const Hero: React.FC = () => {
             Yaratamiz
           </span>
         </h1>
-        
-        <div className="h-16 sm:h-24 flex items-center justify-center mb-10">
+
+        <div className="h-16 sm:h-20 md:h-24 flex items-center justify-center mb-8 md:mb-10">
           <div
             aria-live="polite"
             aria-label={`Hozir ko'rsatilayotgan xizmat: ${currentText || texts[currentIndex]}`}
@@ -147,14 +147,14 @@ const Hero: React.FC = () => {
           </div>
         </div>
 
-        <p className={`${typography.heroSubtitle} text-blue-100 mb-12 max-w-3xl mx-auto animate-fade-in-up animation-delay-800 leading-relaxed`}>
+        <p className={`${typography.heroSubtitle} text-blue-100 mb-8 md:mb-12 max-w-2xl md:max-w-3xl mx-auto animate-fade-in-up animation-delay-800 leading-relaxed px-2`}>
           G'oyalarni zamonaviy texnologiyalar va innovatsion yechimlar bilan raqamli haqiqatga aylantiramiz.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in-up animation-delay-1000 mb-16">
+        <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center animate-fade-in-up animation-delay-1000 mb-12 md:mb-16">
           <button
             onClick={() => scrollToSection('about')}
-            className={`group bg-white text-blue-600 px-6 py-3 rounded-full ${typography.button} hover:bg-blue-50 transition-all duration-500 transform hover:scale-110 shadow-2xl hover:shadow-white/20 relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600`}
+            className={`w-full sm:w-auto group bg-white text-blue-600 px-8 md:px-10 py-3.5 md:py-4 rounded-full ${typography.button} hover:bg-blue-50 transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-white/20 relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600`}
             aria-label="Biz haqimizda qismiga o'tish"
           >
             <span className="relative z-10">Boshlash</span>
@@ -162,7 +162,7 @@ const Hero: React.FC = () => {
           </button>
           <button
             onClick={() => scrollToSection('portfolio')}
-            className={`group border-2 border-white text-white px-6 py-3 rounded-full ${typography.button} hover:bg-white hover:text-blue-600 transition-all duration-500 transform hover:scale-110 shadow-2xl relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600`}
+            className={`w-full sm:w-auto group border-2 border-white text-white px-8 md:px-10 py-3.5 md:py-4 rounded-full ${typography.button} hover:bg-white hover:text-blue-600 transition-all duration-500 transform hover:scale-105 shadow-2xl relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600`}
             aria-label="Portfolio qismiga o'tish"
           >
             <span className="relative z-10">Portfolio ko'rish</span>
@@ -170,9 +170,9 @@ const Hero: React.FC = () => {
           </button>
         </div>
 
-        <div 
-          className="grid grid-cols-1 sm:grid-cols-3 gap-8 animate-fade-in-up animation-delay-1200" 
-          role="list" 
+        <div
+          className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 lg:gap-10 max-w-4xl mx-auto animate-fade-in-up animation-delay-1200"
+          role="list"
           aria-label="Asosiy xizmatlar ro'yxati"
         >
           {[
@@ -182,7 +182,7 @@ const Hero: React.FC = () => {
           ].map((item, index) => (
             <div
               key={index}
-              className="group flex flex-col items-center text-white/90 cursor-pointer transform hover:scale-110 transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 rounded-lg p-4"
+              className="group flex flex-col items-center text-white/90 cursor-pointer transform hover:scale-105 md:hover:scale-110 transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 rounded-lg p-4 md:p-6"
               style={{ animationDelay: item.delay }}
               role="listitem"
               tabIndex={0}
@@ -195,16 +195,16 @@ const Hero: React.FC = () => {
                 }
               }}
             >
-              <div className="relative mb-4">
-                <item.icon 
-                  className="w-10 h-10 group-hover:scale-125 transition-transform duration-500" 
+              <div className="relative mb-3 md:mb-4">
+                <item.icon
+                  className="w-12 h-12 md:w-14 md:h-14 group-hover:scale-125 transition-transform duration-500"
                   aria-hidden="true"
                 />
                 {!prefersReducedMotion && (
                   <div className="absolute inset-0 bg-white/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-ping"></div>
                 )}
               </div>
-              <span className={`${typography.bodySmall} font-medium group-hover:text-white transition-colors duration-300`}>
+              <span className={`${typography.bodySmall} font-medium group-hover:text-white transition-colors duration-300 text-center`}>
                 {item.label}
               </span>
             </div>
