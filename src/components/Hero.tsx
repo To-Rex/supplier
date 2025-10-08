@@ -260,6 +260,8 @@ const Hero: React.FC = () => {
               const distance = 400;
               const translateX = Math.cos(angleInRadians) * distance;
               const translateY = Math.sin(angleInRadians) * distance;
+              // Calculate rotation so tail is always behind
+              const rotationAngle = star.angle;
 
               return (
                 <div
@@ -270,8 +272,9 @@ const Hero: React.FC = () => {
                     top: star.top,
                     boxShadow: '0 0 4px 2px rgba(255, 255, 255, 0.8)',
                     '--translate-x': `${translateX}px`,
-                    '--translate-y': `${translateY}px`
-                  } as React.CSSProperties & { '--translate-x': string; '--translate-y': string }}
+                    '--translate-y': `${translateY}px`,
+                    '--rotation-angle': `${rotationAngle}deg`
+                  } as React.CSSProperties & { '--translate-x': string; '--translate-y': string; '--rotation-angle': string }}
                 />
               );
             })}

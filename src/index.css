@@ -296,12 +296,14 @@ body {
 .shooting-star-random::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
   width: 80px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.8), transparent);
   transform-origin: left center;
+  transform: translate(-50%, -50%) rotate(var(--rotation-angle));
+  pointer-events: none;
 }
 
 /* Loading animation */
