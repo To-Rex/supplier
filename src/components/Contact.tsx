@@ -193,7 +193,7 @@ const Contact: React.FC = () => {
             </span>
           </h2>
           <p className={`${typography.bodyLarge} ${textColors.secondary} max-w-4xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200`}>
-            Loyihangizni boshlashga tayyormisiz? G\'oyalaringizni hayotga tatbiq etishda qanday yordam bera olishimizni muhokama qilaylik.
+            Loyihangizni boshlashga tayyormisiz? G'oyalaringizni hayotga tatbiq etishda qanday yordam bera olishimizni muhokama qilaylik.
           </p>
         </div>
 
