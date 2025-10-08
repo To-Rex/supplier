@@ -355,35 +355,89 @@ const Dashboard: React.FC = () => {
                   />
                 </div>
 
-                <div className="pt-2 border-t border-gray-200">
+                <div className={`pt-2 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                   <p className={`text-xs font-semibold ${textColors.secondary} mb-3`}>Ijtimoiy Tarmoqlar</p>
 
                   <div className="space-y-3">
-                    <input
-                      type="url"
-                      name="facebook_url"
-                      value={contactInfo.facebook_url}
-                      onChange={handleContactInputChange}
-                      placeholder="Facebook URL"
-                      className={`w-full px-3 py-2 text-sm border-2 rounded-lg transition-all ${
-                        isDark
-                          ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500'
-                          : 'bg-white border-gray-200 focus:border-blue-500'
-                      } focus:ring-2 focus:ring-blue-500/20`}
-                    />
+                    <div className="flex items-center space-x-2">
+                      <Facebook className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                      <input
+                        type="url"
+                        name="facebook_url"
+                        value={contactInfo.facebook_url}
+                        onChange={handleContactInputChange}
+                        placeholder="Facebook URL"
+                        className={`flex-1 px-3 py-2 text-sm border-2 rounded-lg transition-all ${
+                          isDark
+                            ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500'
+                            : 'bg-white border-gray-200 focus:border-blue-500'
+                        } focus:ring-2 focus:ring-blue-500/20`}
+                      />
+                    </div>
 
-                    <input
-                      type="url"
-                      name="instagram_url"
-                      value={contactInfo.instagram_url}
-                      onChange={handleContactInputChange}
-                      placeholder="Instagram URL"
-                      className={`w-full px-3 py-2 text-sm border-2 rounded-lg transition-all ${
-                        isDark
-                          ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500'
-                          : 'bg-white border-gray-200 focus:border-blue-500'
-                      } focus:ring-2 focus:ring-blue-500/20`}
-                    />
+                    <div className="flex items-center space-x-2">
+                      <Instagram className="w-4 h-4 text-pink-600 flex-shrink-0" />
+                      <input
+                        type="url"
+                        name="instagram_url"
+                        value={contactInfo.instagram_url}
+                        onChange={handleContactInputChange}
+                        placeholder="Instagram URL"
+                        className={`flex-1 px-3 py-2 text-sm border-2 rounded-lg transition-all ${
+                          isDark
+                            ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500'
+                            : 'bg-white border-gray-200 focus:border-blue-500'
+                        } focus:ring-2 focus:ring-blue-500/20`}
+                      />
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <Twitter className="w-4 h-4 text-sky-500 flex-shrink-0" />
+                      <input
+                        type="url"
+                        name="twitter_url"
+                        value={contactInfo.twitter_url}
+                        onChange={handleContactInputChange}
+                        placeholder="X (Twitter) URL"
+                        className={`flex-1 px-3 py-2 text-sm border-2 rounded-lg transition-all ${
+                          isDark
+                            ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500'
+                            : 'bg-white border-gray-200 focus:border-blue-500'
+                        } focus:ring-2 focus:ring-blue-500/20`}
+                      />
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <Linkedin className="w-4 h-4 text-blue-700 flex-shrink-0" />
+                      <input
+                        type="url"
+                        name="linkedin_url"
+                        value={contactInfo.linkedin_url}
+                        onChange={handleContactInputChange}
+                        placeholder="LinkedIn URL"
+                        className={`flex-1 px-3 py-2 text-sm border-2 rounded-lg transition-all ${
+                          isDark
+                            ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500'
+                            : 'bg-white border-gray-200 focus:border-blue-500'
+                        } focus:ring-2 focus:ring-blue-500/20`}
+                      />
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <Github className={`w-4 h-4 flex-shrink-0 ${isDark ? 'text-gray-300' : 'text-gray-800'}`} />
+                      <input
+                        type="url"
+                        name="github_url"
+                        value={contactInfo.github_url}
+                        onChange={handleContactInputChange}
+                        placeholder="GitHub URL"
+                        className={`flex-1 px-3 py-2 text-sm border-2 rounded-lg transition-all ${
+                          isDark
+                            ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500'
+                            : 'bg-white border-gray-200 focus:border-blue-500'
+                        } focus:ring-2 focus:ring-blue-500/20`}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
