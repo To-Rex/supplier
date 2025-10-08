@@ -56,6 +56,16 @@ const TeamManagement: React.FC = () => {
     }
 
     try {
+      const maxOrderResult = await supabase
+        .from('team_members')
+        .select('display_order')
+        .order('display_order', { ascending: false })
+        .limit(1);
+
+      const nextOrder = maxOrderResult.data && maxOrderResult.data.length > 0
+        ? maxOrderResult.data[0].display_order + 1
+        : 1;
+
       const slug = formData.slug || formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       const { error } = await supabase.from('team_members').insert([
         {
@@ -65,6 +75,7 @@ const TeamManagement: React.FC = () => {
           slug,
           meta_title: formData.meta_title || `${formData.name} - ${formData.role} | Torex`,
           meta_description: formData.meta_description || formData.bio,
+          display_order: nextOrder,
           is_active: true,
         },
       ]);
@@ -85,19 +96,27 @@ const TeamManagement: React.FC = () => {
       const member = members.find((m) => m.id === id);
       if (!member) return;
 
+      const expertiseArray = typeof member.expertise === 'string'
+        ? member.expertise.split(',').map((s) => s.trim())
+        : member.expertise;
+
+      const keywordsArray = typeof member.keywords === 'string'
+        ? member.keywords.split(',').map((s) => s.trim()).filter(Boolean)
+        : member.keywords;
+
       const { error } = await supabase
         .from('team_members')
         .update({
           name: member.name,
           role: member.role,
-          expertise: member.expertise,
+          expertise: expertiseArray,
           image_url: member.image_url,
           bio: member.bio,
           display_order: member.display_order,
           slug: member.slug,
           meta_title: member.meta_title,
           meta_description: member.meta_description,
-          keywords: member.keywords,
+          keywords: keywordsArray,
           updated_at: new Date().toISOString(),
         })
         .eq('id', id);
@@ -229,22 +248,6 @@ const TeamManagement: React.FC = () => {
                     currentImage={formData.image_url}
                     onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
                     label="Jamoa a'zosining rasmi"
-                  />
-                </div>
-                <div>
-                  <label className={`block ${typography.cardSubtitle} ${textColors.primary} mb-2`}>
-                    Tartib raqami
-                  </label>
-                  <input
-                    type="number"
-                    value={formData.display_order}
-                    onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
-                    className={`w-full px-4 py-2 rounded-lg border ${
-                      isDark
-                        ? 'bg-gray-700 border-gray-600 text-white'
-                        : 'bg-white border-gray-300 text-gray-900'
-                    }`}
-                    required
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -385,6 +388,58 @@ const TeamManagement: React.FC = () => {
                             ? 'bg-gray-700 border-gray-600 text-white'
                             : 'bg-white border-gray-300 text-gray-900'
                         }`}
+                      />
+                    </div>
+                    <div>
+                      <label className={`block ${typography.cardSubtitle} ${textColors.primary} mb-2`}>
+                        Mutaxassislik (vergul bilan)
+                      </label>
+                      <input
+                        type="text"
+                        value={Array.isArray(member.expertise) ? member.expertise.join(', ') : member.expertise}
+                        onChange={(e) => handleFieldChange(member.id, 'expertise', e.target.value)}
+                        className={`w-full px-4 py-2 rounded-lg border ${
+                          isDark
+                            ? 'bg-gray-700 border-gray-600 text-white'
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
+                      />
+                    </div>
+                    <div>
+                      <label className={`block ${typography.cardSubtitle} ${textColors.primary} mb-2`}>
+                        Tartib raqami
+                      </label>
+                      <input
+                        type="number"
+                        value={member.display_order}
+                        onChange={(e) => handleFieldChange(member.id, 'display_order', parseInt(e.target.value))}
+                        className={`w-full px-4 py-2 rounded-lg border ${
+                          isDark
+                            ? 'bg-gray-700 border-gray-600 text-white'
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className={`block ${typography.cardSubtitle} ${textColors.primary} mb-2`}>
+                        Biografiya
+                      </label>
+                      <textarea
+                        value={member.bio}
+                        onChange={(e) => handleFieldChange(member.id, 'bio', e.target.value)}
+                        className={`w-full px-4 py-2 rounded-lg border ${
+                          isDark
+                            ? 'bg-gray-700 border-gray-600 text-white'
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
+                        rows={3}
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <ImageUpload
+                        currentImage={member.image_url}
+                        onImageUploaded={(url) => handleFieldChange(member.id, 'image_url', url)}
+                        label="Jamoa a'zosining rasmi"
                       />
                     </div>
                   </div>
