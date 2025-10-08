@@ -122,10 +122,12 @@ const Blog: React.FC = () => {
 
           {/* Side Posts */}
           <div className="space-y-6">
-            {blogPosts.slice(1).map((post, index) => (
-              <article 
+            {blogPosts.slice(1).map((post) => (
+              <article
                 key={post.id}
-                className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group cursor-pointer"
+                className={`rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group cursor-pointer ${
+                  isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white'
+                }`}
               >
                 <div className="flex">
                   <div className="relative w-1/3 overflow-hidden">
@@ -141,13 +143,13 @@ const Blog: React.FC = () => {
                         {post.category}
                       </span>
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2">
+                    <h3 className={`text-lg font-bold mb-2 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2 ${textColors.primary}`}>
                       {post.title}
                     </h3>
-                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                    <p className={`text-sm mb-3 line-clamp-2 ${textColors.secondary}`}>
                       {post.excerpt}
                     </p>
-                    <div className="flex items-center justify-between text-xs text-gray-500">
+                    <div className={`flex items-center justify-between text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                       <div className="flex items-center space-x-2">
                         <span>{post.author}</span>
                         <span>•</span>
