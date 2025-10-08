@@ -135,8 +135,10 @@ const Portfolio: React.FC = () => {
               Portfolio
             </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-12 leading-relaxed animate-fade-in-up animation-delay-200">
-            Eng so\'nggi loyihalarimizni o\'rganing va bizneslarning raqamli maqsadlariga erishishda qanday yordam berganimizni ko\'ring.
+          <p className={`text-xl max-w-4xl mx-auto mb-12 leading-relaxed animate-fade-in-up animation-delay-200 ${
+            isDark ? 'text-gray-300' : 'text-gray-600'
+          }`}>
+            Eng so'nggi loyihalarimizni o'rganing va bizneslarning raqamli maqsadlariga erishishda qanday yordam berganimizni ko'ring.
           </p>
 
           {/* Animated Filter Buttons */}
