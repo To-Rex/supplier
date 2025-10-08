@@ -81,7 +81,7 @@ const TermsOfService: React.FC = () => {
         title="Foydalanish Shartlari"
         description="Torex IT xizmatlaridan foydalanish shartlari va qoidalari. Intellektual mulk huquqlari, javobgarlik va foydalanuvchi majburiyatlari haqida to'liq ma'lumot."
         keywords="foydalanish shartlari, xizmat shartlari, qoidalar, shartnoma, foydalanuvchi shartnomasi, torex it"
-        canonicalUrl="https://torex.uz/terms-of-service"
+        canonicalUrl="https://torexdev.uz/terms-of-service"
       />
       {/* Hero Section */}
       <div className={`relative overflow-hidden transition-colors duration-300 ${

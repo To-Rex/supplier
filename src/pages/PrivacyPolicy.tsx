@@ -63,7 +63,7 @@ const PrivacyPolicy: React.FC = () => {
         title="Maxfiylik Siyosati"
         description="Torex IT maxfiylik siyosati. Shaxsiy ma'lumotlarni to'plash, ishlatish va himoya qilish haqida batafsil ma'lumot. Sizning ma'lumotlaringiz xavfsizligi bizning ustuvor vazifamiz."
         keywords="maxfiylik siyosati, shaxsiy ma'lumotlar, ma'lumotlar xavfsizligi, GDPR, ma'lumotlar himoyasi, torex it"
-        canonicalUrl="https://torex.uz/privacy-policy"
+        canonicalUrl="https://torexdev.uz/privacy-policy"
       />
       {/* Hero Section */}
       <div className={`relative overflow-hidden transition-colors duration-300 ${

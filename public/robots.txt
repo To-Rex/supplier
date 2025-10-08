@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://torex.uz/sitemap.xml
+Sitemap: https://torexdev.uz/sitemap.xml
 
 # Crawl-delay for all bots
 Crawl-delay: 1
