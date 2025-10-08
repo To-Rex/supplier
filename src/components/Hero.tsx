@@ -9,7 +9,7 @@ interface ShootingStar {
   left: string;
   top: string;
   delay: number;
-  direction: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  angle: number;
 }
 
 const Hero: React.FC = () => {
@@ -54,17 +54,15 @@ const Hero: React.FC = () => {
     if (!isDark || prefersReducedMotion) return;
 
     const createShootingStar = () => {
-      const directions: Array<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'> = [
-        'top-left', 'top-right', 'bottom-left', 'bottom-right'
-      ];
-      const randomDirection = directions[Math.floor(Math.random() * directions.length)];
+      // Generate random angle between 0 and 360 degrees
+      const randomAngle = Math.floor(Math.random() * 360);
 
       const star: ShootingStar = {
         id: Date.now() + Math.random(),
         left: `${Math.random() * 80 + 10}%`,
         top: `${Math.random() * 80 + 10}%`,
         delay: 0,
-        direction: randomDirection
+        angle: randomAngle
       };
 
       setShootingStars(prev => [...prev, star]);
@@ -257,17 +255,26 @@ const Hero: React.FC = () => {
             </div>
 
             {/* Shooting stars - only in dark mode */}
-            {isDark && shootingStars.map((star) => (
-              <div
-                key={star.id}
-                className={`absolute w-1 h-1 bg-white rounded-full shooting-star-${star.direction}`}
-                style={{
-                  left: star.left,
-                  top: star.top,
-                  boxShadow: '0 0 4px 2px rgba(255, 255, 255, 0.8)'
-                }}
-              />
-            ))}
+            {isDark && shootingStars.map((star) => {
+              const angleInRadians = (star.angle * Math.PI) / 180;
+              const distance = 400;
+              const translateX = Math.cos(angleInRadians) * distance;
+              const translateY = Math.sin(angleInRadians) * distance;
+
+              return (
+                <div
+                  key={star.id}
+                  className="absolute w-1 h-1 bg-white rounded-full shooting-star-random"
+                  style={{
+                    left: star.left,
+                    top: star.top,
+                    boxShadow: '0 0 4px 2px rgba(255, 255, 255, 0.8)',
+                    '--translate-x': `${translateX}px`,
+                    '--translate-y': `${translateY}px`
+                  } as React.CSSProperties & { '--translate-x': string; '--translate-y': string }}
+                />
+              );
+            })}
           </>
         )}
       </div>
