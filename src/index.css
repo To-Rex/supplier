@@ -245,6 +245,37 @@ body {
   background: linear-gradient(to bottom, #2563eb, #7c3aed);
 }
 
+/* Shooting star animation */
+@keyframes shooting-star {
+  0% {
+    transform: translateX(0) translateY(0) rotate(-45deg);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(300px) translateY(300px) rotate(-45deg);
+    opacity: 0;
+  }
+}
+
+.shooting-star {
+  animation: shooting-star 1.5s ease-out forwards;
+  will-change: transform, opacity;
+}
+
+.shooting-star::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  transform-origin: left center;
+}
+
 /* Loading animation */
 .loading-dot {
   animation: loading 1.4s infinite ease-in-out;

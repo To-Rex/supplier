@@ -4,10 +4,18 @@ import { useTheme } from '../contexts/ThemeContext';
 import { typography, getTextColors } from '../utils/typography';
 import { generateOptimizedParticles, generateOptimizedShapes } from '../utils/performanceAnimations';
 
+interface ShootingStar {
+  id: number;
+  left: string;
+  top: string;
+  delay: number;
+}
+
 const Hero: React.FC = () => {
   const [currentText, setCurrentText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimationPaused, setIsAnimationPaused] = useState(false);
+  const [shootingStars, setShootingStars] = useState<ShootingStar[]>([]);
   const texts = ['Professional Veb-saytlar', 'Mobil Ilovalar', 'Telegram Botlar', 'Raqamli Yechimlar'];
   const { isDark } = useTheme();
   const textColors = getTextColors(isDark);
@@ -20,6 +28,34 @@ const Hero: React.FC = () => {
   const prefersReducedMotion = useMemo(() => {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }, []);
+
+  // Shooting stars effect - only in dark mode
+  useEffect(() => {
+    if (!isDark || prefersReducedMotion) return;
+
+    const createShootingStar = () => {
+      const star: ShootingStar = {
+        id: Date.now() + Math.random(),
+        left: `${Math.random() * 80 + 10}%`,
+        top: `${Math.random() * 50}%`,
+        delay: 0
+      };
+
+      setShootingStars(prev => [...prev, star]);
+
+      // Remove star after animation completes
+      setTimeout(() => {
+        setShootingStars(prev => prev.filter(s => s.id !== star.id));
+      }, 1500);
+    };
+
+    // Create shooting star every 3-4 seconds
+    const interval = setInterval(() => {
+      createShootingStar();
+    }, 3000 + Math.random() * 1000);
+
+    return () => clearInterval(interval);
+  }, [isDark, prefersReducedMotion]);
 
   useEffect(() => {
     if (isAnimationPaused || prefersReducedMotion) return;
@@ -82,7 +118,7 @@ const Hero: React.FC = () => {
                 />
               ))}
             </div>
-            
+
             {/* Floating geometric shapes */}
             <div className="absolute inset-0">
               {optimizedShapes.map((shape) => (
@@ -100,6 +136,19 @@ const Hero: React.FC = () => {
                 </div>
               ))}
             </div>
+
+            {/* Shooting stars - only in dark mode */}
+            {isDark && shootingStars.map((star) => (
+              <div
+                key={star.id}
+                className="absolute w-1 h-1 bg-white rounded-full shooting-star"
+                style={{
+                  left: star.left,
+                  top: star.top,
+                  boxShadow: '0 0 4px 2px rgba(255, 255, 255, 0.8)'
+                }}
+              />
+            ))}
           </>
         )}
       </div>
