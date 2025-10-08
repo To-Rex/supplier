@@ -182,6 +182,7 @@ const Hero: React.FC = () => {
     const handleScrollStop = () => {
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
+        console.log('Scroll stopped - resetting clouds');
         // Gradually remove extra clouds
         const removeCloudInterval = setInterval(() => {
           setExtraClouds(prev => {
@@ -189,9 +190,10 @@ const Hero: React.FC = () => {
               clearInterval(removeCloudInterval);
               return prev;
             }
+            console.log('Removing cloud, remaining:', prev.length - 1);
             return prev.slice(0, -1);
           });
-        }, 200);
+        }, 300);
 
         // Gradually reset clouds
         const resetInterval = setInterval(() => {
@@ -209,7 +211,7 @@ const Hero: React.FC = () => {
             return prev - (prev - 1) * 0.15;
           });
         }, 100);
-      }, 500);
+      }, 2500); // 2.5 seconds after scroll stops
     };
 
     window.addEventListener('scroll', handleScrollStop);
