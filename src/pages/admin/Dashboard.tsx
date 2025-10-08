@@ -68,11 +68,13 @@ const Dashboard: React.FC = () => {
       const { data: contactData } = await supabase
         .from('contact_info')
         .select('*')
-        .single();
+        .maybeSingle();
 
       if (statsData) setStats(statsData);
       if (count) setTotalTeamMembers(count);
-      if (contactData) setContactInfo(contactData);
+      if (contactData) {
+        setContactInfo(contactData);
+      }
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
     } finally {
@@ -94,29 +96,50 @@ const Dashboard: React.FC = () => {
     setMessage(null);
 
     try {
-      const { error } = await supabase
-        .from('contact_info')
-        .update({
-          phone: contactInfo.phone,
-          email: contactInfo.email,
-          location: contactInfo.location,
-          work_hours: contactInfo.work_hours,
-          facebook_url: contactInfo.facebook_url,
-          instagram_url: contactInfo.instagram_url,
-          twitter_url: contactInfo.twitter_url,
-          linkedin_url: contactInfo.linkedin_url,
-          github_url: contactInfo.github_url,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', contactInfo.id);
+      if (contactInfo.id) {
+        const { error } = await supabase
+          .from('contact_info')
+          .update({
+            phone: contactInfo.phone,
+            email: contactInfo.email,
+            location: contactInfo.location,
+            work_hours: contactInfo.work_hours,
+            facebook_url: contactInfo.facebook_url,
+            instagram_url: contactInfo.instagram_url,
+            twitter_url: contactInfo.twitter_url,
+            linkedin_url: contactInfo.linkedin_url,
+            github_url: contactInfo.github_url,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', contactInfo.id);
 
-      if (error) throw error;
+        if (error) throw error;
+      } else {
+        const { data, error } = await supabase
+          .from('contact_info')
+          .insert({
+            phone: contactInfo.phone,
+            email: contactInfo.email,
+            location: contactInfo.location,
+            work_hours: contactInfo.work_hours,
+            facebook_url: contactInfo.facebook_url,
+            instagram_url: contactInfo.instagram_url,
+            twitter_url: contactInfo.twitter_url,
+            linkedin_url: contactInfo.linkedin_url,
+            github_url: contactInfo.github_url
+          })
+          .select()
+          .single();
 
-      setMessage({ type: 'success', text: 'Kontakt ma\'lumotlari muvaffaqiyatli yangilandi!' });
+        if (error) throw error;
+        if (data) setContactInfo(data);
+      }
+
+      setMessage({ type: 'success', text: 'Kontakt ma\'lumotlari muvaffaqiyatli saqlandi!' });
       setTimeout(() => setMessage(null), 3000);
     } catch (error: any) {
-      console.error('Error updating contact info:', error);
-      setMessage({ type: 'error', text: 'Yangilashda xatolik: ' + error.message });
+      console.error('Error saving contact info:', error);
+      setMessage({ type: 'error', text: 'Saqlashda xatolik: ' + error.message });
     } finally {
       setIsSaving(false);
     }
