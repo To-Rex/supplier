@@ -18,19 +18,26 @@ const Portfolio: React.FC = () => {
     const fetchPortfolio = async () => {
       try {
         setIsLoading(true);
+        console.log('Fetching portfolio from Supabase...');
+
         const { data, error } = await supabase
           .from('portfolio')
           .select('*')
           .eq('is_active', true)
           .order('display_order', { ascending: true });
 
+        console.log('Portfolio query result:', { data, error, count: data?.length });
+
         if (error) {
           console.error('Error fetching portfolio:', error);
+          alert('Portfolio ma\'lumotlarini olishda xatolik: ' + error.message);
         } else if (data) {
+          console.log('Portfolio items loaded:', data);
           setPortfolioItems(data);
         }
       } catch (err) {
         console.error('Unexpected error:', err);
+        alert('Kutilmagan xatolik yuz berdi: ' + (err as Error).message);
       } finally {
         setIsLoading(false);
       }
