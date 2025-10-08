@@ -212,14 +212,16 @@ const Hero: React.FC = () => {
         </div>
       </div>
 
-      <button
-        onClick={() => scrollToSection('about')}
-        className={`absolute bottom-8 left-1/2 -translate-x-1/2 z-20 text-white cursor-pointer hover:scale-125 transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 rounded-full p-2 ${!prefersReducedMotion ? 'animate-bounce' : ''}`}
-        style={{ animationDuration: '2s' }}
-        aria-label="Keyingi qismga o'tish - Biz haqimizda"
-      >
-        <ChevronDown className="w-8 h-8 sm:w-10 sm:h-10" aria-hidden="true" />
-      </button>
+      <div className="absolute bottom-8 left-0 right-0 flex justify-center z-20">
+        <button
+          onClick={() => scrollToSection('about')}
+          className={`text-white cursor-pointer hover:scale-125 transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 rounded-full p-2 ${!prefersReducedMotion ? 'animate-bounce' : ''}`}
+          style={{ animationDuration: '2s' }}
+          aria-label="Keyingi qismga o'tish - Biz haqimizda"
+        >
+          <ChevronDown className="w-8 h-8 sm:w-10 sm:h-10" aria-hidden="true" />
+        </button>
+      </div>
     </section>
   );
 };
