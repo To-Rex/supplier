@@ -20,16 +20,28 @@ const Hero: React.FC = () => {
   const { isDark } = useTheme();
   const textColors = getTextColors(isDark);
 
-  // Memoize particles for better performance
+  // Memoize particles and stars for better performance - use fixed seed
   const optimizedParticles = useMemo(() => generateOptimizedParticles(12), []);
   const optimizedShapes = useMemo(() => generateOptimizedShapes(6), []);
+
+  // Generate fixed star positions once
+  const staticStars = useMemo(() => {
+    return Array.from({ length: 40 }).map((_, i) => ({
+      id: i,
+      top: `${(i * 37 + 13) % 100}%`,
+      left: `${(i * 67 + 29) % 100}%`,
+      opacity: ((i * 17) % 50 + 30) / 100,
+      duration: 2 + ((i * 23) % 30) / 10,
+      delay: ((i * 19) % 20) / 10
+    }));
+  }, []);
 
   // Respect reduced motion preferences
   const prefersReducedMotion = useMemo(() => {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }, []);
 
-  // Shooting stars effect - only in dark mode
+  // Shooting stars effect - only in dark mode and on scroll
   useEffect(() => {
     if (!isDark || prefersReducedMotion) return;
 
@@ -49,12 +61,25 @@ const Hero: React.FC = () => {
       }, 1500);
     };
 
-    // Create shooting star every 3-4 seconds
+    // Create shooting star on scroll
+    const handleScroll = () => {
+      // Only create if scroll position is past a threshold
+      if (window.scrollY > 50) {
+        createShootingStar();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Also create shooting star every 3-4 seconds
     const interval = setInterval(() => {
       createShootingStar();
     }, 3000 + Math.random() * 1000);
 
-    return () => clearInterval(interval);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearInterval(interval);
+    };
   }, [isDark, prefersReducedMotion]);
 
   useEffect(() => {
@@ -161,18 +186,18 @@ const Hero: React.FC = () => {
                   <div className="absolute inset-0 bg-gray-200 rounded-full blur-xl opacity-30 animate-pulse" style={{ animationDuration: '4s' }}></div>
                 </div>
 
-                {/* Static stars background */}
+                {/* Static stars background - fixed positions */}
                 <div className="absolute inset-0">
-                  {Array.from({ length: 40 }).map((_, i) => (
+                  {staticStars.map((star) => (
                     <div
-                      key={`star-${i}`}
+                      key={`star-${star.id}`}
                       className="absolute w-1 h-1 bg-white rounded-full"
                       style={{
-                        top: `${Math.random() * 100}%`,
-                        left: `${Math.random() * 100}%`,
-                        opacity: Math.random() * 0.5 + 0.3,
-                        animation: `twinkle ${2 + Math.random() * 3}s ease-in-out infinite`,
-                        animationDelay: `${Math.random() * 2}s`
+                        top: star.top,
+                        left: star.left,
+                        opacity: star.opacity,
+                        animation: `twinkle ${star.duration}s ease-in-out infinite`,
+                        animationDelay: `${star.delay}s`
                       }}
                     />
                   ))}
