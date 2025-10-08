@@ -17,6 +17,10 @@ const TeamManagement: React.FC = () => {
     image_url: '',
     bio: '',
     display_order: 0,
+    slug: '',
+    meta_title: '',
+    meta_description: '',
+    keywords: '',
   });
   const { isDark } = useTheme();
   const textColors = getTextColors(isDark);
@@ -45,10 +49,15 @@ const TeamManagement: React.FC = () => {
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const slug = formData.slug || formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       const { error } = await supabase.from('team_members').insert([
         {
           ...formData,
           expertise: formData.expertise.split(',').map((s) => s.trim()),
+          keywords: formData.keywords.split(',').map((s) => s.trim()).filter(Boolean),
+          slug,
+          meta_title: formData.meta_title || `${formData.name} - ${formData.role} | Torex`,
+          meta_description: formData.meta_description || formData.bio,
           is_active: true,
         },
       ]);
@@ -56,7 +65,7 @@ const TeamManagement: React.FC = () => {
       if (error) throw error;
 
       setShowAddForm(false);
-      setFormData({ name: '', role: '', expertise: '', image_url: '', bio: '', display_order: 0 });
+      setFormData({ name: '', role: '', expertise: '', image_url: '', bio: '', display_order: 0, slug: '', meta_title: '', meta_description: '', keywords: '' });
       fetchMembers();
     } catch (err) {
       console.error('Error adding member:', err);
@@ -78,6 +87,10 @@ const TeamManagement: React.FC = () => {
           image_url: member.image_url,
           bio: member.bio,
           display_order: member.display_order,
+          slug: member.slug,
+          meta_title: member.meta_title,
+          meta_description: member.meta_description,
+          keywords: member.keywords,
           updated_at: new Date().toISOString(),
         })
         .eq('id', id);
@@ -249,6 +262,70 @@ const TeamManagement: React.FC = () => {
                         : 'bg-white border-gray-300 text-gray-900'
                     }`}
                     rows={3}
+                  />
+                </div>
+                <div>
+                  <label className={`block ${typography.cardSubtitle} ${textColors.primary} mb-2`}>
+                    Slug (URL)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.slug}
+                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                    className={`w-full px-4 py-2 rounded-lg border ${
+                      isDark
+                        ? 'bg-gray-700 border-gray-600 text-white'
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                    placeholder="aziz-rahimov (auto-generate from name)"
+                  />
+                </div>
+                <div>
+                  <label className={`block ${typography.cardSubtitle} ${textColors.primary} mb-2`}>
+                    SEO Keywords (vergul bilan)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.keywords}
+                    onChange={(e) => setFormData({ ...formData, keywords: e.target.value })}
+                    className={`w-full px-4 py-2 rounded-lg border ${
+                      isDark
+                        ? 'bg-gray-700 border-gray-600 text-white'
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                    placeholder="developer, react, typescript"
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label className={`block ${typography.cardSubtitle} ${textColors.primary} mb-2`}>
+                    SEO Meta Title
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.meta_title}
+                    onChange={(e) => setFormData({ ...formData, meta_title: e.target.value })}
+                    className={`w-full px-4 py-2 rounded-lg border ${
+                      isDark
+                        ? 'bg-gray-700 border-gray-600 text-white'
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                    placeholder="Auto-generate: Name - Role | Torex"
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label className={`block ${typography.cardSubtitle} ${textColors.primary} mb-2`}>
+                    SEO Meta Description
+                  </label>
+                  <textarea
+                    value={formData.meta_description}
+                    onChange={(e) => setFormData({ ...formData, meta_description: e.target.value })}
+                    className={`w-full px-4 py-2 rounded-lg border ${
+                      isDark
+                        ? 'bg-gray-700 border-gray-600 text-white'
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
+                    rows={2}
+                    placeholder="Auto-generate from bio"
                   />
                 </div>
               </div>

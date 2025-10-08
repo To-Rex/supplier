@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { Users, Award, Clock, Globe } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { typography, getTextColors } from '../utils/typography';
@@ -208,8 +209,9 @@ const About: React.FC = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" role="list" aria-label="Jamoa a'zolari">
               {teamMembers.map((member, index) => (
-              <div 
+              <Link
                 key={member.id}
+                to={`/team/${member.slug}`}
                 className="group cursor-pointer transform hover:scale-105 transition-all duration-500"
                 style={{ animationDelay: `${index * 0.1}s` }}
                 role="listitem"
@@ -274,7 +276,7 @@ const About: React.FC = () => {
                     )}
                   </div>
                 </div>
-              </div>
+              </Link>
               ))}
             </div>
           )}

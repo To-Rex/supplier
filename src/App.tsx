@@ -7,6 +7,7 @@ import AdminLogin from './pages/AdminLogin';
 import Dashboard from './pages/admin/Dashboard';
 import TeamManagement from './pages/admin/TeamManagement';
 import UsersManagement from './pages/admin/UsersManagement';
+import TeamMemberProfile from './pages/TeamMemberProfile';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/*" element={<MainSite />} />
+            <Route path="/team/:slug" element={<TeamMemberProfile />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route
               path="/admin/dashboard"
