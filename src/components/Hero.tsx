@@ -18,12 +18,20 @@ interface RainDrop {
   delay: number;
 }
 
+interface ExtraCloud {
+  id: number;
+  left: string;
+  top: string;
+  size: number;
+}
+
 const Hero: React.FC = () => {
   const [currentText, setCurrentText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimationPaused, setIsAnimationPaused] = useState(false);
   const [shootingStars, setShootingStars] = useState<ShootingStar[]>([]);
   const [rainDrops, setRainDrops] = useState<RainDrop[]>([]);
+  const [extraClouds, setExtraClouds] = useState<ExtraCloud[]>([]);
   const [cloudDarkness, setCloudDarkness] = useState(0);
   const [cloudScale, setCloudScale] = useState(1);
   const texts = ['Professional Veb-saytlar', 'Mobil Ilovalar', 'Telegram Botlar', 'Raqamli Yechimlar'];
@@ -106,6 +114,18 @@ const Hero: React.FC = () => {
           setCloudDarkness(darkness);
           setCloudScale(scale);
 
+          // Add extra clouds when scrolling
+          const cloudCount = Math.floor(scrollY / 200);
+          if (cloudCount > extraClouds.length) {
+            const newCloud: ExtraCloud = {
+              id: Date.now() + Math.random(),
+              left: `${Math.random() * 90}%`,
+              top: `${Math.random() * 70 + 20}%`,
+              size: Math.random() * 0.5 + 0.8
+            };
+            setExtraClouds(prev => [...prev, newCloud]);
+          }
+
           // Create rain drops
           const rainCount = Math.floor(Math.random() * 8) + 12;
           for (let i = 0; i < rainCount; i++) {
@@ -129,6 +149,7 @@ const Hero: React.FC = () => {
       if (!isDark && scrollY < 50) {
         setCloudDarkness(0);
         setCloudScale(1);
+        setExtraClouds([]);
       }
     };
 
@@ -153,6 +174,17 @@ const Hero: React.FC = () => {
     const handleScrollStop = () => {
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
+        // Gradually remove extra clouds
+        const removeCloudInterval = setInterval(() => {
+          setExtraClouds(prev => {
+            if (prev.length === 0) {
+              clearInterval(removeCloudInterval);
+              return prev;
+            }
+            return prev.slice(0, -1);
+          });
+        }, 200);
+
         // Gradually reset clouds
         const resetInterval = setInterval(() => {
           setCloudDarkness(prev => {
@@ -287,6 +319,27 @@ const Hero: React.FC = () => {
                     <div className="w-22 h-13 bg-white rounded-full -ml-7" style={{ backgroundColor: `rgb(${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120})` }}></div>
                   </div>
                 </div>
+
+                {/* Extra clouds added on scroll */}
+                {extraClouds.map((cloud) => (
+                  <div
+                    key={cloud.id}
+                    className="absolute transition-all duration-1000 ease-out"
+                    style={{
+                      left: cloud.left,
+                      top: cloud.top,
+                      opacity: 0.3 + cloudDarkness * 0.4,
+                      transform: `scale(${cloud.size * cloudScale})`,
+                      filter: `brightness(${1 - cloudDarkness * 0.6})`
+                    }}
+                  >
+                    <div className="flex items-center animate-float-slow">
+                      <div className="w-16 h-10 bg-white rounded-full" style={{ backgroundColor: `rgb(${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120})` }}></div>
+                      <div className="w-20 h-12 bg-white rounded-full -ml-6" style={{ backgroundColor: `rgb(${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120})` }}></div>
+                      <div className="w-14 h-9 bg-white rounded-full -ml-8" style={{ backgroundColor: `rgb(${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120}, ${255 - cloudDarkness * 120})` }}></div>
+                    </div>
+                  </div>
+                ))}
 
                 {/* Rain drops */}
                 {rainDrops.map((drop) => (
