@@ -67,9 +67,18 @@ const PortfolioManagement: React.FC = () => {
       : formData.technologies.split(',').map(t => t.trim()).filter(Boolean);
     const ogImage = formData.og_image || formData.image_url;
 
+    let displayOrder = formData.display_order;
+    if (!editingPortfolio) {
+      const maxOrder = portfolios.length > 0
+        ? Math.max(...portfolios.map(p => p.display_order))
+        : 0;
+      displayOrder = maxOrder + 1;
+    }
+
     const portfolioData = {
       ...formData,
       slug,
+      display_order: displayOrder,
       technologies: formData.technologies.split(',').map(t => t.trim()).filter(Boolean),
       meta_title: metaTitle,
       meta_description: metaDescription,
@@ -463,20 +472,22 @@ const PortfolioManagement: React.FC = () => {
                   </select>
                 </div>
 
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    Tartib Raqami *
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    value={formData.display_order}
-                    onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
-                      isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
-                    }`}
-                  />
-                </div>
+                {editingPortfolio && (
+                  <div>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                      Tartib Raqami *
+                    </label>
+                    <input
+                      type="number"
+                      required
+                      value={formData.display_order}
+                      onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300 ${
+                        isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                      }`}
+                    />
+                  </div>
+                )}
 
                 <div className="md:col-span-2">
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
