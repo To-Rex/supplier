@@ -1,18 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Bot, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Github } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { typography, getTextColors } from '../utils/typography';
+import { supabase } from '../lib/supabase';
+
+interface ContactInfoData {
+  phone: string;
+  email: string;
+  location: string;
+  facebook_url: string;
+  instagram_url: string;
+  twitter_url: string;
+  linkedin_url: string;
+  github_url: string;
+}
 
 const Footer: React.FC = () => {
   const { isDark } = useTheme();
   const textColors = getTextColors(isDark);
+  const [contactInfo, setContactInfo] = useState<ContactInfoData | null>(null);
+
+  useEffect(() => {
+    fetchContactInfo();
+  }, []);
+
+  const fetchContactInfo = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('contact_info')
+        .select('phone, email, location, facebook_url, instagram_url, twitter_url, linkedin_url, github_url')
+        .single();
+
+      if (error) {
+        console.error('Error fetching contact info:', error);
+        return;
+      }
+
+      if (data) {
+        setContactInfo(data);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   const socialLinks = [
-    { icon: Facebook, href: '#', label: 'Facebook' },
-    { icon: Twitter, href: '#', label: 'Twitter' },
-    { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
-    { icon: Github, href: '#', label: 'GitHub' }
+    { icon: Facebook, href: contactInfo?.facebook_url || '#', label: 'Facebook', show: !!contactInfo?.facebook_url },
+    { icon: Twitter, href: contactInfo?.twitter_url || '#', label: 'Twitter', show: !!contactInfo?.twitter_url },
+    { icon: Instagram, href: contactInfo?.instagram_url || '#', label: 'Instagram', show: !!contactInfo?.instagram_url },
+    { icon: Linkedin, href: contactInfo?.linkedin_url || '#', label: 'LinkedIn', show: !!contactInfo?.linkedin_url },
+    { icon: Github, href: contactInfo?.github_url || '#', label: 'GitHub', show: !!contactInfo?.github_url }
   ];
 
   const quickLinks = [
@@ -59,10 +96,12 @@ const Footer: React.FC = () => {
               Veb dasturlash, mobil ilovalar va avtomatlashtirish sohasidagi ishonchli hamkoringiz.
             </p>
             <div className="flex space-x-4">
-              {socialLinks.map((social, index) => (
+              {socialLinks.filter(social => social.show).map((social, index) => (
                 <a
                   key={index}
                   href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={`p-3 rounded-full transition-all duration-300 transform hover:scale-110 ${
                     isDark ? 'bg-gray-800 hover:bg-blue-600' : 'bg-blue-500 hover:bg-blue-400'
                   }`}
@@ -118,23 +157,23 @@ const Footer: React.FC = () => {
                 <div>
                   <p className={`${typography.footerText} ${
                     isDark ? 'text-gray-400' : 'text-blue-100'
-                  }`}>Toshkent, O'zbekiston</p>
+                  }`}>{contactInfo?.location || 'Toshkent, O\'zbekiston'}</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-blue-400 flex-shrink-0" />
-                <a href="tel:+998995340313" className={`${typography.footerText} transition-colors duration-300 ${
+                <a href={`tel:${contactInfo?.phone || '+998995340313'}`} className={`${typography.footerText} transition-colors duration-300 ${
                   isDark ? 'text-gray-400 hover:text-white' : 'text-blue-100 hover:text-white'
                 }`}>
-                  +998 99 534 03 13
+                  {contactInfo?.phone || '+998 99 534 03 13'}
                 </a>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-blue-400 flex-shrink-0" />
-                <a href="mailto:dev.dilshodjon@gmail.com" className={`${typography.footerText} transition-colors duration-300 ${
+                <a href={`mailto:${contactInfo?.email || 'dev.dilshodjon@gmail.com'}`} className={`${typography.footerText} transition-colors duration-300 ${
                   isDark ? 'text-gray-400 hover:text-white' : 'text-blue-100 hover:text-white'
                 }`}>
-                  dev.dilshodjon@gmail.com
+                  {contactInfo?.email || 'dev.dilshodjon@gmail.com'}
                 </a>
               </div>
             </div>
