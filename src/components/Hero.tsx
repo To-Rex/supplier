@@ -100,13 +100,56 @@ const Hero: React.FC = () => {
   return (
     <section
       id="hero"
-      className="relative h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800"
+      className={`relative h-screen flex items-center justify-center overflow-hidden transition-colors duration-700 ${
+        isDark
+          ? 'bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800'
+          : 'bg-gradient-to-br from-sky-400 via-blue-400 to-blue-500'
+      }`}
       role="banner"
       aria-label="Bosh sahifa qismi"
     >
-      {/* Animated Background Particles - Hidden from screen readers */}
+      {/* Animated Background - Hidden from screen readers */}
       <div className="absolute inset-0" aria-hidden="true">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/50 via-blue-700/50 to-blue-800/50"></div>
+        {/* Light mode: Sun and clouds */}
+        {!isDark && !prefersReducedMotion && (
+          <>
+            {/* Sun */}
+            <div className="absolute top-20 right-20 w-24 h-24 opacity-30">
+              <div className="absolute inset-0 bg-yellow-300 rounded-full animate-pulse" style={{ animationDuration: '3s' }}></div>
+              <div className="absolute inset-0 bg-yellow-200 rounded-full animate-ping" style={{ animationDuration: '4s' }}></div>
+            </div>
+
+            {/* Clouds */}
+            <div className="absolute top-32 left-[10%] opacity-20">
+              <div className="flex items-center animate-float-slow">
+                <div className="w-20 h-12 bg-white rounded-full"></div>
+                <div className="w-16 h-10 bg-white rounded-full -ml-8"></div>
+                <div className="w-24 h-14 bg-white rounded-full -ml-10"></div>
+              </div>
+            </div>
+
+            <div className="absolute top-48 right-[15%] opacity-20">
+              <div className="flex items-center animate-float-slow" style={{ animationDelay: '1s' }}>
+                <div className="w-16 h-10 bg-white rounded-full"></div>
+                <div className="w-20 h-12 bg-white rounded-full -ml-6"></div>
+                <div className="w-14 h-9 bg-white rounded-full -ml-8"></div>
+              </div>
+            </div>
+
+            <div className="absolute top-[60%] left-[20%] opacity-15">
+              <div className="flex items-center animate-float-slow" style={{ animationDelay: '2s' }}>
+                <div className="w-18 h-11 bg-white rounded-full"></div>
+                <div className="w-22 h-13 bg-white rounded-full -ml-7"></div>
+              </div>
+            </div>
+          </>
+        )}
+
+        <div className={`absolute inset-0 ${
+          isDark
+            ? 'bg-gradient-to-br from-blue-600/50 via-blue-700/50 to-blue-800/50'
+            : 'bg-gradient-to-br from-sky-400/30 via-blue-400/30 to-blue-500/30'
+        }`}></div>
         {!prefersReducedMotion && (
           <>
             <div className="absolute w-full h-full">

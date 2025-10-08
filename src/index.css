@@ -23,6 +23,15 @@
   }
 }
 
+@keyframes float-slow {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(30px, -15px, 0);
+  }
+}
+
 @keyframes pulse-glow {
   0%, 100% {
     box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
@@ -115,6 +124,13 @@
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
   will-change: transform;
   backface-visibility: hidden;
   transform: translateZ(0);
