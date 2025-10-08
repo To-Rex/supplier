@@ -64,7 +64,7 @@ const Hero: React.FC = () => {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 pt-20"
+      className="relative h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800"
       role="banner"
       aria-label="Bosh sahifa qismi"
     >
@@ -104,8 +104,8 @@ const Hero: React.FC = () => {
         )}
       </div>
 
-      <div className="relative z-10 text-center px-4 sm:px-6 md:px-8 lg:px-8 max-w-5xl mx-auto">
-        <div className="mb-6 md:mb-8 animate-fade-in-up">
+      <div className="relative z-10 text-center px-4 sm:px-6 md:px-8 lg:px-8 max-w-5xl mx-auto w-full py-20">
+        <div className="mb-4 md:mb-6 animate-fade-in-up">
           <Bot
             className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 mx-auto mb-4 md:mb-6 text-white ${!prefersReducedMotion ? 'animate-bounce' : ''}`}
             style={{ animationDuration: '2s' }}
@@ -114,7 +114,7 @@ const Hero: React.FC = () => {
         </div>
 
         <h1
-          className={`${typography.heroMain} text-white mb-6 md:mb-8 animate-fade-in-up animation-delay-200`}
+          className={`${typography.heroMain} text-white mb-4 md:mb-6 animate-fade-in-up animation-delay-200`}
           id="main-content"
           tabIndex={-1}
           aria-label="Supplier IT kompaniyasining bosh sahifasi"
@@ -125,7 +125,7 @@ const Hero: React.FC = () => {
           </span>
         </h1>
 
-        <div className="h-16 sm:h-20 md:h-24 flex items-center justify-center mb-8 md:mb-10">
+        <div className="h-14 sm:h-16 md:h-20 flex items-center justify-center mb-6 md:mb-8">
           <div
             aria-live="polite"
             aria-label={`Hozir ko'rsatilayotgan xizmat: ${currentText || texts[currentIndex]}`}
@@ -147,11 +147,11 @@ const Hero: React.FC = () => {
           </div>
         </div>
 
-        <p className={`${typography.heroSubtitle} text-blue-100 mb-8 md:mb-12 max-w-2xl md:max-w-3xl mx-auto animate-fade-in-up animation-delay-800 leading-relaxed px-2`}>
+        <p className={`${typography.heroSubtitle} text-blue-100 mb-6 md:mb-8 max-w-2xl md:max-w-3xl mx-auto animate-fade-in-up animation-delay-800 leading-relaxed px-2`}>
           G'oyalarni zamonaviy texnologiyalar va innovatsion yechimlar bilan raqamli haqiqatga aylantiramiz.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center animate-fade-in-up animation-delay-1000 mb-12 md:mb-16">
+        <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center animate-fade-in-up animation-delay-1000 mb-8 md:mb-10">
           <button
             onClick={() => scrollToSection('about')}
             className={`w-full sm:w-auto group bg-white text-blue-600 px-8 md:px-10 py-3.5 md:py-4 rounded-full ${typography.button} hover:bg-blue-50 transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-white/20 relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600`}
