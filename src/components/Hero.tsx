@@ -114,7 +114,7 @@ const Hero: React.FC = () => {
           // Light mode: rain effect
           // Calculate cloud darkness and scale based on scroll
           const darkness = Math.min(scrollY / 500, 0.7);
-          const scale = Math.min(1 + scrollY / 1000, 1.5);
+          const scale = Math.min(1 + scrollY / 300, 1.8);
           setCloudDarkness(darkness);
           setCloudScale(scale);
 
@@ -287,7 +287,7 @@ const Hero: React.FC = () => {
 
                 {/* Clouds with dynamic darkness and scale */}
                 <div
-                  className="absolute top-32 left-[10%] transition-all duration-700 ease-out"
+                  className="absolute top-32 left-[10%] transition-all duration-500 ease-out"
                   style={{
                     opacity: 0.2 + cloudDarkness * 0.5,
                     transform: `scale(${cloudScale})`,
@@ -302,7 +302,7 @@ const Hero: React.FC = () => {
                 </div>
 
                 <div
-                  className="absolute top-48 right-[15%] transition-all duration-700 ease-out"
+                  className="absolute top-48 right-[15%] transition-all duration-500 ease-out"
                   style={{
                     opacity: 0.2 + cloudDarkness * 0.5,
                     transform: `scale(${cloudScale})`,
@@ -317,7 +317,7 @@ const Hero: React.FC = () => {
                 </div>
 
                 <div
-                  className="absolute top-[60%] left-[20%] transition-all duration-700 ease-out"
+                  className="absolute top-[60%] left-[20%] transition-all duration-500 ease-out"
                   style={{
                     opacity: 0.15 + cloudDarkness * 0.5,
                     transform: `scale(${cloudScale})`,
