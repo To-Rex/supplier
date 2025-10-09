@@ -8,7 +8,9 @@ export const typography = {
   lead: 'text-lg sm:text-xl lg:text-2xl',
   body: 'text-base',
   small: 'text-sm',
-  xs: 'text-xs'
+  xs: 'text-xs',
+  heroMain: 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold',
+  heroAnimated: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold'
 };
 
 export function getTextColors(isDark: boolean) {
