@@ -76,9 +76,9 @@ const Portfolio: React.FC = () => {
   const filters = [
     { id: 'all', label: 'Barcha Loyihalar', color: 'blue' },
     { id: 'web', label: 'Veb Dasturlash', color: 'green' },
-    { id: 'mobile', label: 'Mobil Ilovalar', color: 'purple' },
+    { id: 'mobile', label: 'Mobil Ilovalar', color: 'teal' },
     { id: 'bot', label: 'Telegram Botlar', color: 'pink' },
-    { id: 'design', label: 'Dizayn', color: 'indigo' },
+    { id: 'design', label: 'Dizayn', color: 'orange' },
     { id: 'other', label: 'Boshqa', color: 'gray' }
   ];
 
@@ -131,7 +131,7 @@ const Portfolio: React.FC = () => {
             isDark ? 'text-white' : 'text-gray-900'
           }`}>
             Bizning{' '}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
               Portfolio
             </span>
           </h2>
@@ -149,7 +149,7 @@ const Portfolio: React.FC = () => {
                 onClick={() => handleFilterChange(filter.id)}
                 className={`group px-8 py-4 rounded-full font-semibold transition-all duration-500 transform hover:scale-110 relative overflow-hidden ${
                   activeFilter === filter.id
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-2xl scale-105'
+                    ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-2xl scale-105'
                     : 'bg-white text-gray-600 hover:bg-blue-50 hover:text-blue-600 shadow-lg hover:shadow-xl'
                 }`}
                 style={{ animationDelay: `${index * 0.1}s` }}
@@ -159,7 +159,7 @@ const Portfolio: React.FC = () => {
                   {filter.label}
                 </span>
                 {activeFilter === filter.id && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 animate-pulse"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 animate-pulse"></div>
                 )}
               </button>
             ))}
