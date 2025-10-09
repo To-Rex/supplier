@@ -16,8 +16,15 @@ export default defineConfig({
         pure_funcs: []
       },
       mangle: {
-        keep_fnames: true
+        keep_fnames: true,
+        keep_classnames: true
       }
+    },
+    commonjsOptions: {
+      transformMixedEsModules: true
     }
+  },
+  optimizeDeps: {
+    include: ['lucide-react']
   }
 })
