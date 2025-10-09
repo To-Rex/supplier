@@ -11,9 +11,11 @@ export const typography = {
   xs: 'text-xs'
 };
 
-export const getTextColors = (isDark: boolean) => ({
-  primary: isDark ? 'text-white' : 'text-gray-900',
-  secondary: isDark ? 'text-gray-300' : 'text-gray-700',
-  muted: isDark ? 'text-gray-400' : 'text-gray-600',
-  accent: 'text-blue-600'
-});
+export function getTextColors(isDark: boolean) {
+  return {
+    primary: isDark ? 'text-white' : 'text-gray-900',
+    secondary: isDark ? 'text-gray-300' : 'text-gray-700',
+    muted: isDark ? 'text-gray-400' : 'text-gray-600',
+    accent: 'text-blue-600'
+  };
+}
