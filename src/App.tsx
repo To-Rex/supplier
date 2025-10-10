@@ -8,6 +8,7 @@ import AdminLogin from './pages/AdminLogin';
 import Dashboard from './pages/admin/Dashboard';
 import TeamManagement from './pages/admin/TeamManagement';
 import PortfolioManagement from './pages/admin/PortfolioManagement';
+import BlogManagement from './pages/admin/BlogManagement';
 import UsersManagement from './pages/admin/UsersManagement';
 import ContactMessages from './pages/admin/ContactMessages';
 import TeamMemberProfile from './pages/TeamMemberProfile';
@@ -54,6 +55,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <PortfolioManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/blog"
+              element={
+                <ProtectedRoute>
+                  <BlogManagement />
                 </ProtectedRoute>
               }
             />
