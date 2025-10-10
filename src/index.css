@@ -2,6 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile viewport height fix */
+@supports (height: 100dvh) {
+  #hero {
+    height: 100dvh !important;
+  }
+}
+
+/* Smooth font rendering on all devices */
+@layer base {
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Touch optimizations for mobile */
+@media (hover: none) and (pointer: coarse) {
+  button, a {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Tiny screens optimization (iPhone SE, Galaxy Fold, etc) */
+@media (max-width: 374px) {
+  #hero {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  #hero .relative.z-10 {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+}
+
+/* Landscape mobile optimization */
+@media (max-height: 500px) and (orientation: landscape) {
+  #hero {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  #hero .relative.z-10 {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+}
+
 /* Performance-optimized animations */
 @keyframes fade-in-up {
   from {

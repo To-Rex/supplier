@@ -264,7 +264,7 @@ const Hero: React.FC = () => {
   return (
     <section
       id="hero"
-      className={`relative h-screen flex items-center justify-center overflow-hidden transition-colors duration-700 ${
+      className={`relative h-screen flex items-center justify-center overflow-hidden overflow-x-hidden transition-colors duration-700 ${
         isDark
           ? 'bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800'
           : 'bg-gradient-to-br from-sky-400 via-blue-400 to-blue-500'
@@ -465,17 +465,17 @@ const Hero: React.FC = () => {
         )}
       </div>
 
-      <div className="relative z-10 text-center px-4 sm:px-6 md:px-8 lg:px-8 max-w-5xl mx-auto w-full py-20">
-        <div className="mb-4 md:mb-6 animate-fade-in-up">
+      <div className="relative z-10 text-center px-4 xs:px-5 sm:px-6 md:px-8 lg:px-10 xl:px-12 max-w-7xl mx-auto w-full py-12 xs:py-16 sm:py-20 md:py-24">
+        <div className="mb-3 xs:mb-4 sm:mb-5 md:mb-6 animate-fade-in-up">
           <Bot
-            className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 mx-auto mb-4 md:mb-6 text-white ${!prefersReducedMotion ? 'animate-bounce' : ''}`}
+            className={`w-10 h-10 xs:w-12 xs:h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 mx-auto mb-3 xs:mb-4 sm:mb-5 md:mb-6 text-white ${!prefersReducedMotion ? 'animate-bounce' : ''}`}
             style={{ animationDuration: '2s' }}
             aria-hidden="true"
           />
         </div>
 
         <h1
-          className={`${typography.heroMain} text-white mb-4 md:mb-6 animate-fade-in-up animation-delay-200`}
+          className={`${typography.heroMain} text-white mb-3 xs:mb-4 sm:mb-5 md:mb-6 lg:mb-8 animate-fade-in-up animation-delay-200 leading-tight`}
           id="main-content"
           tabIndex={-1}
           aria-label="Torex IT kompaniyasining bosh sahifasi"
@@ -486,7 +486,7 @@ const Hero: React.FC = () => {
           </span>
         </h1>
 
-        <div className="h-14 sm:h-16 md:h-20 flex items-center justify-center mb-6 md:mb-8">
+        <div className="min-h-[3.5rem] xs:min-h-[4rem] sm:min-h-[4.5rem] md:min-h-[5rem] lg:min-h-[6rem] flex items-center justify-center mb-4 xs:mb-5 sm:mb-6 md:mb-8 lg:mb-10 px-2">
           <div
             aria-live="polite"
             aria-label={`Hozir ko'rsatilayotgan xizmat: ${currentText || texts[currentIndex]}`}
@@ -501,21 +501,21 @@ const Hero: React.FC = () => {
               {isAnimationPaused ? "Davom ettirish" : "To'xtatish"}
             </button>
             
-            <span role="text">
+            <span role="text" className="break-words hyphens-auto max-w-full">
               {currentText || texts[currentIndex]}
               {!prefersReducedMotion && <span className="animate-pulse text-white" aria-hidden="true">|</span>}
             </span>
           </div>
         </div>
 
-        <p className={`${typography.heroSubtitle} text-blue-100 mb-6 md:mb-8 max-w-2xl md:max-w-3xl mx-auto animate-fade-in-up animation-delay-800 leading-relaxed px-2`}>
+        <p className={`${typography.heroSubtitle} text-blue-100 mb-5 xs:mb-6 sm:mb-7 md:mb-8 lg:mb-10 max-w-xl xs:max-w-2xl sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto animate-fade-in-up animation-delay-800 leading-relaxed px-2`}>
           G'oyalarni zamonaviy texnologiyalar va innovatsion yechimlar bilan raqamli haqiqatga aylantiramiz.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center animate-fade-in-up animation-delay-1000 mb-8 md:mb-10">
+        <div className="flex flex-col sm:flex-row gap-3 xs:gap-4 sm:gap-5 md:gap-6 lg:gap-8 justify-center items-center animate-fade-in-up animation-delay-1000 mb-6 xs:mb-8 sm:mb-10 md:mb-12 lg:mb-14">
           <button
             onClick={() => scrollToSection('about')}
-            className={`w-full sm:w-auto group bg-white text-blue-600 px-8 md:px-10 py-3.5 md:py-4 rounded-full ${typography.button} hover:bg-blue-50 transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-white/20 relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600`}
+            className={`w-full xs:w-auto sm:w-auto group bg-white text-blue-600 px-6 xs:px-8 sm:px-9 md:px-10 lg:px-12 py-3 xs:py-3.5 sm:py-3.5 md:py-4 lg:py-4.5 rounded-full ${typography.button} hover:bg-blue-50 transition-all duration-500 transform hover:scale-105 active:scale-95 shadow-2xl hover:shadow-white/20 relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 min-w-[140px] xs:min-w-[160px] sm:min-w-[180px]`}
             aria-label="Biz haqimizda qismiga o'tish"
           >
             <span className="relative z-10">Boshlash</span>
@@ -523,7 +523,7 @@ const Hero: React.FC = () => {
           </button>
           <button
             onClick={() => scrollToSection('portfolio')}
-            className={`w-full sm:w-auto group border-2 border-white text-white px-8 md:px-10 py-3.5 md:py-4 rounded-full ${typography.button} hover:bg-white hover:text-blue-600 transition-all duration-500 transform hover:scale-105 shadow-2xl relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600`}
+            className={`w-full xs:w-auto sm:w-auto group border-2 border-white text-white px-6 xs:px-8 sm:px-9 md:px-10 lg:px-12 py-3 xs:py-3.5 sm:py-3.5 md:py-4 lg:py-4.5 rounded-full ${typography.button} hover:bg-white hover:text-blue-600 transition-all duration-500 transform hover:scale-105 active:scale-95 shadow-2xl relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 min-w-[140px] xs:min-w-[160px] sm:min-w-[180px]`}
             aria-label="Portfolio qismiga o'tish"
           >
             <span className="relative z-10">Portfolio ko'rish</span>
@@ -532,7 +532,7 @@ const Hero: React.FC = () => {
         </div>
 
         <div
-          className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 lg:gap-10 max-w-4xl mx-auto animate-fade-in-up animation-delay-1200"
+          className="grid grid-cols-1 xs:grid-cols-3 sm:grid-cols-3 gap-4 xs:gap-5 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12 max-w-xs xs:max-w-2xl sm:max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto animate-fade-in-up animation-delay-1200"
           role="list"
           aria-label="Asosiy xizmatlar ro'yxati"
         >
@@ -543,7 +543,7 @@ const Hero: React.FC = () => {
           ].map((item, index) => (
             <div
               key={index}
-              className="group flex flex-col items-center text-white/90 cursor-pointer transform hover:scale-105 md:hover:scale-110 transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 rounded-lg p-4 md:p-6"
+              className="group flex flex-col items-center text-white/90 cursor-pointer transform hover:scale-105 active:scale-95 md:hover:scale-110 transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 rounded-lg p-3 xs:p-4 sm:p-5 md:p-6 lg:p-8"
               style={{ animationDelay: item.delay }}
               role="listitem"
               tabIndex={0}
@@ -556,9 +556,9 @@ const Hero: React.FC = () => {
                 }
               }}
             >
-              <div className="relative mb-3 md:mb-4">
+              <div className="relative mb-2 xs:mb-3 sm:mb-3 md:mb-4">
                 <item.icon
-                  className="w-12 h-12 md:w-14 md:h-14 group-hover:scale-125 transition-transform duration-500"
+                  className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-18 lg:h-18 group-hover:scale-125 transition-transform duration-500"
                   aria-hidden="true"
                 />
                 {!prefersReducedMotion && (
@@ -573,14 +573,14 @@ const Hero: React.FC = () => {
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-0 right-0 flex justify-center z-20">
+      <div className="absolute bottom-4 xs:bottom-6 sm:bottom-8 md:bottom-10 left-0 right-0 flex justify-center z-20">
         <button
           onClick={() => scrollToSection('about')}
-          className={`text-white cursor-pointer hover:scale-125 transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 rounded-full p-2 ${!prefersReducedMotion ? 'animate-bounce' : ''}`}
+          className={`text-white cursor-pointer hover:scale-125 active:scale-95 transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 rounded-full p-2 ${!prefersReducedMotion ? 'animate-bounce' : ''}`}
           style={{ animationDuration: '2s' }}
           aria-label="Keyingi qismga o'tish - Biz haqimizda"
         >
-          <ChevronDown className="w-8 h-8 sm:w-10 sm:h-10" aria-hidden="true" />
+          <ChevronDown className="w-7 h-7 xs:w-8 xs:h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" aria-hidden="true" />
         </button>
       </div>
     </section>
