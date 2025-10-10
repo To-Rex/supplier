@@ -12,6 +12,7 @@ import UsersManagement from './pages/admin/UsersManagement';
 import ContactMessages from './pages/admin/ContactMessages';
 import TeamMemberProfile from './pages/TeamMemberProfile';
 import PortfolioDetail from './pages/PortfolioDetail';
+import BlogDetail from './pages/BlogDetail';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import Sitemap from './pages/Sitemap';
@@ -27,6 +28,7 @@ function App() {
             <Route path="/" element={<MainSite />} />
             <Route path="/team/:slug" element={<TeamMemberProfile />} />
             <Route path="/portfolio/:slug" element={<PortfolioDetail />} />
+            <Route path="/blog/:slug" element={<BlogDetail />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/sitemap" element={<Sitemap />} />

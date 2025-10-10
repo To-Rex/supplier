@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, User, ArrowRight, Clock } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
 import { typography, getTextColors } from '../utils/typography';
 import { supabase } from '../lib/supabase';
@@ -105,9 +106,13 @@ const Blog: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
             {blogPosts.map((post, index) => (
-            <article
+            <Link
               key={post.id}
-              className={`group relative rounded-3xl overflow-hidden transition-all duration-700 transform cursor-pointer ${
+              to={`/blog/${post.slug}`}
+              className="block"
+            >
+              <article
+                className={`group relative rounded-3xl overflow-hidden transition-all duration-700 transform cursor-pointer ${
                 isDark
                   ? 'bg-gradient-to-br from-gray-800 via-gray-850 to-gray-900 border border-gray-700/50'
                   : 'bg-white border border-gray-100'
@@ -189,7 +194,8 @@ const Blog: React.FC = () => {
                   ? 'group-hover:shadow-[0_0_40px_rgba(59,130,246,0.4)]'
                   : 'group-hover:shadow-[0_0_40px_rgba(59,130,246,0.25)]'
               }`}></div>
-            </article>
+              </article>
+            </Link>
             ))}
           </div>
         )}
