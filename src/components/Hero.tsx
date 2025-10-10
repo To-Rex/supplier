@@ -99,6 +99,15 @@ const Hero: React.FC = () => {
 
       console.log('Scroll event:', scrollY, 'isDark:', isDark);
 
+      // Light mode: ALWAYS update cloud scale on scroll
+      if (!isDark) {
+        const darkness = Math.min(scrollY / 200, 0.95);
+        const scale = Math.min(1 + scrollY / 80, 4.0);
+        console.log('Light mode scroll - updating clouds:', { scrollY, darkness, scale });
+        setCloudDarkness(darkness);
+        setCloudScale(scale);
+      }
+
       if (scrollY > 50 && now - lastScrollTime > 80) {
         lastScrollTime = now;
         console.log('Triggering effects at scrollY:', scrollY);
@@ -111,13 +120,7 @@ const Hero: React.FC = () => {
             setTimeout(() => createShootingStar(), i * 60);
           }
         } else {
-          // Light mode: rain effect
-          // Calculate cloud darkness and scale based on scroll - more dramatic scaling
-          const darkness = Math.min(scrollY / 200, 0.95);
-          const scale = Math.min(1 + scrollY / 80, 4.0);
-          console.log('Light mode scroll:', { scrollY, darkness, scale });
-          setCloudDarkness(darkness);
-          setCloudScale(scale);
+          // Light mode: rain effect and extra clouds
 
           // Add extra clouds when scrolling - more clouds, bigger sizes
           const cloudCount = Math.floor(scrollY / 100);
@@ -133,7 +136,7 @@ const Hero: React.FC = () => {
 
           // Create rain drops - more and continuous
           const rainCount = Math.floor(Math.random() * 15) + 20;
-          console.log('Creating rain drops:', rainCount, 'darkness:', darkness);
+          console.log('Creating rain drops:', rainCount);
           for (let i = 0; i < rainCount; i++) {
             setTimeout(() => {
               const drop: RainDrop = {
@@ -141,10 +144,7 @@ const Hero: React.FC = () => {
                 left: `${Math.random() * 100}%`,
                 delay: Math.random() * 200
               };
-              setRainDrops(prev => {
-                console.log('Adding rain drop at', drop.left);
-                return [...prev, drop];
-              });
+              setRainDrops(prev => [...prev, drop]);
 
               setTimeout(() => {
                 setRainDrops(prev => prev.filter(d => d.id !== drop.id));
@@ -154,8 +154,8 @@ const Hero: React.FC = () => {
         }
       }
 
-      // Reset clouds when not scrolling (light mode)
-      if (!isDark && scrollY < 50) {
+      // Reset clouds when at top (light mode)
+      if (!isDark && scrollY < 10) {
         setCloudDarkness(0);
         setCloudScale(1);
         setExtraClouds([]);
