@@ -109,14 +109,14 @@ const Blog: React.FC = () => {
             <Link
               key={post.id}
               to={`/blog/${post.slug}`}
-              className="block"
+              className="block h-full"
             >
               <article
                 className={`group relative rounded-3xl overflow-hidden transition-all duration-700 transform cursor-pointer ${
                 isDark
                   ? 'bg-gradient-to-br from-gray-800 via-gray-850 to-gray-900 border border-gray-700/50'
                   : 'bg-white border border-gray-100'
-              } shadow-xl hover:shadow-2xl hover:-translate-y-3 hover:scale-[1.02] flex flex-col`}
+              } shadow-xl hover:shadow-2xl hover:-translate-y-3 hover:scale-[1.02] flex flex-col h-full`}
               style={{
                 animationDelay: `${index * 0.1}s`,
               }}
@@ -143,16 +143,26 @@ const Blog: React.FC = () => {
               {/* Content Section */}
               <div className="p-6 flex flex-col flex-grow">
                 {/* Title */}
-                <h3 className={`text-xl font-bold mb-3 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2 leading-snug ${
+                <h3 className={`text-xl font-bold mb-3 group-hover:text-blue-600 transition-colors duration-300 leading-snug min-h-[3.5rem] ${
                   textColors.primary
-                }`}>
+                }`} style={{
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden'
+                }}>
                   {post.title}
                 </h3>
 
                 {/* Excerpt */}
-                <p className={`text-sm leading-relaxed mb-4 line-clamp-3 flex-grow ${
+                <p className={`text-sm leading-relaxed mb-4 flex-grow min-h-[4.5rem] ${
                   textColors.secondary
-                }`}>
+                }`} style={{
+                  display: '-webkit-box',
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden'
+                }}>
                   {post.excerpt}
                 </p>
 
