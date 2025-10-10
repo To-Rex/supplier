@@ -24,31 +24,61 @@ const Blog: React.FC = () => {
   const textColors = getTextColors(isDark);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [offset, setOffset] = useState(0);
+  const POSTS_PER_PAGE = 4;
 
   useEffect(() => {
-    const fetchBlogPosts = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('blog_posts')
-          .select('*')
-          .eq('is_published', true)
-          .order('published_at', { ascending: false })
-          .limit(4);
-
-        if (error) throw error;
-
-        if (data) {
-          setBlogPosts(data);
-        }
-      } catch (error) {
-        console.error('Blog yuklashda xatolik:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBlogPosts();
+    fetchBlogPosts(true);
   }, []);
+
+  const fetchBlogPosts = async (isInitial = false) => {
+    try {
+      if (isInitial) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
+      }
+
+      const currentOffset = isInitial ? 0 : offset;
+      const from = currentOffset;
+      const to = from + POSTS_PER_PAGE - 1;
+
+      const { data, error, count } = await supabase
+        .from('blog_posts')
+        .select('*', { count: 'exact' })
+        .eq('is_published', true)
+        .order('published_at', { ascending: false })
+        .range(from, to);
+
+      if (error) throw error;
+
+      if (data) {
+        if (isInitial) {
+          setBlogPosts(data);
+          setOffset(data.length);
+        } else {
+          setBlogPosts(prev => [...prev, ...data]);
+          setOffset(prev => prev + data.length);
+        }
+
+        const totalFetched = isInitial ? data.length : offset + data.length;
+        setHasMore(count ? totalFetched < count : data.length === POSTS_PER_PAGE);
+      }
+    } catch (error) {
+      console.error('Blog yuklashda xatolik:', error);
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  };
+
+  const handleLoadMore = () => {
+    if (!loadingMore && hasMore) {
+      fetchBlogPosts(false);
+    }
+  };
 
   const getCategoryColor = (category: string) => {
     const colors = {
@@ -210,15 +240,30 @@ const Blog: React.FC = () => {
           </div>
         )}
 
-        <div className="text-center">
-          <button className="group relative bg-gradient-to-r from-blue-600 to-blue-700 text-white px-10 py-4 rounded-full font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl overflow-hidden">
-            <span className="relative z-10 flex items-center justify-center space-x-2">
-              <span>Barcha Maqolalarni Ko'rish</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          </button>
-        </div>
+        {hasMore && blogPosts.length > 0 && (
+          <div className="text-center">
+            <button
+              onClick={handleLoadMore}
+              disabled={loadingMore}
+              className="group relative bg-gradient-to-r from-blue-600 to-blue-700 text-white px-10 py-4 rounded-full font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            >
+              <span className="relative z-10 flex items-center justify-center space-x-2">
+                {loadingMore ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+                    <span>Yuklanmoqda...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Yana Boshqa Maqolalarni Ko'rish</span>
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </>
+                )}
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
