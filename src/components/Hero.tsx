@@ -465,17 +465,17 @@ const Hero: React.FC = () => {
         )}
       </div>
 
-      <div className="relative z-10 text-center px-4 xs:px-5 sm:px-6 md:px-8 lg:px-10 xl:px-12 max-w-7xl mx-auto w-full pt-20 xs:pt-24 sm:pt-28 md:pt-32 pb-12 xs:pb-16 sm:pb-20 md:pb-24">
-        <div className="mb-3 xs:mb-4 sm:mb-5 md:mb-6 animate-fade-in-up">
+      <div className="relative z-10 text-center px-4 xs:px-5 sm:px-6 md:px-8 lg:px-10 xl:px-12 max-w-7xl mx-auto w-full pt-28 xs:pt-32 sm:pt-36 md:pt-40 lg:pt-44 pb-8 xs:pb-12 sm:pb-16 md:pb-20 lg:pb-24">
+        <div className="mb-2 xs:mb-3 sm:mb-4 md:mb-5 lg:mb-6 animate-fade-in-up">
           <Bot
-            className={`w-10 h-10 xs:w-12 xs:h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 mx-auto mb-3 xs:mb-4 sm:mb-5 md:mb-6 text-white ${!prefersReducedMotion ? 'animate-bounce' : ''}`}
+            className={`w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 mx-auto mb-2 xs:mb-3 sm:mb-4 md:mb-5 lg:mb-6 text-white ${!prefersReducedMotion ? 'animate-bounce' : ''}`}
             style={{ animationDuration: '2s' }}
             aria-hidden="true"
           />
         </div>
 
         <h1
-          className={`${typography.heroMain} text-white mb-3 xs:mb-4 sm:mb-5 md:mb-6 lg:mb-8 animate-fade-in-up animation-delay-200 leading-tight`}
+          className={`${typography.heroMain} text-white mb-2 xs:mb-3 sm:mb-4 md:mb-5 lg:mb-6 xl:mb-8 animate-fade-in-up animation-delay-200 leading-tight`}
           id="main-content"
           tabIndex={-1}
           aria-label="Torex IT kompaniyasining bosh sahifasi"

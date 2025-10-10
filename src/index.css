@@ -12,7 +12,7 @@
 /* Safe area for notch devices (iPhone X and newer) */
 @supports (padding: max(0px)) {
   #hero .relative.z-10 {
-    padding-top: max(5rem, env(safe-area-inset-top, 0px) + 5rem);
+    padding-top: max(6rem, env(safe-area-inset-top, 0px) + 6rem);
     padding-left: max(1rem, env(safe-area-inset-left, 0px));
     padding-right: max(1rem, env(safe-area-inset-right, 0px));
   }
@@ -24,12 +24,30 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  #root {
+    position: relative;
+    overflow-x: hidden;
+  }
 }
 
 /* Touch optimizations for mobile */
 @media (hover: none) and (pointer: coarse) {
   button, a {
     -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Mobile screens - all sizes */
+@media (max-width: 639px) {
+  #hero .relative.z-10 {
+    padding-top: 7.5rem !important;
   }
 }
 
@@ -41,7 +59,7 @@
   }
 
   #hero .relative.z-10 {
-    padding-top: 5.5rem !important;
+    padding-top: 8rem !important;
     padding-bottom: 2rem !important;
   }
 }
@@ -55,8 +73,8 @@
   }
 
   #hero .relative.z-10 {
-    padding-top: 5rem !important;
-    padding-bottom: 3rem !important;
+    padding-top: 6rem !important;
+    padding-bottom: 2rem !important;
   }
 }
 
