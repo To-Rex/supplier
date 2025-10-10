@@ -29,6 +29,9 @@ const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<StatsSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalTeamMembers, setTotalTeamMembers] = useState(0);
+  const [totalPortfolio, setTotalPortfolio] = useState(0);
+  const [totalBlogPosts, setTotalBlogPosts] = useState(0);
+  const [totalMessages, setTotalMessages] = useState(0);
   const [contactInfo, setContactInfo] = useState<ContactInfoData>({
     id: '',
     phone: '',
@@ -54,26 +57,39 @@ const Dashboard: React.FC = () => {
     try {
       setLoading(true);
 
-      const { data: statsData } = await supabase
-        .from('site_stats_summary')
-        .select('*')
-        .order('stat_date', { ascending: false })
-        .limit(7);
+      const [statsResult, teamResult, portfolioResult, blogResult, messagesResult, contactResult] = await Promise.all([
+        supabase
+          .from('site_stats_summary')
+          .select('*')
+          .order('stat_date', { ascending: false })
+          .limit(7),
+        supabase
+          .from('team_members')
+          .select('*', { count: 'exact', head: true })
+          .eq('is_active', true),
+        supabase
+          .from('portfolio')
+          .select('*', { count: 'exact', head: true }),
+        supabase
+          .from('blog_posts')
+          .select('*', { count: 'exact', head: true })
+          .eq('is_published', true),
+        supabase
+          .from('contact_messages')
+          .select('*', { count: 'exact', head: true }),
+        supabase
+          .from('contact_info')
+          .select('*')
+          .maybeSingle()
+      ]);
 
-      const { count } = await supabase
-        .from('team_members')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_active', true);
-
-      const { data: contactData } = await supabase
-        .from('contact_info')
-        .select('*')
-        .maybeSingle();
-
-      if (statsData) setStats(statsData);
-      if (count) setTotalTeamMembers(count);
-      if (contactData) {
-        setContactInfo(contactData);
+      if (statsResult.data) setStats(statsResult.data);
+      if (teamResult.count !== null) setTotalTeamMembers(teamResult.count);
+      if (portfolioResult.count !== null) setTotalPortfolio(portfolioResult.count);
+      if (blogResult.count !== null) setTotalBlogPosts(blogResult.count);
+      if (messagesResult.count !== null) setTotalMessages(messagesResult.count);
+      if (contactResult.data) {
+        setContactInfo(contactResult.data);
       }
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
@@ -180,32 +196,32 @@ const Dashboard: React.FC = () => {
 
   const summaryCards = [
     {
-      title: 'Bugungi Tashriflar',
-      value: todayStats.visits,
-      icon: Eye,
-      color: 'blue',
-      change: '+12%',
-    },
-    {
-      title: 'Noyob Foydalanuvchilar',
-      value: todayStats.visitors,
-      icon: Users,
-      color: 'green',
-      change: '+8%',
-    },
-    {
-      title: 'Haftalik Jami',
-      value: weekTotal,
-      icon: TrendingUp,
-      color: 'teal',
-      change: '+15%',
-    },
-    {
       title: 'Jamoa A\'zolari',
       value: totalTeamMembers,
+      icon: Users,
+      color: 'blue',
+      description: 'Faol a\'zolar',
+    },
+    {
+      title: 'Portfolio Loyihalar',
+      value: totalPortfolio,
+      icon: TrendingUp,
+      color: 'green',
+      description: 'Jami loyihalar',
+    },
+    {
+      title: 'Blog Postlari',
+      value: totalBlogPosts,
       icon: Calendar,
+      color: 'teal',
+      description: 'Nashr etilgan',
+    },
+    {
+      title: 'Xabarlar',
+      value: totalMessages,
+      icon: Eye,
       color: 'orange',
-      change: '+2',
+      description: 'Kelgan xabarlar',
     },
   ];
 
@@ -254,10 +270,10 @@ const Dashboard: React.FC = () => {
                 <div className={`p-3 rounded-lg bg-gradient-to-br ${getColorClasses(card.color)}`}>
                   <card.icon className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-green-600 text-sm font-semibold">{card.change}</span>
               </div>
               <h3 className={`${typography.h2} ${textColors.primary} mb-1`}>{card.value.toLocaleString()}</h3>
-              <p className={`${typography.cardSubtitle} ${textColors.secondary}`}>{card.title}</p>
+              <p className={`${typography.cardSubtitle} ${textColors.primary} font-semibold`}>{card.title}</p>
+              <p className={`${typography.bodySmall} ${textColors.secondary} mt-1`}>{card.description}</p>
             </div>
           ))}
         </div>
