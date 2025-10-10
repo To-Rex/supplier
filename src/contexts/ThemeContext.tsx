@@ -33,12 +33,19 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   useEffect(() => {
     // Save preference to localStorage
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    
+
     // Apply theme to document
     if (isDark) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
+    }
+
+    // Update favicon
+    const favicon = document.getElementById('favicon') as HTMLLinkElement;
+    if (favicon) {
+      const emoji = isDark ? '👨🏼‍💻' : '👨🏿‍💻';
+      favicon.href = `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>${emoji}</text></svg>`;
     }
   }, [isDark]);
 
