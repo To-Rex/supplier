@@ -1,50 +1,67 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const scrollPositions: { [key: string]: number } = {};
+const SCROLL_KEY = 'scrollPosition';
+const FROM_DETAIL_KEY = 'fromDetailPage';
 
 const ScrollManager = () => {
   const location = useLocation();
-  const restoring = useRef(false);
 
   useEffect(() => {
-    const currentPath = location.pathname;
-    const currentState = location.state as { fromPortfolio?: boolean } | null;
+    const isDetailPage = location.pathname.startsWith('/portfolio/') ||
+                        location.pathname.startsWith('/team/');
 
-    if (currentPath.startsWith('/portfolio/') || currentPath.startsWith('/team/')) {
+    if (isDetailPage) {
+      sessionStorage.setItem(FROM_DETAIL_KEY, 'true');
       window.scrollTo(0, 0);
       return;
     }
 
-    if (currentPath === '/' && currentState?.fromPortfolio) {
-      restoring.current = true;
-      const savedPosition = scrollPositions['/'] || 0;
+    const fromDetailPage = sessionStorage.getItem(FROM_DETAIL_KEY);
+    const savedScroll = sessionStorage.getItem(SCROLL_KEY);
 
-      setTimeout(() => {
-        window.scrollTo(0, savedPosition);
-        restoring.current = false;
-      }, 50);
-    } else if (!currentState?.fromPortfolio) {
+    if (location.pathname === '/' && fromDetailPage === 'true' && savedScroll) {
+      sessionStorage.removeItem(FROM_DETAIL_KEY);
+
+      const targetScroll = parseInt(savedScroll, 10);
+
+      const scrollToTarget = () => {
+        window.scrollTo(0, targetScroll);
+      };
+
+      if (document.readyState === 'complete') {
+        requestAnimationFrame(scrollToTarget);
+      } else {
+        window.addEventListener('load', scrollToTarget, { once: true });
+      }
+    } else {
       window.scrollTo(0, 0);
     }
 
-    const saveScrollPosition = () => {
-      if (!restoring.current) {
-        scrollPositions[currentPath] = window.scrollY;
+    const saveScroll = () => {
+      if (location.pathname === '/') {
+        sessionStorage.setItem(SCROLL_KEY, window.scrollY.toString());
       }
     };
 
+    let ticking = false;
     const handleScroll = () => {
-      requestAnimationFrame(saveScrollPosition);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          saveScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
-      saveScrollPosition();
       window.removeEventListener('scroll', handleScroll);
+      saveScroll();
     };
-  }, [location]);
+  }, [location.pathname]);
 
   return null;
 };

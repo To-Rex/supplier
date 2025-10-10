@@ -15,7 +15,7 @@ const PortfolioDetail: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleBackClick = () => {
-    navigate('/', { state: { fromPortfolio: true } });
+    navigate('/');
   };
 
   useEffect(() => {
