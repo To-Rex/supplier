@@ -73,7 +73,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
             <div className={`hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg ${isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
               <UserCircle className="w-5 h-5" />
-              <span className="text-sm font-medium">{user?.email}</span>
+              <span className="text-sm font-medium">{user?.full_name || user?.username}</span>
             </div>
 
             <button

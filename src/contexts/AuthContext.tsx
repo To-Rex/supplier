@@ -1,66 +1,79 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { User, Session } from '@supabase/supabase-js';
+
+interface AdminUser {
+  id: string;
+  username: string;
+  full_name: string;
+  email: string;
+}
 
 interface AuthContextType {
-  user: User | null;
-  session: Session | null;
+  user: AdminUser | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
+  login: (username: string, password: string) => Promise<boolean>;
+  logout: () => void;
   signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<AdminUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
+    const storedUser = localStorage.getItem('torex_admin_user');
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        localStorage.removeItem('torex_admin_user');
+      }
+    }
+    setLoading(false);
   }, []);
 
-  const signIn = async (email: string, password: string) => {
+  const login = async (username: string, password: string): Promise<boolean> => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { data, error } = await supabase
+        .from('admin_users')
+        .select('id, username, full_name, email')
+        .eq('username', username)
+        .eq('password_hash', password)
+        .eq('is_active', true)
+        .maybeSingle();
 
-      if (error) {
-        return { error };
+      if (error || !data) {
+        console.error('Login error:', error);
+        return false;
       }
 
-      setSession(data.session);
-      setUser(data.user);
-      return { error: null };
+      await supabase
+        .from('admin_users')
+        .update({ last_login: new Date().toISOString() })
+        .eq('id', data.id);
+
+      setUser(data);
+      localStorage.setItem('torex_admin_user', JSON.stringify(data));
+      return true;
     } catch (err) {
-      return { error: err as Error };
+      console.error('Login exception:', err);
+      return false;
     }
   };
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
+  const logout = () => {
     setUser(null);
-    setSession(null);
+    localStorage.removeItem('torex_admin_user');
+  };
+
+  const signOut = async () => {
+    logout();
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, signOut }}>
       {children}
     </AuthContext.Provider>
   );

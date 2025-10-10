@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { LogIn, Lock, Mail, Eye, EyeOff, Shield, ArrowLeft } from 'lucide-react';
+import { LogIn, Lock, User, Eye, EyeOff, Shield, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 
 const AdminLogin: React.FC = () => {
-  const [email, setEmail] = useState(() => {
-    return localStorage.getItem('rememberedEmail') || '';
+  const [username, setUsername] = useState(() => {
+    return localStorage.getItem('rememberedUsername') || '';
   });
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(() => {
-    return localStorage.getItem('rememberedEmail') !== null;
+    return localStorage.getItem('rememberedUsername') !== null;
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signIn } = useAuth();
+  const { login } = useAuth();
   const { isDark } = useTheme();
   const navigate = useNavigate();
 
@@ -25,15 +25,15 @@ const AdminLogin: React.FC = () => {
     setLoading(true);
 
     try {
-      const { error: signInError } = await signIn(email, password);
+      const success = await login(username, password);
 
-      if (signInError) {
-        setError('Email yoki parol noto\'g\'ri');
+      if (!success) {
+        setError('Login yoki parol noto\'g\'ri');
       } else {
         if (rememberMe) {
-          localStorage.setItem('rememberedEmail', email);
+          localStorage.setItem('rememberedUsername', username);
         } else {
-          localStorage.removeItem('rememberedEmail');
+          localStorage.removeItem('rememberedUsername');
         }
         navigate('/admin/dashboard');
       }
@@ -97,31 +97,31 @@ const AdminLogin: React.FC = () => {
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Email Input */}
+              {/* Username Input */}
               <div>
                 <label
-                  htmlFor="email"
+                  htmlFor="username"
                   className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}
                 >
-                  Email
+                  Login
                 </label>
                 <div className="relative">
-                  <Mail className={`absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
+                  <User className={`absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
                     isDark ? 'text-gray-400' : 'text-gray-500'
                   }`} />
                   <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    type="text"
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     className={`w-full pl-12 pr-4 py-3.5 rounded-xl border-2 transition-all duration-200 focus:outline-none ${
                       isDark
                         ? 'bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:bg-gray-700'
                         : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:bg-white'
                     }`}
-                    placeholder="admin@example.com"
+                    placeholder="Loginni kiriting"
                     required
-                    autoComplete="email"
+                    autoComplete="username"
                   />
                 </div>
               </div>
