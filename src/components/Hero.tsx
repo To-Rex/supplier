@@ -532,7 +532,7 @@ const Hero: React.FC = () => {
         </div>
 
         <div
-          className="grid grid-cols-3 gap-2 xs:gap-3 sm:gap-3 md:gap-4 lg:gap-5 max-w-sm xs:max-w-md sm:max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto animate-fade-in-up animation-delay-1200"
+          className="grid grid-cols-3 gap-2 xs:gap-3 sm:gap-3 md:gap-3 lg:gap-4 max-w-sm xs:max-w-md sm:max-w-xl md:max-w-xl lg:max-w-2xl mx-auto animate-fade-in-up animation-delay-1200"
           role="list"
           aria-label="Asosiy xizmatlar ro'yxati"
         >
@@ -543,7 +543,7 @@ const Hero: React.FC = () => {
           ].map((item, index) => (
             <div
               key={index}
-              className="group flex flex-col items-center text-white/90 cursor-pointer transform hover:scale-105 active:scale-95 transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 rounded-lg p-2 xs:p-3 sm:p-3 md:p-4 lg:p-5"
+              className="group flex flex-col items-center text-white/90 cursor-pointer transform hover:scale-105 active:scale-95 transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 rounded-lg p-2 xs:p-3 sm:p-3 md:p-3 lg:p-4"
               style={{ animationDelay: item.delay }}
               role="listitem"
               tabIndex={0}
@@ -556,9 +556,9 @@ const Hero: React.FC = () => {
                 }
               }}
             >
-              <div className="relative mb-1.5 xs:mb-2 sm:mb-2 md:mb-2.5">
+              <div className="relative mb-1.5 xs:mb-2 sm:mb-2 md:mb-2">
                 <item.icon
-                  className="w-8 h-8 xs:w-10 xs:h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 lg:w-14 lg:h-14 group-hover:scale-110 transition-transform duration-500"
+                  className="w-8 h-8 xs:w-10 xs:h-10 sm:w-11 sm:h-11 md:w-11 md:h-11 lg:w-12 lg:h-12 group-hover:scale-110 transition-transform duration-500"
                   aria-hidden="true"
                 />
                 {!prefersReducedMotion && (

@@ -13,7 +13,7 @@ export const typography = {
   heroAnimated: 'text-xl xs:text-xl sm:text-2xl md:text-2xl lg:text-3xl font-semibold',
   heroSubtitle: 'text-sm xs:text-base sm:text-base md:text-lg lg:text-lg',
   button: 'text-sm xs:text-sm sm:text-base md:text-base lg:text-base font-semibold',
-  bodySmall: 'text-xs xs:text-sm sm:text-sm md:text-base'
+  bodySmall: 'text-xs xs:text-sm sm:text-sm md:text-sm lg:text-sm'
 };
 
 export function getTextColors(isDark: boolean) {
