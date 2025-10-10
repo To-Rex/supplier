@@ -5,19 +5,28 @@ const ScrollManager = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const isPortfolioReturn = sessionStorage.getItem('portfolioScrollPosition');
+    if (location.pathname.startsWith('/portfolio/')) {
+      return;
+    }
 
-    if (location.pathname === '/' && isPortfolioReturn) {
-      const scrollPosition = parseInt(isPortfolioReturn, 10);
+    const savedScrollPosition = sessionStorage.getItem('portfolioScrollPosition');
+
+    if (location.pathname === '/' && savedScrollPosition) {
+      const scrollPosition = parseInt(savedScrollPosition, 10);
       sessionStorage.removeItem('portfolioScrollPosition');
 
-      setTimeout(() => {
-        window.scrollTo({
-          top: scrollPosition,
-          behavior: 'instant'
+      const scrollToPosition = () => {
+        window.scrollTo(0, scrollPosition);
+      };
+
+      if (document.readyState === 'complete') {
+        requestAnimationFrame(scrollToPosition);
+      } else {
+        window.addEventListener('load', () => {
+          requestAnimationFrame(scrollToPosition);
         });
-      }, 100);
-    } else if (!location.pathname.startsWith('/portfolio/')) {
+      }
+    } else {
       window.scrollTo(0, 0);
     }
   }, [location.pathname]);
