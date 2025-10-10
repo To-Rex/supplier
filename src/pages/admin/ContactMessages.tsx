@@ -182,7 +182,7 @@ const ContactMessages: React.FC = () => {
             { label: 'Jami', value: stats.total, color: 'blue' },
             { label: 'Yangi', value: stats.new, color: 'green' },
             { label: 'O\'qilgan', value: stats.read, color: 'yellow' },
-            { label: 'Javob berilgan', value: stats.replied, color: 'purple' },
+            { label: 'Javob berilgan', value: stats.replied, color: 'teal' },
           ].map((stat, index) => (
             <div
               key={index}

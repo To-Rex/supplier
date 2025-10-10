@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, UserCog, LogOut, Menu, X, MessageSquare } from 'lucide-react';
+import { LayoutDashboard, Users, UserCog, LogOut, Menu, X, MessageSquare, Briefcase } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { typography, getTextColors } from '../../utils/typography';
@@ -26,6 +26,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const menuItems = [
     { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { path: '/admin/team', icon: Users, label: 'Jamoa A\'zolari' },
+    { path: '/admin/portfolio', icon: Briefcase, label: 'Portfolio' },
     { path: '/admin/users', icon: UserCog, label: 'Adminlar' },
     { path: '/admin/messages', icon: MessageSquare, label: 'Xabarlar' },
   ];

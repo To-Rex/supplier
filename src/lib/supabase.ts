@@ -30,3 +30,27 @@ export interface TeamMember {
   created_at: string;
   updated_at: string;
 }
+
+export interface Portfolio {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  full_description: string | null;
+  image_url: string;
+  category: 'web' | 'mobile' | 'bot' | 'design' | 'other';
+  technologies: string[];
+  live_url: string | null;
+  github_url: string | null;
+  client_name: string | null;
+  completion_date: string | null;
+  is_featured: boolean;
+  is_active: boolean;
+  display_order: number;
+  meta_title: string | null;
+  meta_description: string | null;
+  meta_keywords: string[];
+  og_image: string | null;
+  created_at: string;
+  updated_at: string;
+}

@@ -91,7 +91,7 @@ const About: React.FC = () => {
   const stats = [
     { icon: Users, number: counts.clients, suffix: '+', label: 'Mamnun Mijozlar', color: 'blue' },
     { icon: Award, number: counts.projects, suffix: '+', label: 'Tugallangan Loyihalar', color: 'green' },
-    { icon: Clock, number: counts.experience, suffix: '+', label: 'Yillik Tajriba', color: 'purple' },
+    { icon: Clock, number: counts.experience, suffix: '+', label: 'Yillik Tajriba', color: 'cyan' },
     { icon: Globe, number: counts.countries, suffix: '+', label: 'Xizmat Ko\'rsatilgan Mamlakatlar', color: 'pink' },
   ];
 
@@ -101,7 +101,7 @@ const About: React.FC = () => {
     const colors = {
       blue: 'from-blue-500 to-blue-600',
       green: 'from-green-500 to-green-600',
-      purple: 'from-purple-500 to-purple-600',
+      cyan: 'from-cyan-500 to-cyan-600',
       pink: 'from-pink-500 to-pink-600'
     };
     return colors[color as keyof typeof colors];
@@ -141,7 +141,7 @@ const About: React.FC = () => {
             id="about-heading"
             className={`${typography.h1} ${textColors.primary} mb-6 animate-fade-in-up`}
           >
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
               Torex IT
             </span>{' '}
             Haqida
@@ -153,35 +153,35 @@ const About: React.FC = () => {
         </div>
 
         {/* Animated Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-24" role="list" aria-label="Kompaniya statistikasi">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-24" role="list" aria-label="Kompaniya statistikasi">
           {stats.map((stat, index) => (
-            <div 
+            <div
               key={index}
-              className="group text-center cursor-pointer transform hover:scale-110 transition-all duration-500"
+              className="group text-center cursor-pointer transform hover:scale-105 transition-all duration-500"
               style={{ animationDelay: `${index * 0.2}s` }}
               role="listitem"
               tabIndex={0}
               aria-label={`${stat.number}${stat.suffix} ${stat.label}`}
             >
-              <div className={`relative rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+              <div className={`relative rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden h-full flex flex-col justify-center items-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                 isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white'
               }`}>
                 {/* Animated background gradient */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${getColorClasses(stat.color)} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} aria-hidden="true"></div>
-                
-                <div className="relative z-10">
-                  <div className="relative mb-6">
-                    <stat.icon 
-                      className="w-16 h-16 text-blue-600 mx-auto group-hover:scale-125 group-hover:rotate-12 transition-all duration-500" 
+
+                <div className="relative z-10 flex flex-col items-center">
+                  <div className="relative mb-4">
+                    <stat.icon
+                      className="w-12 h-12 text-blue-600 mx-auto group-hover:scale-125 group-hover:rotate-12 transition-all duration-500"
                       aria-hidden="true"
                     />
                     <div className="absolute inset-0 bg-blue-600/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-ping" aria-hidden="true"></div>
                   </div>
-                  
-                  <h3 className={`${typography.statNumber} ${textColors.primary} mb-3 group-hover:text-blue-600 transition-colors duration-300`}>
+
+                  <h3 className={`text-4xl font-bold mb-2 group-hover:text-blue-600 transition-colors duration-300 ${textColors.primary}`}>
                     {stat.number}{stat.suffix}
                   </h3>
-                  <p className={`${typography.statLabel} ${textColors.secondary} font-medium`}>{stat.label}</p>
+                  <p className={`text-sm font-medium leading-tight ${textColors.secondary}`}>{stat.label}</p>
                 </div>
               </div>
             </div>
@@ -192,7 +192,7 @@ const About: React.FC = () => {
         <div>
           <h3 className={`${typography.h2} text-center ${textColors.primary} mb-16 animate-fade-in-up`}>
             Bizning{' '}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
               Mutaxassis Jamoamiz
             </span>
           </h3>
@@ -212,17 +212,17 @@ const About: React.FC = () => {
               <Link
                 key={member.id}
                 to={`/team/${member.slug}`}
-                className="group cursor-pointer transform hover:scale-105 transition-all duration-500"
+                className="group cursor-pointer transform hover:scale-105 transition-all duration-500 flex"
                 style={{ animationDelay: `${index * 0.1}s` }}
                 role="listitem"
                 tabIndex={0}
                 aria-label={`${member.name} - ${member.role}. ${member.expertise.join(', ')}`}
               >
-                <div className={`rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 text-center relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                <div className={`rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 text-center relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex flex-col w-full ${
                   isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white'
                 }`}>
                   {/* Animated background */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-cyan-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true"></div>
                   
                   <div className="relative z-10">
                     <div className="relative mb-6">
@@ -237,7 +237,7 @@ const About: React.FC = () => {
                           placeholder={placeholder}
                           sizes="112px"
                         />
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-600/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true"></div>
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-600/20 to-cyan-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true"></div>
                       </div>
                       
                       {/* Floating particles around image */}
@@ -262,18 +262,20 @@ const About: React.FC = () => {
                       {member.name}
                     </h4>
                     <p className={`text-blue-600 ${typography.cardSubtitle} font-semibold mb-2`}>{member.role}</p>
-                    <div className={`${typography.cardBody} ${textColors.secondary}`}>
+                    <div className={`${typography.cardBody} ${textColors.secondary} mb-3`}>
                       {member.expertise.map((skill, i) => (
                         <span key={i}>
                           {skill}{i < member.expertise.length - 1 ? ' • ' : ''}
                         </span>
                       ))}
                     </div>
-                    {member.bio && (
-                      <p className={`${typography.bodySmall} ${textColors.secondary} mt-3 leading-relaxed`}>
-                        {member.bio}
-                      </p>
-                    )}
+                    <div className="flex-grow">
+                      {member.bio && (
+                        <p className={`${typography.bodySmall} ${textColors.secondary} leading-relaxed line-clamp-3`}>
+                          {member.bio}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </Link>

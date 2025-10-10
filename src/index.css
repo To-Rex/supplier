@@ -183,7 +183,7 @@ body {
 }
 
 /* Hide all scroll indicators */
-:::-webkit-scrollbar {
+::-webkit-scrollbar {
   display: none;
   width: 0;
 }

@@ -60,8 +60,8 @@ const Services: React.FC = () => {
       title: 'Telegram Botlar',
       description: 'Biznes avtomatlashtirish va mijozlar bilan muloqot uchun aqlli chatbotlar.',
       features: ['Maxsus Buyruqlar', 'API Integratsiya', 'To\'lov Jarayoni', '24/7 Avtomatlashtirish'],
-      color: 'purple',
-      gradient: 'from-purple-500 to-purple-700'
+      color: 'teal',
+      gradient: 'from-teal-500 to-teal-700'
     },
     {
       icon: Palette,
@@ -105,12 +105,12 @@ const Services: React.FC = () => {
         border: 'border-green-200 hover:border-green-500',
         shadow: 'hover:shadow-green-500/25'
       },
-      purple: {
-        bg: isHovered ? 'bg-gradient-to-br from-purple-500 to-purple-700' : 'bg-white',
-        text: isHovered ? 'text-white' : 'text-purple-600',
-        icon: isHovered ? 'text-white' : 'text-purple-500',
-        border: 'border-purple-200 hover:border-purple-500',
-        shadow: 'hover:shadow-purple-500/25'
+      teal: {
+        bg: isHovered ? 'bg-gradient-to-br from-teal-500 to-teal-700' : 'bg-white',
+        text: isHovered ? 'text-white' : 'text-teal-600',
+        icon: isHovered ? 'text-white' : 'text-teal-500',
+        border: 'border-teal-200 hover:border-teal-500',
+        shadow: 'hover:shadow-teal-500/25'
       },
       pink: {
         bg: isHovered ? 'bg-gradient-to-br from-pink-500 to-pink-700' : 'bg-white',
@@ -166,7 +166,7 @@ const Services: React.FC = () => {
         <div className="text-center mb-20">
           <h2 className={`${typography.h1} ${textColors.primary} mb-6 animate-fade-in-up`}>
             Bizning{' '}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
               Xizmatlarimiz
             </span>
           </h2>
