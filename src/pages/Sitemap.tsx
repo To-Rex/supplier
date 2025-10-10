@@ -42,7 +42,7 @@ const Sitemap: React.FC = () => {
     {
       title: "Admin Panel",
       icon: User,
-      color: "gray",
+      color: "purple",
       links: [
         { name: "Admin Kirish", path: "/admin/login", icon: User, description: "Administrator uchun kirish" },
         { name: "Dashboard", path: "/admin/dashboard", icon: Home, description: "Boshqaruv paneli" },
@@ -76,11 +76,11 @@ const Sitemap: React.FC = () => {
         border: isDark ? 'border-green-700' : 'border-green-200',
         hover: isDark ? 'hover:bg-green-600/30' : 'hover:bg-green-50'
       },
-      gray: {
-        bg: isDark ? 'bg-gray-600/20' : 'bg-gray-100',
-        text: isDark ? 'text-gray-400' : 'text-gray-600',
-        border: isDark ? 'border-gray-700' : 'border-gray-200',
-        hover: isDark ? 'hover:bg-gray-600/30' : 'hover:bg-gray-50'
+      purple: {
+        bg: isDark ? 'bg-purple-600/20' : 'bg-purple-100',
+        text: isDark ? 'text-purple-400' : 'text-purple-600',
+        border: isDark ? 'border-purple-700' : 'border-purple-200',
+        hover: isDark ? 'hover:bg-purple-600/30' : 'hover:bg-purple-50'
       },
       red: {
         bg: isDark ? 'bg-red-600/20' : 'bg-red-100',

@@ -91,7 +91,7 @@ const About: React.FC = () => {
   const stats = [
     { icon: Users, number: counts.clients, suffix: '+', label: 'Mamnun Mijozlar', color: 'blue' },
     { icon: Award, number: counts.projects, suffix: '+', label: 'Tugallangan Loyihalar', color: 'green' },
-    { icon: Clock, number: counts.experience, suffix: '+', label: 'Yillik Tajriba', color: 'cyan' },
+    { icon: Clock, number: counts.experience, suffix: '+', label: 'Yillik Tajriba', color: 'purple' },
     { icon: Globe, number: counts.countries, suffix: '+', label: 'Xizmat Ko\'rsatilgan Mamlakatlar', color: 'pink' },
   ];
 
@@ -101,7 +101,7 @@ const About: React.FC = () => {
     const colors = {
       blue: 'from-blue-500 to-blue-600',
       green: 'from-green-500 to-green-600',
-      cyan: 'from-cyan-500 to-cyan-600',
+      purple: 'from-purple-500 to-purple-600',
       pink: 'from-pink-500 to-pink-600'
     };
     return colors[color as keyof typeof colors];
@@ -141,7 +141,7 @@ const About: React.FC = () => {
             id="about-heading"
             className={`${typography.h1} ${textColors.primary} mb-6 animate-fade-in-up`}
           >
-            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Torex IT
             </span>{' '}
             Haqida
@@ -192,7 +192,7 @@ const About: React.FC = () => {
         <div>
           <h3 className={`${typography.h2} text-center ${textColors.primary} mb-16 animate-fade-in-up`}>
             Bizning{' '}
-            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Mutaxassis Jamoamiz
             </span>
           </h3>
@@ -222,7 +222,7 @@ const About: React.FC = () => {
                   isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white'
                 }`}>
                   {/* Animated background */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-cyan-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true"></div>
                   
                   <div className="relative z-10">
                     <div className="relative mb-6">
@@ -237,7 +237,7 @@ const About: React.FC = () => {
                           placeholder={placeholder}
                           sizes="112px"
                         />
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-600/20 to-cyan-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true"></div>
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-600/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true"></div>
                       </div>
                       
                       {/* Floating particles around image */}

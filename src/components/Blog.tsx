@@ -54,7 +54,7 @@ const Blog: React.FC = () => {
     const colors = {
       'Veb Dasturlash': isDark ? 'bg-blue-900 text-blue-300' : 'bg-blue-100 text-blue-700',
       'Mobil Dasturlash': isDark ? 'bg-green-900 text-green-300' : 'bg-green-100 text-green-700',
-      'Bot Dasturlash': isDark ? 'bg-teal-900 text-teal-300' : 'bg-teal-100 text-teal-700',
+      'Bot Dasturlash': isDark ? 'bg-purple-900 text-purple-300' : 'bg-purple-100 text-purple-700',
       'Dizayn': isDark ? 'bg-pink-900 text-pink-300' : 'bg-pink-100 text-pink-700'
     };
     return colors[category as keyof typeof colors] || (isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700');
@@ -70,7 +70,7 @@ const Blog: React.FC = () => {
           isDark ? 'bg-blue-500' : 'bg-blue-300'
         }`}></div>
         <div className={`absolute bottom-20 left-20 w-96 h-96 rounded-full blur-3xl opacity-20 ${
-          isDark ? 'bg-teal-500' : 'bg-teal-300'
+          isDark ? 'bg-purple-500' : 'bg-purple-300'
         }`}></div>
       </div>
 
