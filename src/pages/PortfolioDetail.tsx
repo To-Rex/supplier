@@ -44,7 +44,6 @@ const PortfolioDetail: React.FC = () => {
     };
 
     fetchPortfolio();
-    window.scrollTo(0, 0);
   }, [slug]);
 
   if (isLoading) {

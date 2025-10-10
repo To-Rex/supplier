@@ -23,45 +23,19 @@ const SectionSkeleton = memo(() => (
 ));
 
 const MainSite: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const { isDark } = useTheme();
 
   usePerformanceOptimization();
   useAnimationOptimization();
 
-  const handleLoadingComplete = useCallback(() => {
-    setIsLoading(false);
-  }, []);
-
   useEffect(() => {
-    const handleLoad = () => {
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(handleLoadingComplete, { timeout: 1000 });
-      } else {
-        setTimeout(handleLoadingComplete, 800);
-      }
-    };
-
-    if (document.readyState === 'complete') {
-      handleLoad();
-    } else {
-      window.addEventListener('load', handleLoad);
-      return () => window.removeEventListener('load', handleLoad);
-    }
-  }, [handleLoadingComplete]);
-
-  useEffect(() => {
-    if (!isLoading && 'requestIdleCallback' in window) {
+    if ('requestIdleCallback' in window) {
       requestIdleCallback(() => {
         import('./components/About');
         import('./components/Services');
       });
     }
-  }, [isLoading]);
-
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
+  }, []);
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
