@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
+import ScrollManager from './components/ScrollManager';
 import MainSite from './MainSite';
 import AdminLogin from './pages/AdminLogin';
 import Dashboard from './pages/admin/Dashboard';
@@ -21,6 +22,7 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <BrowserRouter>
+          <ScrollManager />
           <Routes>
             <Route path="/" element={<MainSite />} />
             <Route path="/team/:slug" element={<TeamMemberProfile />} />

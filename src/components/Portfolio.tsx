@@ -189,6 +189,9 @@ const Portfolio: React.FC = () => {
                 <Link
                   key={project.id}
                   to={`/portfolio/${project.slug}`}
+                  onClick={() => {
+                    sessionStorage.setItem('portfolioScrollPosition', window.scrollY.toString());
+                  }}
                   className={`group ${isDark ? 'bg-gray-800' : 'bg-white'} rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-700 transform cursor-pointer relative border ${isDark ? 'border-gray-700' : 'border-gray-100'} ${
                     isVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-20 opacity-0 scale-95'
                   } hover:scale-[1.02] hover:-translate-y-2`}
