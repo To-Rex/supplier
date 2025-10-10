@@ -1,35 +1,52 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const ScrollManager = () => {
   const location = useLocation();
+  const scrollPositions = useRef<{ [key: string]: number }>({});
 
   useEffect(() => {
-    if (location.pathname.startsWith('/portfolio/')) {
+    const currentPath = location.pathname;
+    const currentState = location.state as { fromPortfolio?: boolean } | null;
+
+    if (currentPath.startsWith('/portfolio/')) {
+      window.scrollTo(0, 0);
       return;
     }
 
-    const savedScrollPosition = sessionStorage.getItem('portfolioScrollPosition');
+    if (currentPath === '/' && currentState?.fromPortfolio && scrollPositions.current['/']) {
+      const savedPosition = scrollPositions.current['/'];
 
-    if (location.pathname === '/' && savedScrollPosition) {
-      const scrollPosition = parseInt(savedScrollPosition, 10);
-      sessionStorage.removeItem('portfolioScrollPosition');
-
-      const scrollToPosition = () => {
-        window.scrollTo(0, scrollPosition);
-      };
-
-      if (document.readyState === 'complete') {
-        requestAnimationFrame(scrollToPosition);
-      } else {
-        window.addEventListener('load', () => {
-          requestAnimationFrame(scrollToPosition);
+      setTimeout(() => {
+        window.scrollTo({
+          top: savedPosition,
+          behavior: 'auto'
         });
+      }, 0);
+    } else if (currentPath === '/') {
+      if (scrollPositions.current['/']) {
+        setTimeout(() => {
+          window.scrollTo({
+            top: scrollPositions.current['/'],
+            behavior: 'auto'
+          });
+        }, 0);
       }
     } else {
       window.scrollTo(0, 0);
     }
-  }, [location.pathname]);
+
+    const saveScrollPosition = () => {
+      scrollPositions.current[currentPath] = window.scrollY;
+    };
+
+    window.addEventListener('scroll', saveScrollPosition, { passive: true });
+
+    return () => {
+      saveScrollPosition();
+      window.removeEventListener('scroll', saveScrollPosition);
+    };
+  }, [location]);
 
   return null;
 };

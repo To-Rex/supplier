@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, User, ExternalLink, Github, ArrowLeft, Tag } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { typography, getTextColors } from '../utils/typography';
@@ -8,10 +8,15 @@ import SEOOptimizer from '../components/SEOOptimizer';
 
 const PortfolioDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
   const { isDark } = useTheme();
   const textColors = getTextColors(isDark);
   const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const handleBackClick = () => {
+    navigate('/', { state: { fromPortfolio: true } });
+  };
 
   useEffect(() => {
     const fetchPortfolio = async () => {
@@ -63,7 +68,7 @@ const PortfolioDetail: React.FC = () => {
         <div className="text-center">
           <h1 className={`${typography.h2} ${textColors.heading} mb-4`}>Loyiha topilmadi</h1>
           <button
-            onClick={() => window.history.back()}
+            onClick={handleBackClick}
             className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -104,7 +109,7 @@ const PortfolioDetail: React.FC = () => {
 
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
             <button
-              onClick={() => window.history.back()}
+              onClick={handleBackClick}
               className="inline-flex items-center space-x-2 text-white hover:text-blue-200 transition-colors mb-8"
             >
               <ArrowLeft className="w-5 h-5" />
