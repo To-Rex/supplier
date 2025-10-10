@@ -112,9 +112,9 @@ const Hero: React.FC = () => {
           }
         } else {
           // Light mode: rain effect
-          // Calculate cloud darkness and scale based on scroll - much more dramatic
-          const darkness = Math.min(scrollY / 300, 0.9);
-          const scale = Math.min(1 + scrollY / 150, 2.8);
+          // Calculate cloud darkness and scale based on scroll - more dramatic scaling
+          const darkness = Math.min(scrollY / 250, 0.95);
+          const scale = Math.min(1 + scrollY / 100, 3.5);
           setCloudDarkness(darkness);
           setCloudScale(scale);
 
