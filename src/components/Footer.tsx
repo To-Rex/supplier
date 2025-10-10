@@ -1,74 +1,168 @@
-import React from 'react';
-import { Code2, Facebook, Instagram, Linkedin, Youtube } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Bot, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Github } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
-import { getTextColors } from '../utils/typography';
+import { typography, getTextColors } from '../utils/typography';
+import { supabase } from '../lib/supabase';
+
+interface ContactInfoData {
+  phone: string;
+  email: string;
+  location: string;
+  facebook_url: string;
+  instagram_url: string;
+  twitter_url: string;
+  linkedin_url: string;
+  github_url: string;
+}
 
 const Footer: React.FC = () => {
   const { isDark } = useTheme();
   const textColors = getTextColors(isDark);
+  const [contactInfo, setContactInfo] = useState<ContactInfoData | null>(null);
+
+  useEffect(() => {
+    fetchContactInfo();
+  }, []);
+
+  const fetchContactInfo = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('contact_info')
+        .select('phone, email, location, facebook_url, instagram_url, twitter_url, linkedin_url, github_url')
+        .single();
+
+      if (error) {
+        console.error('Error fetching contact info:', error);
+        return;
+      }
+
+      if (data) {
+        setContactInfo(data);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const socialLinks = [
+    { icon: Facebook, href: contactInfo?.facebook_url || '#', label: 'Facebook', show: !!contactInfo?.facebook_url },
+    { icon: Twitter, href: contactInfo?.twitter_url || '#', label: 'Twitter', show: !!contactInfo?.twitter_url },
+    { icon: Instagram, href: contactInfo?.instagram_url || '#', label: 'Instagram', show: !!contactInfo?.instagram_url },
+    { icon: Linkedin, href: contactInfo?.linkedin_url || '#', label: 'LinkedIn', show: !!contactInfo?.linkedin_url },
+    { icon: Github, href: contactInfo?.github_url || '#', label: 'GitHub', show: !!contactInfo?.github_url }
+  ];
 
   return (
-    <footer className={`py-16 ${isDark ? 'bg-gray-900 border-t border-gray-800' : 'bg-gray-50 border-t border-gray-200'}`}>
+    <footer className={`transition-colors duration-300 ${
+      isDark ? 'bg-gray-900 text-white' : 'bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <Code2 className="w-8 h-8 text-blue-600" />
-              <span className={`text-2xl font-bold ${textColors.primary}`}>Torex IT</span>
+        {/* Main Footer Content */}
+        <div className="py-16 grid grid-cols-1 md:grid-cols-2 gap-12">
+          {/* Company Info */}
+          <div>
+            <div className="flex items-center space-x-2 mb-6">
+              <Bot className="w-8 h-8 text-blue-400" />
+              <span className={`${typography.navLarge} font-bold`}>Torex IT</span>
             </div>
-            <p className={textColors.secondary}>Professional IT yechimlar va zamonaviy texnologiyalar</p>
+            <p className={`${typography.body} mb-6 leading-relaxed ${
+              isDark ? 'text-gray-400' : 'text-blue-100'
+            }`}>
+              G'oyalarni zamonaviy texnologiyalar va innovatsion yechimlar bilan raqamli haqiqatga aylantiramiz.
+              Veb dasturlash, mobil ilovalar va avtomatlashtirish sohasidagi ishonchli hamkoringiz.
+            </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-blue-600 transition-colors">
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-blue-600 transition-colors">
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-blue-600 transition-colors">
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-blue-600 transition-colors">
-                <Youtube className="w-5 h-5" />
-              </a>
+              {socialLinks.filter(social => social.show).map((social, index) => (
+                <a
+                  key={index}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`p-3 rounded-full transition-all duration-300 transform hover:scale-110 ${
+                    isDark ? 'bg-gray-800 hover:bg-blue-600' : 'bg-blue-500 hover:bg-blue-400'
+                  }`}
+                  aria-label={social.label}
+                >
+                  <social.icon className="w-5 h-5" />
+                </a>
+              ))}
             </div>
           </div>
 
+          {/* Contact Info */}
           <div>
-            <h3 className={`text-lg font-semibold ${textColors.primary} mb-4`}>Xizmatlar</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className={`${textColors.secondary} hover:text-blue-600 transition-colors`}>Veb Dasturlash</a></li>
-              <li><a href="#" className={`${textColors.secondary} hover:text-blue-600 transition-colors`}>Mobil Ilovalar</a></li>
-              <li><a href="#" className={`${textColors.secondary} hover:text-blue-600 transition-colors`}>Telegram Botlar</a></li>
-              <li><a href="#" className={`${textColors.secondary} hover:text-blue-600 transition-colors`}>CRM Tizimlar</a></li>
-            </ul>
-          </div>
+            <h3 className={`${typography.footerTitle} font-semibold mb-6`}>Aloqa Ma'lumotlari</h3>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <MapPin className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className={`${typography.footerText} ${
+                    isDark ? 'text-gray-400' : 'text-blue-100'
+                  }`}>{contactInfo?.location || 'Toshkent, O\'zbekiston'}</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Phone className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                <a href={`tel:${contactInfo?.phone || '+998995340313'}`} className={`${typography.footerText} transition-colors duration-300 ${
+                  isDark ? 'text-gray-400 hover:text-white' : 'text-blue-100 hover:text-white'
+                }`}>
+                  {contactInfo?.phone || '+998 99 534 03 13'}
+                </a>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Mail className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                <a href={`mailto:${contactInfo?.email || 'dev.dilshodjon@gmail.com'}`} className={`${typography.footerText} transition-colors duration-300 ${
+                  isDark ? 'text-gray-400 hover:text-white' : 'text-blue-100 hover:text-white'
+                }`}>
+                  {contactInfo?.email || 'dev.dilshodjon@gmail.com'}
+                </a>
+              </div>
+            </div>
 
-          <div>
-            <h3 className={`text-lg font-semibold ${textColors.primary} mb-4`}>Kompaniya</h3>
-            <ul className="space-y-2">
-              <li><a href="#about" className={`${textColors.secondary} hover:text-blue-600 transition-colors`}>Biz haqimizda</a></li>
-              <li><a href="#portfolio" className={`${textColors.secondary} hover:text-blue-600 transition-colors`}>Portfolio</a></li>
-              <li><a href="#blog" className={`${textColors.secondary} hover:text-blue-600 transition-colors`}>Blog</a></li>
-              <li><a href="#contact" className={`${textColors.secondary} hover:text-blue-600 transition-colors`}>Aloqa</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className={`text-lg font-semibold ${textColors.primary} mb-4`}>Aloqa</h3>
-            <ul className="space-y-2">
-              <li className={textColors.secondary}>Toshkent, O'zbekiston</li>
-              <li><a href="tel:+998901234567" className={`${textColors.secondary} hover:text-blue-600 transition-colors`}>+998 90 123 45 67</a></li>
-              <li><a href="mailto:info@torexdev.uz" className={`${textColors.secondary} hover:text-blue-600 transition-colors`}>info@torexdev.uz</a></li>
-            </ul>
+            {/* Newsletter Signup */}
+            <div className="mt-8">
+              <h4 className={`${typography.footerText} font-semibold mb-3`}>Yangilanib Turing</h4>
+              <div className="flex">
+                <input
+                  type="email"
+                  placeholder="Sizning emailingiz"
+                  className={`flex-1 px-4 py-2 rounded-l-lg focus:outline-none focus:border-blue-300 transition-colors duration-300 ${
+                    isDark ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' : 'bg-blue-500 border-blue-400 text-white placeholder-blue-200'
+                  }`}
+                />
+                <button className={`px-4 py-2 rounded-r-lg transition-colors duration-300 ${
+                  isDark ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-400 hover:bg-blue-300'
+                }`}>
+                  <Mail className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className={`pt-8 border-t ${isDark ? 'border-gray-800' : 'border-gray-200'}`}>
+        {/* Bottom Footer */}
+        <div className={`border-t py-8 ${
+          isDark ? 'border-gray-800' : 'border-blue-500'
+        }`}>
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className={`text-sm ${textColors.secondary}`}>© 2024 Torex IT. Barcha huquqlar himoyalangan.</p>
-            <div className="flex space-x-6 text-sm">
-              <a href="/privacy-policy" className={`${textColors.secondary} hover:text-blue-600 transition-colors`}>Maxfiylik Siyosati</a>
-              <a href="/terms-of-service" className={`${textColors.secondary} hover:text-blue-600 transition-colors`}>Foydalanish Shartlari</a>
+            <div className={`${typography.footerText} ${
+              isDark ? 'text-gray-400' : 'text-blue-100'
+            }`}>
+              © 2024 Torex IT. Barcha huquqlar himoyalangan. | torex.uz
+            </div>
+            <div className={`flex space-x-6 ${typography.footerText} ${
+              isDark ? 'text-gray-400' : 'text-blue-200'
+            }`}>
+              <Link to="/privacy-policy" className={`transition-colors duration-300 ${
+                isDark ? 'hover:text-white' : 'hover:text-white'
+              }`}>Maxfiylik Siyosati</Link>
+              <Link to="/terms-of-service" className={`transition-colors duration-300 ${
+                isDark ? 'hover:text-white' : 'hover:text-white'
+              }`}>Xizmat Shartlari</Link>
+              <Link to="/sitemap" className={`transition-colors duration-300 ${
+                isDark ? 'hover:text-white' : 'hover:text-white'
+              }`}>Sayt Xaritasi</Link>
             </div>
           </div>
         </div>
