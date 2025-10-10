@@ -88,19 +88,37 @@ const BlogManagement: React.FC = () => {
       .replace(/^-+|-+$/g, '');
   };
 
+  const calculateReadTime = (content: string): string => {
+    const wordsPerMinute = 200;
+    const words = content.trim().split(/\s+/).length;
+    const minutes = Math.ceil(words / wordsPerMinute);
+    return `${minutes} daqiqa`;
+  };
+
+  const generateKeywords = (title: string, category: string): string => {
+    const titleWords = title
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(word => word.length > 3)
+      .slice(0, 5);
+    return [...titleWords, category.toLowerCase()].join(', ');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const slug = editingPost ? formData.slug : generateSlug(formData.title);
+    const readTime = formData.read_time || calculateReadTime(formData.content);
     const metaTitle = formData.meta_title || formData.title;
     const metaDescription = formData.meta_description || formData.excerpt;
     const keywords = formData.keywords
       ? formData.keywords.split(',').map(k => k.trim()).filter(Boolean)
-      : [];
+      : generateKeywords(formData.title, formData.category).split(',').map(k => k.trim()).filter(Boolean);
 
     const postData = {
       ...formData,
       slug,
+      read_time: readTime,
       meta_title: metaTitle,
       meta_description: metaDescription,
       keywords,
@@ -398,10 +416,11 @@ const BlogManagement: React.FC = () => {
                     required={!!editingPost}
                     value={formData.slug}
                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    placeholder="Avtomatik yaratiladi"
+                    placeholder="Sarlavhadan avtomatik yaratiladi"
                     className={`w-full px-4 py-2 rounded-lg border ${
-                      isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                      isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
                     }`}
+                    disabled={!editingPost}
                   />
                 </div>
 
@@ -438,18 +457,22 @@ const BlogManagement: React.FC = () => {
 
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    O'qish vaqti *
+                    O'qish vaqti
                   </label>
                   <input
                     type="text"
-                    required
                     value={formData.read_time}
                     onChange={(e) => setFormData({ ...formData, read_time: e.target.value })}
-                    placeholder="5 min, 10 daqiqa"
+                    placeholder="Matndan avtomatik hisoblanadi"
                     className={`w-full px-4 py-2 rounded-lg border ${
-                      isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                      isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
                     }`}
                   />
+                  {formData.content && !formData.read_time && (
+                    <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                      Avtomatik: {calculateReadTime(formData.content)}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -525,11 +548,16 @@ const BlogManagement: React.FC = () => {
                       type="text"
                       value={formData.meta_title}
                       onChange={(e) => setFormData({ ...formData, meta_title: e.target.value })}
-                      placeholder="Bo'sh qoldirilsa sarlavha ishlatiladi"
+                      placeholder="Sarlavhadan avtomatik olinadi"
                       className={`w-full px-4 py-2 rounded-lg border ${
-                        isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                        isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
                       }`}
                     />
+                    {formData.title && !formData.meta_title && (
+                      <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        Avtomatik: {formData.title}
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -540,11 +568,16 @@ const BlogManagement: React.FC = () => {
                       rows={2}
                       value={formData.meta_description}
                       onChange={(e) => setFormData({ ...formData, meta_description: e.target.value })}
-                      placeholder="Bo'sh qoldirilsa qisqacha mazmun ishlatiladi"
+                      placeholder="Qisqacha mazmundan avtomatik olinadi"
                       className={`w-full px-4 py-2 rounded-lg border ${
-                        isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                        isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
                       }`}
                     />
+                    {formData.excerpt && !formData.meta_description && (
+                      <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        Avtomatik: {formData.excerpt.substring(0, 100)}...
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -555,11 +588,16 @@ const BlogManagement: React.FC = () => {
                       type="text"
                       value={formData.keywords}
                       onChange={(e) => setFormData({ ...formData, keywords: e.target.value })}
-                      placeholder="react, javascript, veb (vergul bilan ajratilgan)"
+                      placeholder="Sarlavha va kategoriyadan avtomatik yaratiladi"
                       className={`w-full px-4 py-2 rounded-lg border ${
-                        isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                        isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
                       }`}
                     />
+                    {formData.title && formData.category && !formData.keywords && (
+                      <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        Avtomatik: {generateKeywords(formData.title, formData.category)}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
