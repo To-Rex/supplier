@@ -407,22 +407,22 @@ const BlogManagement: React.FC = () => {
                   />
                 </div>
 
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    Slug {editingPost && '*'}
-                  </label>
-                  <input
-                    type="text"
-                    required={!!editingPost}
-                    value={formData.slug}
-                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    placeholder="Sarlavhadan avtomatik yaratiladi"
-                    className={`w-full px-4 py-2 rounded-lg border ${
-                      isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                    }`}
-                    disabled={!editingPost}
-                  />
-                </div>
+                {editingPost && (
+                  <div>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                      Slug *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.slug}
+                      onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                      className={`w-full px-4 py-2 rounded-lg border ${
+                        isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                      }`}
+                    />
+                  </div>
+                )}
 
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -455,25 +455,27 @@ const BlogManagement: React.FC = () => {
                   />
                 </div>
 
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    O'qish vaqti
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.read_time}
-                    onChange={(e) => setFormData({ ...formData, read_time: e.target.value })}
-                    placeholder="Matndan avtomatik hisoblanadi"
-                    className={`w-full px-4 py-2 rounded-lg border ${
-                      isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                    }`}
-                  />
-                  {formData.content && !formData.read_time && (
-                    <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                      Avtomatik: {calculateReadTime(formData.content)}
-                    </p>
-                  )}
-                </div>
+                {editingPost && (
+                  <div>
+                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                      O'qish vaqti
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.read_time}
+                      onChange={(e) => setFormData({ ...formData, read_time: e.target.value })}
+                      placeholder="Matndan avtomatik hisoblanadi"
+                      className={`w-full px-4 py-2 rounded-lg border ${
+                        isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                      }`}
+                    />
+                    {formData.content && !formData.read_time && (
+                      <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        Avtomatik: {calculateReadTime(formData.content)}
+                      </p>
+                    )}
+                  </div>
+                )}
 
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -534,73 +536,75 @@ const BlogManagement: React.FC = () => {
                 />
               </div>
 
-              <div className={`border-t ${isDark ? 'border-gray-700' : 'border-gray-200'} pt-4`}>
-                <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  SEO Sozlamalari
-                </h3>
+              {editingPost && (
+                <div className={`border-t ${isDark ? 'border-gray-700' : 'border-gray-200'} pt-4`}>
+                  <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    SEO Sozlamalari
+                  </h3>
 
-                <div className="space-y-4">
-                  <div>
-                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Meta Title
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.meta_title}
-                      onChange={(e) => setFormData({ ...formData, meta_title: e.target.value })}
-                      placeholder="Sarlavhadan avtomatik olinadi"
-                      className={`w-full px-4 py-2 rounded-lg border ${
-                        isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                      }`}
-                    />
-                    {formData.title && !formData.meta_title && (
-                      <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        Avtomatik: {formData.title}
-                      </p>
-                    )}
-                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                        Meta Title
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.meta_title}
+                        onChange={(e) => setFormData({ ...formData, meta_title: e.target.value })}
+                        placeholder="Sarlavhadan avtomatik olinadi"
+                        className={`w-full px-4 py-2 rounded-lg border ${
+                          isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                        }`}
+                      />
+                      {formData.title && !formData.meta_title && (
+                        <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                          Avtomatik: {formData.title}
+                        </p>
+                      )}
+                    </div>
 
-                  <div>
-                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Meta Description
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={formData.meta_description}
-                      onChange={(e) => setFormData({ ...formData, meta_description: e.target.value })}
-                      placeholder="Qisqacha mazmundan avtomatik olinadi"
-                      className={`w-full px-4 py-2 rounded-lg border ${
-                        isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                      }`}
-                    />
-                    {formData.excerpt && !formData.meta_description && (
-                      <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        Avtomatik: {formData.excerpt.substring(0, 100)}...
-                      </p>
-                    )}
-                  </div>
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                        Meta Description
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={formData.meta_description}
+                        onChange={(e) => setFormData({ ...formData, meta_description: e.target.value })}
+                        placeholder="Qisqacha mazmundan avtomatik olinadi"
+                        className={`w-full px-4 py-2 rounded-lg border ${
+                          isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                        }`}
+                      />
+                      {formData.excerpt && !formData.meta_description && (
+                        <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                          Avtomatik: {formData.excerpt.substring(0, 100)}...
+                        </p>
+                      )}
+                    </div>
 
-                  <div>
-                    <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Kalit so'zlar
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.keywords}
-                      onChange={(e) => setFormData({ ...formData, keywords: e.target.value })}
-                      placeholder="Sarlavha va kategoriyadan avtomatik yaratiladi"
-                      className={`w-full px-4 py-2 rounded-lg border ${
-                        isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-                      }`}
-                    />
-                    {formData.title && formData.category && !formData.keywords && (
-                      <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        Avtomatik: {generateKeywords(formData.title, formData.category)}
-                      </p>
-                    )}
+                    <div>
+                      <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                        Kalit so'zlar
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.keywords}
+                        onChange={(e) => setFormData({ ...formData, keywords: e.target.value })}
+                        placeholder="Sarlavha va kategoriyadan avtomatik yaratiladi"
+                        className={`w-full px-4 py-2 rounded-lg border ${
+                          isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                        }`}
+                      />
+                      {formData.title && formData.category && !formData.keywords && (
+                        <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                          Avtomatik: {generateKeywords(formData.title, formData.category)}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               <div className="flex justify-end space-x-3 pt-4">
                 <button
