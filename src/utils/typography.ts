@@ -9,10 +9,10 @@ export const typography = {
   body: 'text-base',
   small: 'text-sm',
   xs: 'text-xs',
-  heroMain: 'text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold',
-  heroAnimated: 'text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold',
-  heroSubtitle: 'text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl',
-  button: 'text-sm xs:text-base sm:text-base md:text-lg font-semibold',
+  heroMain: 'text-3xl xs:text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl font-bold',
+  heroAnimated: 'text-xl xs:text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold',
+  heroSubtitle: 'text-sm xs:text-base sm:text-lg md:text-lg lg:text-xl',
+  button: 'text-sm xs:text-sm sm:text-base md:text-base lg:text-base font-semibold',
   bodySmall: 'text-xs xs:text-sm sm:text-sm md:text-base'
 };
 
