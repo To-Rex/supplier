@@ -91,7 +91,7 @@ const Blog: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
           {blogPosts.map((post, index) => (
             <article
               key={post.id}
@@ -99,15 +99,13 @@ const Blog: React.FC = () => {
                 isDark
                   ? 'bg-gradient-to-br from-gray-800 via-gray-850 to-gray-900 border border-gray-700/50'
                   : 'bg-white border border-gray-100'
-              } shadow-xl hover:shadow-2xl hover:-translate-y-3 hover:scale-[1.02] ${
-                index === 0 ? 'md:col-span-2 lg:row-span-2' : ''
-              }`}
+              } shadow-xl hover:shadow-2xl hover:-translate-y-3 hover:scale-[1.02] flex flex-col`}
               style={{
                 animationDelay: `${index * 0.1}s`,
               }}
             >
               {/* Image Section */}
-              <div className={`relative overflow-hidden ${index === 0 ? 'h-80 lg:h-96' : 'h-64'}`}>
+              <div className="relative overflow-hidden h-56">
                 <img
                   src={post.image}
                   alt={post.title}
@@ -115,100 +113,60 @@ const Blog: React.FC = () => {
                 />
 
                 {/* Gradient Overlay */}
-                <div className={`absolute inset-0 bg-gradient-to-t transition-opacity duration-500 ${
-                  index === 0
-                    ? 'from-black/90 via-black/50 to-transparent'
-                    : 'from-black/80 via-black/30 to-transparent group-hover:from-black/90'
-                }`}></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/90 transition-opacity duration-500"></div>
 
                 {/* Category Badge */}
-                <div className="absolute top-5 left-5 z-10">
-                  <span className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md shadow-lg border transition-all duration-300 ${getCategoryColor(post.category)} group-hover:scale-110`}>
+                <div className="absolute top-4 left-4 z-10">
+                  <span className={`px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md shadow-lg border transition-all duration-300 ${getCategoryColor(post.category)} group-hover:scale-110`}>
                     {post.category}
                   </span>
                 </div>
-
-                {/* Featured Badge */}
-                {index === 0 && (
-                  <div className="absolute top-5 right-5 z-10">
-                    <span className="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-lg animate-pulse border border-white/20">
-                      ⭐ Asosiy
-                    </span>
-                  </div>
-                )}
-
-                {/* Title Overlay for Featured Post */}
-                {index === 0 && (
-                  <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                    <h3 className="text-3xl lg:text-4xl font-bold mb-4 leading-tight group-hover:text-blue-300 transition-colors duration-300">
-                      {post.title}
-                    </h3>
-                    <div className="flex items-center flex-wrap gap-4 text-sm">
-                      <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                        <User className="w-4 h-4" />
-                        <span className="font-medium">{post.author}</span>
-                      </div>
-                      <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                        <Clock className="w-4 h-4" />
-                        <span>{post.readTime}</span>
-                      </div>
-                      <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                        <Calendar className="w-4 h-4" />
-                        <span>{new Date(post.date).toLocaleDateString('uz-UZ', { month: 'short', day: 'numeric' })}</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
 
               {/* Content Section */}
-              <div className={index === 0 ? 'p-8 lg:p-10' : 'p-6'}>
-                {/* Title for non-featured posts */}
-                {index !== 0 && (
-                  <h3 className={`font-bold mb-3 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2 leading-snug ${
-                    textColors.primary
-                  } ${index === 0 ? 'text-2xl' : 'text-xl'}`}>
-                    {post.title}
-                  </h3>
-                )}
+              <div className="p-6 flex flex-col flex-grow">
+                {/* Title */}
+                <h3 className={`text-xl font-bold mb-3 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2 leading-snug ${
+                  textColors.primary
+                }`}>
+                  {post.title}
+                </h3>
 
                 {/* Excerpt */}
-                <p className={`leading-relaxed mb-5 ${
+                <p className={`text-sm leading-relaxed mb-4 line-clamp-3 flex-grow ${
                   textColors.secondary
-                } ${index === 0 ? 'text-base line-clamp-3' : 'text-sm line-clamp-2'}`}>
+                }`}>
                   {post.excerpt}
                 </p>
 
-                {/* Meta Info for non-featured posts */}
-                {index !== 0 && (
-                  <div className={`flex items-center flex-wrap gap-3 text-xs mb-5 ${
-                    isDark ? 'text-gray-400' : 'text-gray-500'
-                  }`}>
-                    <div className="flex items-center space-x-1.5">
-                      <User className="w-3.5 h-3.5" />
-                      <span className="font-medium">{post.author}</span>
-                    </div>
-                    <span>•</span>
-                    <div className="flex items-center space-x-1.5">
-                      <Clock className="w-3.5 h-3.5" />
-                      <span>{post.readTime}</span>
-                    </div>
+                {/* Meta Info */}
+                <div className={`flex items-center flex-wrap gap-3 text-xs mb-4 ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`}>
+                  <div className="flex items-center space-x-1.5">
+                    <User className="w-3.5 h-3.5" />
+                    <span className="font-medium">{post.author}</span>
                   </div>
-                )}
+                  <span>•</span>
+                  <div className="flex items-center space-x-1.5">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>{post.readTime}</span>
+                  </div>
+                </div>
 
-                {/* Read More Button */}
-                <div className={`flex items-center justify-between pt-5 border-t ${
+                {/* Footer */}
+                <div className={`flex items-center justify-between pt-4 border-t ${
                   isDark ? 'border-gray-700' : 'border-gray-100'
                 }`}>
-                  <div className="flex items-center space-x-2 text-sm">
-                    <Calendar className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+                  <div className="flex items-center space-x-2 text-xs">
+                    <Calendar className={`w-3.5 h-3.5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
                     <span className={isDark ? 'text-gray-400' : 'text-gray-500'}>
-                      {new Date(post.date).toLocaleDateString('uz-UZ', { year: 'numeric', month: 'long', day: 'numeric' })}
+                      {new Date(post.date).toLocaleDateString('uz-UZ', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </span>
                   </div>
                   <div className="flex items-center space-x-2 text-blue-600 dark:text-blue-400 font-semibold group-hover:gap-3 transition-all duration-300">
-                    <span className="text-sm">Batafsil</span>
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" />
+                    <span className="text-xs">Batafsil</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-300" />
                   </div>
                 </div>
               </div>
