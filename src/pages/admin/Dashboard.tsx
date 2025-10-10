@@ -197,7 +197,7 @@ const Dashboard: React.FC = () => {
       title: 'Haftalik Jami',
       value: weekTotal,
       icon: TrendingUp,
-      color: 'purple',
+      color: 'teal',
       change: '+15%',
     },
     {
@@ -213,7 +213,7 @@ const Dashboard: React.FC = () => {
     const colors: Record<string, string> = {
       blue: 'from-blue-500 to-blue-600',
       green: 'from-green-500 to-green-600',
-      purple: 'from-purple-500 to-purple-600',
+      teal: 'from-teal-500 to-teal-600',
       orange: 'from-orange-500 to-orange-600',
     };
     return colors[color] || colors.blue;

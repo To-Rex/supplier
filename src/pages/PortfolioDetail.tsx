@@ -206,7 +206,7 @@ const PortfolioDetail: React.FC = () => {
                       className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-300 ${
                         isDark
                           ? 'bg-blue-600/20 text-blue-400'
-                          : 'bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700'
+                          : 'bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-700'
                       }`}
                     >
                       {tech}

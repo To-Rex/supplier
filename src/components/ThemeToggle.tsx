@@ -10,7 +10,7 @@ const ThemeToggle: React.FC = () => {
       onClick={toggleTheme}
       className={`group relative flex items-center justify-center w-14 h-8 rounded-full transition-all duration-500 transform hover:scale-105 ${
         isDark
-          ? 'bg-gradient-to-r from-purple-900 to-blue-900 shadow-lg shadow-purple-500/25'
+          ? 'bg-gradient-to-r from-gray-800 to-blue-900 shadow-lg shadow-blue-500/25'
           : 'bg-gradient-to-r from-blue-400 to-cyan-400 shadow-lg shadow-blue-500/25'
       }`}
       aria-label={isDark ? 'Light mode ga o\'tish' : 'Dark mode ga o\'tish'}
@@ -31,7 +31,7 @@ const ThemeToggle: React.FC = () => {
           }`}
         />
         <Moon
-          className={`absolute w-3 h-3 text-purple-600 transition-all duration-500 transform ${
+          className={`absolute w-3 h-3 text-blue-600 transition-all duration-500 transform ${
             isDark ? 'rotate-0 scale-100 opacity-100' : 'rotate-180 scale-0 opacity-0'
           }`}
         />
