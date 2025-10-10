@@ -1,54 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, User, ArrowRight, Clock } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { typography, getTextColors } from '../utils/typography';
+import { supabase } from '../lib/supabase';
+
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  image_url: string;
+  author: string;
+  category: string;
+  read_time: string;
+  published_at: string;
+  views_count: number;
+}
 
 const Blog: React.FC = () => {
   const { isDark } = useTheme();
   const textColors = getTextColors(isDark);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const blogPosts = [
-    {
-      id: 1,
-      title: '2024-yilda Veb Dasturlashning 10 ta Muhim Trendi',
-      excerpt: 'AI integratsiyasidan progressiv veb-ilovalargacha, veb dasturlash kelajagini shakllantirayotgan eng so\'nggi trendlarni kashf eting.',
-      image: 'https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=600',
-      author: 'Dilshodjon Abdullayev',
-      date: '2024-01-15',
-      readTime: '5 daqiqa',
-      category: 'Veb Dasturlash'
-    },
-    {
-      id: 2,
-      title: 'Mobil Ilova Xavfsizligi: 2024 uchun Eng Yaxshi Amaliyotlar',
-      excerpt: 'Ushbu muhim xavfsizlik amaliyotlari bilan mobil ilovalaringizni xavfsizlik tahdidlaridan qanday himoya qilishni o\'rganing.',
-      image: 'https://images.pexels.com/photos/60504/security-protection-anti-virus-software-60504.jpeg?auto=compress&cs=tinysrgb&w=600',
-      author: 'Aziza Karimova',
-      date: '2024-01-10',
-      readTime: '7 daqiqa',
-      category: 'Mobil Dasturlash'
-    },
-    {
-      id: 3,
-      title: 'AI bilan Aqlli Telegram Botlar Yaratish',
-      excerpt: 'Zamonaviy AI texnologiyalari va Telegram Bot API yordamida aqlli chatbotlarni qanday yaratishni o\'rganing.',
-      image: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=600',
-      author: 'Bobur Rahimov',
-      date: '2024-01-05',
-      readTime: '6 daqiqa',
-      category: 'Bot Dasturlash'
-    },
-    {
-      id: 4,
-      title: 'Yaxshi Foydalanuvchi Tajribasi uchun UI/UX Dizayn Tamoyillari',
-      excerpt: 'Jozibali va intuitiv foydalanuvchi interfeyslari yaratadigan asosiy dizayn tamoyillarini o\'zlashtirib oling.',
-      image: 'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=600',
-      author: 'Madina Toshmatova',
-      date: '2024-01-01',
-      readTime: '8 daqiqa',
-      category: 'Dizayn'
-    }
-  ];
+  useEffect(() => {
+    const fetchBlogPosts = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .eq('is_published', true)
+          .order('published_at', { ascending: false })
+          .limit(4);
+
+        if (error) throw error;
+
+        if (data) {
+          setBlogPosts(data);
+        }
+      } catch (error) {
+        console.error('Blog yuklashda xatolik:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogPosts();
+  }, []);
 
   const getCategoryColor = (category: string) => {
     const colors = {
@@ -91,8 +90,21 @@ const Blog: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
-          {blogPosts.map((post, index) => (
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className={`animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 ${
+              isDark ? 'border-blue-400' : 'border-blue-600'
+            }`}></div>
+          </div>
+        ) : blogPosts.length === 0 ? (
+          <div className="text-center py-20">
+            <p className={`${typography.bodyLarge} ${textColors.secondary}`}>
+              Hozircha blog postlar mavjud emas
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+            {blogPosts.map((post, index) => (
             <article
               key={post.id}
               className={`group relative rounded-3xl overflow-hidden transition-all duration-700 transform cursor-pointer ${
@@ -107,7 +119,7 @@ const Blog: React.FC = () => {
               {/* Image Section */}
               <div className="relative overflow-hidden h-56">
                 <img
-                  src={post.image}
+                  src={post.image_url}
                   alt={post.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                 />
@@ -150,7 +162,7 @@ const Blog: React.FC = () => {
                   <span>•</span>
                   <div className="flex items-center space-x-1.5">
                     <Clock className="w-3.5 h-3.5" />
-                    <span>{post.readTime}</span>
+                    <span>{post.read_time}</span>
                   </div>
                 </div>
 
@@ -161,7 +173,7 @@ const Blog: React.FC = () => {
                   <div className="flex items-center space-x-2 text-xs">
                     <Calendar className={`w-3.5 h-3.5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
                     <span className={isDark ? 'text-gray-400' : 'text-gray-500'}>
-                      {new Date(post.date).toLocaleDateString('uz-UZ', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      {new Date(post.published_at).toLocaleDateString('uz-UZ', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </span>
                   </div>
                   <div className="flex items-center space-x-2 text-blue-600 dark:text-blue-400 font-semibold group-hover:gap-3 transition-all duration-300">
@@ -178,8 +190,9 @@ const Blog: React.FC = () => {
                   : 'group-hover:shadow-[0_0_40px_rgba(59,130,246,0.25)]'
               }`}></div>
             </article>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         <div className="text-center">
           <button className="group relative bg-gradient-to-r from-blue-600 to-blue-700 text-white px-10 py-4 rounded-full font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl overflow-hidden">
