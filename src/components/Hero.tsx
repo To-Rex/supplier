@@ -87,7 +87,7 @@ const Hero: React.FC = () => {
       // Remove star after animation completes
       setTimeout(() => {
         setShootingStars(prev => prev.filter(s => s.id !== star.id));
-      }, 1500);
+      }, 800);
     };
 
     // Create shooting stars on scroll (dark mode)
@@ -163,10 +163,10 @@ const Hero: React.FC = () => {
 
     window.addEventListener('scroll', handleScroll);
 
-    // Also create shooting star every 3-4 seconds
+    // Also create shooting star every 5-6 seconds
     const interval = setInterval(() => {
       createShootingStar();
-    }, 3000 + Math.random() * 1000);
+    }, 5000 + Math.random() * 1000);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
