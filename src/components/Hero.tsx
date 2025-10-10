@@ -113,8 +113,9 @@ const Hero: React.FC = () => {
         } else {
           // Light mode: rain effect
           // Calculate cloud darkness and scale based on scroll - more dramatic scaling
-          const darkness = Math.min(scrollY / 250, 0.95);
-          const scale = Math.min(1 + scrollY / 100, 3.5);
+          const darkness = Math.min(scrollY / 200, 0.95);
+          const scale = Math.min(1 + scrollY / 80, 4.0);
+          console.log('Light mode scroll:', { scrollY, darkness, scale });
           setCloudDarkness(darkness);
           setCloudScale(scale);
 
@@ -287,11 +288,13 @@ const Hero: React.FC = () => {
 
                 {/* Clouds with dynamic darkness and scale */}
                 <div
-                  className="absolute top-32 left-[10%] transition-all duration-300 ease-out"
+                  className="absolute top-32 left-[10%] transition-all duration-500 ease-out"
                   style={{
-                    opacity: 0.2 + cloudDarkness * 0.5,
-                    transform: `scale(${cloudScale})`,
-                    filter: `brightness(${1 - cloudDarkness * 0.6})`
+                    opacity: 0.3 + cloudDarkness * 0.5,
+                    transform: `scale(${cloudScale}) translateZ(0)`,
+                    filter: `brightness(${1 - cloudDarkness * 0.6})`,
+                    willChange: 'transform, opacity',
+                    transformOrigin: 'center center'
                   }}
                 >
                   <div className="flex items-center animate-float-slow">
@@ -302,11 +305,13 @@ const Hero: React.FC = () => {
                 </div>
 
                 <div
-                  className="absolute top-48 right-[15%] transition-all duration-300 ease-out"
+                  className="absolute top-48 right-[15%] transition-all duration-500 ease-out"
                   style={{
-                    opacity: 0.2 + cloudDarkness * 0.5,
-                    transform: `scale(${cloudScale})`,
-                    filter: `brightness(${1 - cloudDarkness * 0.6})`
+                    opacity: 0.3 + cloudDarkness * 0.5,
+                    transform: `scale(${cloudScale}) translateZ(0)`,
+                    filter: `brightness(${1 - cloudDarkness * 0.6})`,
+                    willChange: 'transform, opacity',
+                    transformOrigin: 'center center'
                   }}
                 >
                   <div className="flex items-center animate-float-slow" style={{ animationDelay: '1s' }}>
@@ -317,11 +322,13 @@ const Hero: React.FC = () => {
                 </div>
 
                 <div
-                  className="absolute top-[60%] left-[20%] transition-all duration-300 ease-out"
+                  className="absolute top-[60%] left-[20%] transition-all duration-500 ease-out"
                   style={{
-                    opacity: 0.15 + cloudDarkness * 0.5,
-                    transform: `scale(${cloudScale})`,
-                    filter: `brightness(${1 - cloudDarkness * 0.6})`
+                    opacity: 0.25 + cloudDarkness * 0.5,
+                    transform: `scale(${cloudScale}) translateZ(0)`,
+                    filter: `brightness(${1 - cloudDarkness * 0.6})`,
+                    willChange: 'transform, opacity',
+                    transformOrigin: 'center center'
                   }}
                 >
                   <div className="flex items-center animate-float-slow" style={{ animationDelay: '2s' }}>
