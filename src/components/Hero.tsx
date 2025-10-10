@@ -465,7 +465,7 @@ const Hero: React.FC = () => {
         )}
       </div>
 
-      <div className="relative z-10 text-center px-4 xs:px-5 sm:px-6 md:px-8 lg:px-10 xl:px-12 max-w-7xl mx-auto w-full py-12 xs:py-16 sm:py-20 md:py-24">
+      <div className="relative z-10 text-center px-4 xs:px-5 sm:px-6 md:px-8 lg:px-10 xl:px-12 max-w-7xl mx-auto w-full pt-20 xs:pt-24 sm:pt-28 md:pt-32 pb-12 xs:pb-16 sm:pb-20 md:pb-24">
         <div className="mb-3 xs:mb-4 sm:mb-5 md:mb-6 animate-fade-in-up">
           <Bot
             className={`w-10 h-10 xs:w-12 xs:h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 mx-auto mb-3 xs:mb-4 sm:mb-5 md:mb-6 text-white ${!prefersReducedMotion ? 'animate-bounce' : ''}`}
