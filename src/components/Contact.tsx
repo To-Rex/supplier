@@ -138,7 +138,7 @@ const Contact: React.FC = () => {
       title: 'Bizni Ziyorat Qiling',
       details: contactInfoData?.location || 'Toshkent, O\'zbekiston',
       description: 'Ofisimizga tashrif buyuring',
-      color: 'orange'
+      color: 'purple'
     }
   ];
 
@@ -155,7 +155,7 @@ const Contact: React.FC = () => {
     const colors = {
       blue: 'from-blue-500 to-blue-600',
       green: 'from-green-500 to-green-600',
-      orange: 'from-orange-500 to-orange-600'
+      purple: 'from-purple-500 to-purple-600'
     };
     return colors[color as keyof typeof colors];
   };
@@ -188,12 +188,12 @@ const Contact: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-20">
           <h2 className={`${typography.h1} ${textColors.primary} mb-6 animate-fade-in-up`}>
-            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Bog'laning
             </span>
           </h2>
           <p className={`${typography.bodyLarge} ${textColors.secondary} max-w-4xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200`}>
-            Loyihangizni boshlashga tayyormisiz? G'oyalaringizni hayotga tatbiq etishda qanday yordam bera olishimizni muhokama qilaylik.
+            Loyihangizni boshlashga tayyormisiz? G\'oyalaringizni hayotga tatbiq etishda qanday yordam bera olishimizni muhokama qilaylik.
           </p>
         </div>
 
@@ -226,7 +226,7 @@ const Contact: React.FC = () => {
             </div>
 
             <div className={`rounded-3xl p-8 relative overflow-hidden ${
-              isDark ? 'bg-gradient-to-br from-gray-800 to-gray-700' : 'bg-gradient-to-br from-blue-50 to-cyan-50'
+              isDark ? 'bg-gradient-to-br from-gray-800 to-gray-700' : 'bg-gradient-to-br from-blue-50 to-purple-50'
             }`}>
               {/* Animated background elements */}
               <div className="absolute inset-0">
@@ -381,7 +381,7 @@ const Contact: React.FC = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-5 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-cyan-700 transition-all duration-500 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3 shadow-xl hover:shadow-2xl relative overflow-hidden group"
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-5 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-500 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3 shadow-xl hover:shadow-2xl relative overflow-hidden group"
               >
                 {isLoading ? (
                   <div className="w-8 h-8 border-3 border-white border-t-transparent rounded-full animate-spin" />
@@ -393,7 +393,7 @@ const Contact: React.FC = () => {
                 )}
                 
                 {/* Animated background */}
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </button>
             </form>
 

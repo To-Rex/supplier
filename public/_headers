@@ -1,30 +1,26 @@
-# Security and SEO headers for all routes
+# Security headers for all routes
 /*
   # Content Security Policy
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self';
-
+  
   # XSS Protection
   X-XSS-Protection: 1; mode=block
-
+  
   # Content Type Options
   X-Content-Type-Options: nosniff
-
+  
   # Frame Options
   X-Frame-Options: DENY
-
+  
   # Referrer Policy
   Referrer-Policy: strict-origin-when-cross-origin
-
+  
   # Permissions Policy
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
-
+  
   # HSTS (if using HTTPS)
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-
-  # SEO Headers
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-  X-Content-Language: uz
-
+  
   # Cache Control for HTML
   Cache-Control: public, max-age=0, must-revalidate
 

@@ -5,12 +5,11 @@ import { useTheme } from '../../contexts/ThemeContext';
 
 interface ImageUploadProps {
   currentImage?: string;
-  onImageChange: (url: string) => void;
-  bucket?: string;
+  onImageUploaded: (url: string) => void;
   label?: string;
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ currentImage, onImageChange, bucket = 'team-images', label = 'Rasm yuklash' }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ currentImage, onImageUploaded, label = 'Rasm yuklash' }) => {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(currentImage || null);
   const { isDark } = useTheme();
@@ -24,7 +23,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ currentImage, onImageChange, 
       const filePath = `${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from(bucket)
+        .from('team-images')
         .upload(filePath, file, {
           cacheControl: '3600',
           upsert: false,
@@ -35,11 +34,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ currentImage, onImageChange, 
       }
 
       const { data } = supabase.storage
-        .from(bucket)
+        .from('team-images')
         .getPublicUrl(filePath);
 
       setPreview(data.publicUrl);
-      onImageChange(data.publicUrl);
+      onImageUploaded(data.publicUrl);
     } catch (error) {
       console.error('Error uploading image:', error);
       alert('Rasm yuklashda xatolik yuz berdi!');
@@ -68,7 +67,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ currentImage, onImageChange, 
 
   const handleRemove = () => {
     setPreview(null);
-    onImageChange('');
+    onImageUploaded('');
   };
 
   return (

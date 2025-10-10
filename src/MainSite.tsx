@@ -69,7 +69,7 @@ const MainSite: React.FC = () => {
         title="Torex IT - Professional Veb Dasturlash, Mobil Ilovalar, CRM va AI Yechimlar"
         description="Torex IT - O'zbekistondagi yetakchi IT kompaniya. Professional veb-sayt va mobil ilova dasturlash, iOS va Android ilovalar, Telegram botlar, CRM tizimlar va AI yechimlar. 5+ yillik tajriba, 100+ mamnun mijozlar. Bepul konsultatsiya!"
         keywords="veb dasturlash, mobil ilovalar, telegram botlar, iOS dasturlash, Android dasturlash, CRM tizimlar, AI yechimlar, raqamli marketing, elektron tijorat, IT xizmatlar, dasturiy ta'minot, O'zbekiston, Toshkent, torex it, torex uz"
-        canonicalUrl="https://torexdev.uz/"
+        canonicalUrl="https://torex.uz/"
       />
       <Header />
       <main>

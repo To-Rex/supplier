@@ -1,75 +1,79 @@
-interface Particle {
-  x: number;
-  y: number;
-  size: number;
-  speedX: number;
-  speedY: number;
-  opacity: number;
-}
+// Performance-optimized animation utilities
+export const getOptimizedAnimationStyle = (
+  left: number,
+  top: number,
+  delay: number,
+  duration: number,
+  scale: number
+) => ({
+  left: `${left}%`,
+  top: `${top}%`,
+  animationDelay: `${delay}s`,
+  animationDuration: `${duration}s`,
+  transform: `scale(${scale}) translateZ(0)`, // Force GPU acceleration
+  willChange: 'transform, opacity', // Optimize for animation
+  backfaceVisibility: 'hidden' as const, // Prevent flickering
+});
 
-interface Shape {
-  x: number;
-  y: number;
-  size: number;
-  rotation: number;
-  rotationSpeed: number;
-  type: 'circle' | 'square' | 'triangle';
-}
+export const getOptimizedFloatStyle = (
+  left: number,
+  top: number,
+  animationDuration: number,
+  animationDelay: number,
+  spinDuration: number
+) => ({
+  left: `${left}%`,
+  top: `${top}%`,
+  animation: `float ${animationDuration}s ease-in-out ${animationDelay}s infinite`,
+  willChange: 'transform',
+  backfaceVisibility: 'hidden' as const,
+  transform: 'translateZ(0)', // Force GPU layer
+});
 
-export const generateOptimizedParticles = (count: number, width: number, height: number): Particle[] => {
-  const particles: Particle[] = [];
-
+// Reduce animation count while maintaining visual impact
+export const generateOptimizedParticles = (count: number = 12) => {
+  const particles = [];
   for (let i = 0; i < count; i++) {
     particles.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      size: Math.random() * 3 + 1,
-      speedX: (Math.random() - 0.5) * 0.5,
-      speedY: (Math.random() - 0.5) * 0.5,
-      opacity: Math.random() * 0.5 + 0.2
+      id: i,
+      ...getOptimizedAnimationStyle(
+        Math.random() * 100,
+        Math.random() * 100,
+        Math.random() * 3, // Shorter delay range
+        2 + Math.random() * 2, // Shorter duration range
+        0.7 + Math.random() * 0.8 // Smaller scale range
+      )
     });
   }
-
   return particles;
 };
 
-export const generateOptimizedShapes = (count: number, width: number, height: number): Shape[] => {
-  const shapes: Shape[] = [];
-  const types: Shape['type'][] = ['circle', 'square', 'triangle'];
-
+export const generateOptimizedShapes = (count: number = 6) => {
+  const shapes = [];
   for (let i = 0; i < count; i++) {
     shapes.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      size: Math.random() * 80 + 40,
-      rotation: Math.random() * 360,
-      rotationSpeed: (Math.random() - 0.5) * 0.5,
-      type: types[Math.floor(Math.random() * types.length)]
+      id: i,
+      ...getOptimizedFloatStyle(
+        Math.random() * 100,
+        Math.random() * 100,
+        4 + Math.random() * 3, // Shorter float duration
+        Math.random() * 2, // Shorter delay
+        8 + Math.random() * 6 // Shorter spin duration
+      )
     });
   }
-
   return shapes;
 };
 
-export const updateParticles = (particles: Particle[], width: number, height: number): Particle[] => {
-  return particles.map(particle => {
-    let newX = particle.x + particle.speedX;
-    let newY = particle.y + particle.speedY;
-
-    if (newX < 0 || newX > width) particle.speedX *= -1;
-    if (newY < 0 || newY > height) particle.speedY *= -1;
-
-    return {
-      ...particle,
-      x: newX,
-      y: newY
+// Performance monitoring
+export const useAnimationPerformance = () => {
+  if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+    const checkPerformance = () => {
+      if (performance.now() > 16) { // If frame time > 16ms
+        console.warn('Animation performance issue detected');
+      }
     };
-  });
-};
-
-export const updateShapes = (shapes: Shape[]): Shape[] => {
-  return shapes.map(shape => ({
-    ...shape,
-    rotation: shape.rotation + shape.rotationSpeed
-  }));
+    
+    window.requestIdleCallback(checkPerformance);
+  }
 };

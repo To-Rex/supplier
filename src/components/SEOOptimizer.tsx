@@ -175,15 +175,15 @@ const SEOOptimizer: React.FC<SEOOptimizerProps> = ({
       "inLanguage": locale.split('_')[0],
       "isPartOf": {
         "@type": "WebSite",
-        "@id": "https://torexdev.uz/#website"
+        "@id": "https://torex.uz/#website"
       },
       "about": {
         "@type": "Organization",
-        "@id": "https://torexdev.uz/#organization"
+        "@id": "https://torex.uz/#organization"
       },
       "mainEntity": {
         "@type": "Organization",
-        "@id": "https://torexdev.uz/#organization"
+        "@id": "https://torex.uz/#organization"
       },
       "breadcrumb": {
         "@type": "BreadcrumbList",
@@ -191,18 +191,18 @@ const SEOOptimizer: React.FC<SEOOptimizerProps> = ({
           "@type": "ListItem",
           "position": 1,
           "name": "Bosh sahifa",
-          "item": "https://torexdev.uz/"
+          "item": "https://torex.uz/"
         }]
       },
       "publisher": {
         "@type": "Organization",
-        "@id": "https://torexdev.uz/#organization"
+        "@id": "https://torex.uz/#organization"
       },
       "datePublished": publishDate || new Date().toISOString(),
       "dateModified": modifiedDate || new Date().toISOString(),
       "author": {
         "@type": "Organization",
-        "@id": "https://torexdev.uz/#organization"
+        "@id": "https://torex.uz/#organization"
       },
       "potentialAction": [{
         "@type": "ReadAction",

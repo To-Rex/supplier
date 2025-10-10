@@ -246,7 +246,7 @@ const TeamManagement: React.FC = () => {
                 <div className="md:col-span-2">
                   <ImageUpload
                     currentImage={formData.image_url}
-                    onImageChange={(url) => setFormData({ ...formData, image_url: url })}
+                    onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
                     label="Jamoa a'zosining rasmi"
                   />
                 </div>
@@ -438,7 +438,7 @@ const TeamManagement: React.FC = () => {
                     <div className="md:col-span-2">
                       <ImageUpload
                         currentImage={member.image_url}
-                        onImageChange={(url) => handleFieldChange(member.id, 'image_url', url)}
+                        onImageUploaded={(url) => handleFieldChange(member.id, 'image_url', url)}
                         label="Jamoa a'zosining rasmi"
                       />
                     </div>

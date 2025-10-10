@@ -6,14 +6,9 @@ import MainSite from './MainSite';
 import AdminLogin from './pages/AdminLogin';
 import Dashboard from './pages/admin/Dashboard';
 import TeamManagement from './pages/admin/TeamManagement';
-import PortfolioManagement from './pages/admin/PortfolioManagement';
 import UsersManagement from './pages/admin/UsersManagement';
 import ContactMessages from './pages/admin/ContactMessages';
 import TeamMemberProfile from './pages/TeamMemberProfile';
-import PortfolioDetail from './pages/PortfolioDetail';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsOfService from './pages/TermsOfService';
-import Sitemap from './pages/Sitemap';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 
 function App() {
@@ -22,12 +17,8 @@ function App() {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<MainSite />} />
+            <Route path="/*" element={<MainSite />} />
             <Route path="/team/:slug" element={<TeamMemberProfile />} />
-            <Route path="/portfolio/:slug" element={<PortfolioDetail />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/terms-of-service" element={<TermsOfService />} />
-            <Route path="/sitemap" element={<Sitemap />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route
               path="/admin/dashboard"
@@ -42,14 +33,6 @@ function App() {
               element={
                 <ProtectedRoute>
                   <TeamManagement />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/portfolio"
-              element={
-                <ProtectedRoute>
-                  <PortfolioManagement />
                 </ProtectedRoute>
               }
             />
