@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { ChevronDown, Code, Smartphone, Bot } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { typography, getTextColors } from '../utils/typography';
@@ -478,7 +479,7 @@ const Hero: React.FC = () => {
           className={`${typography.heroMain} text-white mb-2 xs:mb-3 sm:mb-3 md:mb-4 lg:mb-5 xl:mb-6 animate-fade-in-up animation-delay-200 leading-tight`}
           id="main-content"
           tabIndex={-1}
-          aria-label="Torex IT kompaniyasining bosh sahifasi"
+          aria-label="Torex kompaniyasining bosh sahifasi"
         >
           <span className={`inline-block ${!prefersReducedMotion ? 'animate-pulse' : ''}`}>Biz</span>{' '}
           <span className={`inline-block bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent ${!prefersReducedMotion ? 'animate-pulse animation-delay-400' : ''}`}>
@@ -513,22 +514,22 @@ const Hero: React.FC = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 xs:gap-3 sm:gap-3 md:gap-4 lg:gap-4 justify-center items-center animate-fade-in-up animation-delay-1000 mb-5 xs:mb-6 sm:mb-7 md:mb-8 lg:mb-8">
-          <button
-            onClick={() => scrollToSection('about')}
+          <Link
+            to="/services"
             className={`w-full xs:w-auto sm:w-auto group bg-white text-blue-600 px-6 xs:px-7 sm:px-7 md:px-8 lg:px-9 py-2.5 xs:py-2.5 sm:py-3 md:py-3 lg:py-3 rounded-full ${typography.button} hover:bg-blue-50 transition-all duration-500 transform hover:scale-105 active:scale-95 shadow-2xl hover:shadow-white/20 relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 min-w-[140px] xs:min-w-[145px] sm:min-w-[150px]`}
-            aria-label="Biz haqimizda qismiga o'tish"
+            aria-label="Xizmatlar sahifasiga o'tish"
           >
             <span className="relative z-10">Boshlash</span>
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
-          </button>
-          <button
-            onClick={() => scrollToSection('portfolio')}
+          </Link>
+          <Link
+            to="/portfolio"
             className={`w-full xs:w-auto sm:w-auto group border-2 border-white text-white px-6 xs:px-7 sm:px-7 md:px-8 lg:px-9 py-2.5 xs:py-2.5 sm:py-3 md:py-3 lg:py-3 rounded-full ${typography.button} hover:bg-white hover:text-blue-600 transition-all duration-500 transform hover:scale-105 active:scale-95 shadow-2xl relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 min-w-[140px] xs:min-w-[145px] sm:min-w-[150px]`}
-            aria-label="Portfolio qismiga o'tish"
+            aria-label="Portfolio sahifasiga o'tish"
           >
             <span className="relative z-10">Portfolio ko'rish</span>
             <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          </button>
+          </Link>
         </div>
 
         <div

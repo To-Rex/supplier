@@ -495,7 +495,10 @@ const PortfolioManagement: React.FC = () => {
                   </label>
                   <ImageUpload
                     currentImage={formData.image_url}
-                    onImageChange={(url) => setFormData({ ...formData, image_url: url })}
+                    onImageChange={(url) => {
+                      console.log('PortfolioManagement: onImageChange called with URL:', url);
+                      setFormData({ ...formData, image_url: url });
+                    }}
                     bucket="portfolio-images"
                   />
                 </div>

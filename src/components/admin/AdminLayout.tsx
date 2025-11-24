@@ -59,7 +59,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               {isSidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
             <Link to="/admin/dashboard" className="text-xl font-bold text-blue-600">
-              Torex IT Admin
+              Torex Admin
             </Link>
           </div>
 

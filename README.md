@@ -1,4 +1,4 @@
-# Torex IT - Professional Web Platform
+# Torex - Professional Web Platform
 
 Zamonaviy, yuqori samarali va foydalanuvchilarga qulay korporativ veb-platforma. React, TypeScript, Tailwind CSS va Supabase texnologiyalari asosida qurilgan.
 
@@ -221,7 +221,7 @@ Pull requestlar xush kelibsiz! Katta o'zgarishlar uchun avval issue oching.
 
 ## Muallif
 
-Torex IT - [Website](https://torex-it.uz)
+Torex - [Website](https://torex-it.uz)
 
 ## Qo'llab-quvvatlash
 

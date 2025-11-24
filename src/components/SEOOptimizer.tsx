@@ -19,7 +19,7 @@ const SEOOptimizer: React.FC<SEOOptimizerProps> = ({
   keywords,
   ogImage,
   canonicalUrl,
-  author = 'Torex IT',
+  author = 'Torex',
   publishDate,
   modifiedDate,
   articleSection,
@@ -28,7 +28,7 @@ const SEOOptimizer: React.FC<SEOOptimizerProps> = ({
   useEffect(() => {
     // Update title with proper format
     if (title) {
-      const fullTitle = title.includes('Torex IT') ? title : `${title} | Torex IT`;
+      const fullTitle = title.includes('Torex') ? title : `${title} | Torex`;
       document.title = fullTitle;
       
       // Update OG title
@@ -170,7 +170,7 @@ const SEOOptimizer: React.FC<SEOOptimizerProps> = ({
       "@type": "WebPage",
       "@id": `${currentUrl}#webpage`,
       "url": currentUrl,
-      "name": title || "Torex IT - Professional IT Xizmatlar",
+      "name": title || "Torex - Professional IT Xizmatlar",
       "description": description || "Professional veb dasturlash, mobil ilovalar, Telegram botlar va AI yechimlar",
       "inLanguage": locale.split('_')[0],
       "isPartOf": {

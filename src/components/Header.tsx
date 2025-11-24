@@ -1,39 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Bot } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import ThemeToggle from './ThemeToggle';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('hero');
+  const [isPastHero, setIsPastHero] = useState(false);
   const { isDark } = useTheme();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-
-      // Detect active section
-      const sections = ['hero', 'about', 'services', 'portfolio', 'blog', 'contact'];
-      const scrollPosition = window.scrollY + 100;
-      
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const offsetTop = element.offsetTop;
-          const offsetBottom = offsetTop + element.offsetHeight;
-          
-          if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
-            setActiveSection(section);
-            break;
-          }
-        }
+      const scrollY = window.scrollY;
+      setIsScrolled(scrollY > 50);
+      if (location.pathname === '/') {
+        setIsPastHero(scrollY > window.innerHeight);
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [location.pathname]);
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -60,44 +49,19 @@ const Header = () => {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isMenuOpen]);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const offset = 80;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-
-      setIsMenuOpen(false);
-      // Announce navigation to screen readers
-      const announcement = `${sectionId === 'hero' ? 'Bosh sahifa' : sectionId} qismiga o'tildi`;
-      const liveRegion = document.createElement('div');
-      liveRegion.setAttribute('aria-live', 'polite');
-      liveRegion.setAttribute('aria-atomic', 'true');
-      liveRegion.className = 'sr-only';
-      liveRegion.textContent = announcement;
-      document.body.appendChild(liveRegion);
-      setTimeout(() => document.body.removeChild(liveRegion), 1000);
-    }
-  };
-
-  const isHeroSection = activeSection === 'hero';
-  const textColor = isHeroSection ? 'text-white' : (isDark ? 'text-white' : 'text-gray-900');
-  const logoColor = isHeroSection ? 'text-white' : 'text-blue-600';
-  const headerBg = isScrolled && !isHeroSection
-    ? (isDark ? 'bg-gray-900/95 backdrop-blur-md shadow-lg border-b border-gray-700' : 'bg-white/95 backdrop-blur-md shadow-lg')
-    : 'bg-transparent';
+  const isHomePage = location.pathname === '/';
+  const isTransparentBg = isHomePage && !isPastHero;
+  const textColor = isTransparentBg ? 'text-white' : (isDark ? 'text-white' : 'text-gray-900');
+  const logoColor = isTransparentBg ? 'text-white' : 'text-blue-600';
+  const solidBg = isDark ? 'bg-gray-900/95 backdrop-blur-md shadow-lg border-b border-gray-700' : 'bg-white/95 backdrop-blur-md shadow-lg';
+  const headerBg = isHomePage ? (isPastHero ? solidBg : 'bg-transparent') : (isScrolled ? solidBg : 'bg-transparent');
 
   const navigationItems = [
-    { id: 'hero', label: 'Bosh sahifa' },
-    { id: 'about', label: 'Biz haqimizda' },
-    { id: 'services', label: 'Xizmatlar' },
-    { id: 'portfolio', label: 'Portfolio' },
-    { id: 'blog', label: 'Blog' },
+    { path: '/', label: 'Bosh sahifa' },
+    { path: '/about', label: 'Biz haqimizda' },
+    { path: '/services', label: 'Xizmatlar' },
+    { path: '/portfolio', label: 'Portfolio' },
+    { path: '/blog', label: 'Blog' },
   ];
 
   return (
@@ -108,62 +72,52 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4 md:grid md:grid-cols-3">
           {/* Logo */}
-          <div
+          <Link
+            to="/"
             className="flex items-center space-x-2 cursor-pointer transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg p-1 md:justify-self-start"
-            onClick={() => scrollToSection('hero')}
-            role="button"
-            tabIndex={0}
             aria-label="Torex IT bosh sahifaga o'tish"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                scrollToSection('hero');
-              }
-            }}
           >
-            <Bot className={`w-7 h-7 lg:w-8 lg:h-8 transition-all duration-500 ${logoColor} hover:rotate-12`} aria-hidden="true" />
-            <span className={`text-lg lg:text-xl font-bold transition-all duration-500 ${textColor}`}>
-              Torex IT
-            </span>
-          </div>
+            <img src="/logo.png" alt="Torex IT Logo" className={`w-7 h-7 lg:w-8 lg:h-8 transition-all duration-500 ${logoColor} hover:rotate-12`} />
+            <span className={`text-lg lg:text-xl font-bold transition-all duration-500 ${textColor}`}>Torex</span>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center justify-center space-x-3 lg:space-x-5 xl:space-x-8" role="navigation" aria-label="Asosiy navigatsiya">
             {navigationItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
+              <Link
+                key={item.path}
+                to={item.path}
                 className={`transition-all duration-500 text-sm lg:text-base font-medium hover:scale-105 focus:outline-none rounded-lg px-3 py-2 pb-3 whitespace-nowrap relative group ${
-                  activeSection === item.id
-                    ? (isHeroSection ? 'text-white' : (isDark ? 'text-white' : 'text-blue-600'))
+                  location.pathname === item.path
+                    ? (isTransparentBg ? 'text-white' : (isDark ? 'text-white' : 'text-blue-600'))
                     : `${textColor} hover:bg-blue-500/10`
                 }`}
-                aria-current={activeSection === item.id ? 'page' : undefined}
+                aria-current={location.pathname === item.path ? 'page' : undefined}
               >
                 {item.label}
-                {activeSection === item.id && (
+                {location.pathname === item.path && (
                   <>
                     <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 rounded-full transition-all duration-500 ${
-                      isHeroSection ? 'bg-white w-8' : (isDark ? 'bg-blue-400 w-8' : 'bg-blue-600 w-8')
+                      isTransparentBg ? 'bg-white w-8' : (isDark ? 'bg-blue-400 w-8' : 'bg-blue-600 w-8')
                     }`} aria-hidden="true"></span>
                     <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 blur-sm animate-pulse ${
-                      isHeroSection ? 'bg-white/50' : (isDark ? 'bg-blue-400/50' : 'bg-blue-600/50')
+                      isTransparentBg ? 'bg-white/50' : (isDark ? 'bg-blue-400/50' : 'bg-blue-600/50')
                     }`} aria-hidden="true"></span>
                   </>
                 )}
-              </button>
+              </Link>
             ))}
           </nav>
 
           {/* Right Controls */}
           <div className="flex items-center justify-end space-x-3">
-            <button
-              onClick={() => scrollToSection('contact')}
+            <Link
+              to="/contact"
               className="hidden md:block bg-blue-600 text-white px-4 lg:px-6 py-2 rounded-full hover:bg-blue-700 transition-all duration-300 text-sm lg:text-base font-medium transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               aria-label="Bog'lanish qismiga o'tish"
             >
               Bog'lanish
-            </button>
+            </Link>
             <ThemeToggle />
             <button
               data-mobile-toggle
@@ -194,23 +148,19 @@ const Header = () => {
           >
             <nav className="flex flex-col space-y-4 pointer-events-auto">
               {navigationItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    scrollToSection(item.id);
-                  }}
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setIsMenuOpen(false)}
                   className={`text-left transition-all duration-300 text-sm font-medium px-4 py-2 rounded-lg transform hover:translate-x-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer ${
-                    activeSection === item.id
+                    location.pathname === item.path
                       ? `text-blue-600 ${isDark ? 'bg-blue-900/30' : 'bg-blue-50'}`
                       : `${isDark ? 'text-gray-200 hover:text-blue-400 hover:bg-gray-800' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'}`
                   }`}
-                  aria-current={activeSection === item.id ? 'page' : undefined}
-                  type="button"
+                  aria-current={location.pathname === item.path ? 'page' : undefined}
                 >
                   {item.label}
-                  {activeSection === item.id && (
+                  {location.pathname === item.path && (
                     <span className="ml-2 inline-flex items-center">
                       <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
@@ -218,15 +168,16 @@ const Header = () => {
                       </span>
                     </span>
                   )}
-                </button>
+                </Link>
               ))}
-              <button
-                onClick={() => scrollToSection('contact')}
+              <Link
+                to="/contact"
+                onClick={() => setIsMenuOpen(false)}
                 className="text-left bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-all duration-300 text-sm font-medium mx-4 transform hover:scale-105 shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 aria-label="Bog'lanish qismiga o'tish"
               >
                 Bog'lanish
-              </button>
+              </Link>
             </nav>
           </div>
         )}

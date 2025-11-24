@@ -16,7 +16,7 @@ const TermsOfService: React.FC = () => {
     {
       icon: CheckCircle,
       title: "1. Xizmatlardan Foydalanish",
-      content: "Torex IT xizmatlaridan foydalanish orqali siz ushbu shartlarga rozilik bildirasiz. Xizmatlarimizdan faqat qonuniy maqsadlarda foydalanishingiz kerak. Har qanday noqonuniy yoki buzg'unchi faoliyat qat'iyan man etiladi."
+      content: "Torex xizmatlaridan foydalanish orqali siz ushbu shartlarga rozilik bildirasiz. Xizmatlarimizdan faqat qonuniy maqsadlarda foydalanishingiz kerak. Har qanday noqonuniy yoki buzg'unchi faoliyat qat'iyan man etiladi."
     },
     {
       icon: Users,
@@ -26,7 +26,7 @@ const TermsOfService: React.FC = () => {
     {
       icon: ShieldCheck,
       title: "3. Intellektual Mulk Huquqlari",
-      content: "Barcha kontent, dizayn, kod va materiallar Torex IT intellektual mulki hisoblanadi. Ularni nusxalash, tarqatish yoki tijoriy maqsadlarda ishlatish uchun yozma ruxsat olish zarur. Mualliflik huquqini buzish qonuniy ta'qib etiladi."
+      content: "Barcha kontent, dizayn, kod va materiallar Torex intellektual mulki hisoblanadi. Ularni nusxalash, tarqatish yoki tijoriy maqsadlarda ishlatish uchun yozma ruxsat olish zarur. Mualliflik huquqini buzish qonuniy ta'qib etiladi."
     },
     {
       icon: CreditCard,
@@ -36,7 +36,7 @@ const TermsOfService: React.FC = () => {
     {
       icon: Scale,
       title: "5. Mas'uliyatni Cheklash",
-      content: "Torex IT xizmatlar sifati uchun mas'ul, ammo uchinchi tomon xizmatlaridan kelib chiqadigan muammolar uchun javobgar emas. Biz texnik nosozliklar, ma'lumotlar yo'qolishi yoki xizmat uzilishlari uchun to'liq mas'uliyat olmaymiz."
+      content: "Torex xizmatlar sifati uchun mas'ul, ammo uchinchi tomon xizmatlaridan kelib chiqadigan muammolar uchun javobgar emas. Biz texnik nosozliklar, ma'lumotlar yo'qolishi yoki xizmat uzilishlari uchun to'liq mas'uliyat olmaymiz."
     },
     {
       icon: AlertTriangle,
@@ -79,7 +79,7 @@ const TermsOfService: React.FC = () => {
     }`}>
       <SEOOptimizer
         title="Foydalanish Shartlari"
-        description="Torex IT xizmatlaridan foydalanish shartlari va qoidalari. Intellektual mulk huquqlari, javobgarlik va foydalanuvchi majburiyatlari haqida to'liq ma'lumot."
+        description="Torex xizmatlaridan foydalanish shartlari va qoidalari. Intellektual mulk huquqlari, javobgarlik va foydalanuvchi majburiyatlari haqida to'liq ma'lumot."
         keywords="foydalanish shartlari, xizmat shartlari, qoidalar, shartnoma, foydalanuvchi shartnomasi, torex it"
         canonicalUrl="https://torexdev.uz/terms-of-service"
       />
@@ -102,7 +102,7 @@ const TermsOfService: React.FC = () => {
               Xizmat Shartlari
             </h1>
             <p className={`${typography.lead} text-blue-100 max-w-3xl mx-auto leading-relaxed`}>
-              Torex IT xizmatlaridan foydalanish shartlari va qoidalari.
+              Torex xizmatlaridan foydalanish shartlari va qoidalari.
               Iltimos, xizmatlarimizdan foydalanishdan oldin diqqat bilan o'qib chiqing.
             </p>
             <div className={`${typography.body} text-blue-200 pt-4`}>

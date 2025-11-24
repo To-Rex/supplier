@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Bot, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Github } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
 import { typography, getTextColors } from '../utils/typography';
@@ -63,8 +63,8 @@ const Footer: React.FC = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center space-x-2 mb-6">
-              <Bot className="w-8 h-8 text-blue-400" />
-              <span className={`${typography.navLarge} font-bold`}>Torex IT</span>
+              <img src="/logo.png" alt="Torex IT Logo" className="w-8 h-8" />
+              <span className={`${typography.navLarge} font-bold`}>Torex</span>
             </div>
             <p className={`${typography.body} mb-6 leading-relaxed ${
               isDark ? 'text-gray-400' : 'text-blue-100'
@@ -149,7 +149,7 @@ const Footer: React.FC = () => {
             <div className={`${typography.footerText} ${
               isDark ? 'text-gray-400' : 'text-blue-100'
             }`}>
-              © 2024 Torex IT. Barcha huquqlar himoyalangan. | torex.uz
+              © 2025 Torex. Barcha huquqlar himoyalangan. | torexdev.uz
             </div>
             <div className={`flex space-x-6 ${typography.footerText} ${
               isDark ? 'text-gray-400' : 'text-blue-200'

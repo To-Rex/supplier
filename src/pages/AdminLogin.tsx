@@ -220,7 +220,7 @@ const AdminLogin: React.FC = () => {
               isDark ? 'border-gray-700 text-gray-400' : 'border-gray-200 text-gray-500'
             }`}>
               <p>Himoyalangan admin paneli</p>
-              <p className="mt-1">© 2024 Torex IT. Barcha huquqlar himoyalangan.</p>
+              <p className="mt-1">© 2024 Torex. Barcha huquqlar himoyalangan.</p>
             </div>
           </div>
         </div>

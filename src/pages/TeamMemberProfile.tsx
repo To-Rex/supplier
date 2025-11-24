@@ -150,7 +150,7 @@ const TeamMemberProfile: React.FC = () => {
 
                 <div className="flex gap-4">
                   <a
-                    href={`mailto:info@torex.uz?subject=Contact ${member.name}`}
+                    href={`mailto:info@torexdev.uz?subject=Contact ${member.name}`}
                     className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   >
                     <Mail className="w-5 h-5" />

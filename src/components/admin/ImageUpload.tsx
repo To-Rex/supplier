@@ -1,32 +1,59 @@
 import React, { useRef, useState } from 'react';
 import { Upload, X, Image as ImageIcon } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
+import { supabase } from '../../lib/supabase';
 
 interface ImageUploadProps {
-  value: string;
-  onChange: (file: File | null, preview: string) => void;
+  currentImage: string;
+  onImageChange: (url: string) => void;
+  bucket: string;
   label?: string;
   accept?: string;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
-  value,
-  onChange,
+  currentImage,
+  onImageChange,
+  bucket,
   label = 'Rasm yuklash',
   accept = 'image/*'
 }) => {
   const { isDark } = useTheme();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const uploadFile = async (file: File) => {
+    setIsUploading(true);
+    try {
+      const fileName = `${Date.now()}-${file.name}`;
+      console.log('ImageUpload: Uploading file to Supabase:', fileName, bucket);
+
+      const { data, error } = await supabase.storage
+        .from(bucket)
+        .upload(fileName, file);
+
+      if (error) throw error;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from(bucket)
+        .getPublicUrl(fileName);
+
+      console.log('ImageUpload: Upload successful, public URL:', publicUrl);
+      onImageChange(publicUrl);
+    } catch (error) {
+      console.error('ImageUpload: Upload failed:', error);
+      alert('Rasm yuklashda xatolik yuz berdi');
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        onChange(file, reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      console.log('ImageUpload: File selected:', file.name, file.size, file.type);
+      uploadFile(file);
     }
   };
 
@@ -46,16 +73,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
     const file = e.dataTransfer.files?.[0];
     if (file && file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        onChange(file, reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      console.log('ImageUpload: File dropped:', file.name, file.size, file.type);
+      uploadFile(file);
     }
   };
 
   const handleRemove = () => {
-    onChange(null, '');
+    onImageChange('');
     if (inputRef.current) {
       inputRef.current.value = '';
     }
@@ -67,10 +91,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         {label}
       </label>
 
-      {value ? (
+      {currentImage ? (
         <div className="relative">
           <img
-            src={value}
+            src={currentImage}
             alt="Preview"
             className="w-full h-48 object-cover rounded-lg"
           />
@@ -87,23 +111,27 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          onClick={() => inputRef.current?.click()}
-          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-            isDragging
-              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+          onClick={() => !isUploading && inputRef.current?.click()}
+          className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+            isUploading
+              ? 'border-gray-400 bg-gray-100 dark:bg-gray-700 cursor-not-allowed'
+              : isDragging
+              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 cursor-pointer'
               : isDark
-              ? 'border-gray-600 hover:border-gray-500 bg-gray-800'
-              : 'border-gray-300 hover:border-gray-400 bg-gray-50'
+              ? 'border-gray-600 hover:border-gray-500 bg-gray-800 cursor-pointer'
+              : 'border-gray-300 hover:border-gray-400 bg-gray-50 cursor-pointer'
           }`}
         >
           <div className="flex flex-col items-center gap-2">
-            {isDragging ? (
+            {isUploading ? (
+              <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            ) : isDragging ? (
               <Upload className="w-12 h-12 text-blue-500" />
             ) : (
               <ImageIcon className={`w-12 h-12 ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
             )}
             <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-              {isDragging ? 'Rasmni tashlang' : 'Rasm yuklash uchun bosing yoki torting'}
+              {isUploading ? 'Yuklanmoqda...' : isDragging ? 'Rasmni tashlang' : 'Rasm yuklash uchun bosing yoki torting'}
             </p>
             <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
               PNG, JPG, WEBP (max. 5MB)

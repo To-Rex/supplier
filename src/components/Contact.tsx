@@ -248,7 +248,7 @@ const Contact: React.FC = () => {
               <div className="relative z-10">
                 <h4 className={`text-2xl font-bold mb-6 ${
                   isDark ? 'text-white' : 'text-gray-900'
-                }`}>Nega Torex IT ni Tanlash Kerak?</h4>
+                }`}>Nega Torex ni Tanlash Kerak?</h4>
                 <ul className="space-y-4">
                   {[
                     '5+ yillik tajribaga ega mutaxassis jamoa',

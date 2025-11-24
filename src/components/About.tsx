@@ -137,12 +137,12 @@ const About: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-20">
-          <h2 
+          <h2
             id="about-heading"
             className={`${typography.h1} ${textColors.primary} mb-6 animate-fade-in-up`}
           >
             <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              Torex IT
+              Torex
             </span>{' '}
             Haqida
           </h2>

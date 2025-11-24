@@ -151,7 +151,7 @@ CREATE INDEX IF NOT EXISTS idx_site_stats_summary_stat_date ON site_stats_summar
 -- Insert default admin user (username: torex, password: torex)
 -- Using a simple hash for demo purposes
 INSERT INTO admin_users (username, password_hash, full_name, email, is_active) VALUES
-  ('torex', 'torex123', 'Torex Admin', 'admin@torex.uz', true)
+  ('torex', 'torex123', 'Torex Admin', 'admin@torexdev.uz', true)
 ON CONFLICT (username) DO NOTHING;
 
 -- Insert some sample analytics data

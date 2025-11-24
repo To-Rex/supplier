@@ -18,7 +18,7 @@ const Sitemap: React.FC = () => {
       icon: Home,
       color: "blue",
       links: [
-        { name: "Bosh sahifa", path: "/", icon: Home, description: "Torex IT asosiy sahifasi" },
+        { name: "Bosh sahifa", path: "/", icon: Home, description: "Torex asosiy sahifasi" },
         { name: "Biz Haqimizda", path: "/#about", icon: Users, description: "Bizning jamoa va missiyamiz haqida" },
         { name: "Xizmatlar", path: "/#services", icon: Briefcase, description: "Bizning xizmatlarimiz ro'yxati" },
         { name: "Portfolio", path: "/#portfolio", icon: FolderOpen, description: "Amalga oshirilgan loyihalar" },
@@ -115,7 +115,7 @@ const Sitemap: React.FC = () => {
               Sayt Xaritasi
             </h1>
             <p className={`${typography.lead} text-blue-100 max-w-3xl mx-auto leading-relaxed`}>
-              Torex IT saytidagi barcha sahifalar va bo'limlar tuzilishi.
+              Torex saytidagi barcha sahifalar va bo'limlar tuzilishi.
               Qidirayotgan ma'lumotingizni tezda topishingiz uchun qulay navigatsiya.
             </p>
           </div>

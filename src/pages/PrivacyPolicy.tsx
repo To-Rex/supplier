@@ -61,7 +61,7 @@ const PrivacyPolicy: React.FC = () => {
     }`}>
       <SEOOptimizer
         title="Maxfiylik Siyosati"
-        description="Torex IT maxfiylik siyosati. Shaxsiy ma'lumotlarni to'plash, ishlatish va himoya qilish haqida batafsil ma'lumot. Sizning ma'lumotlaringiz xavfsizligi bizning ustuvor vazifamiz."
+        description="Torex maxfiylik siyosati. Shaxsiy ma'lumotlarni to'plash, ishlatish va himoya qilish haqida batafsil ma'lumot. Sizning ma'lumotlaringiz xavfsizligi bizning ustuvor vazifamiz."
         keywords="maxfiylik siyosati, shaxsiy ma'lumotlar, ma'lumotlar xavfsizligi, GDPR, ma'lumotlar himoyasi, torex it"
         canonicalUrl="https://torexdev.uz/privacy-policy"
       />
